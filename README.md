@@ -4,6 +4,20 @@
 
 有点地方可能自己写得不好，不完善，甚至是不对，希望看发现的朋友能提个issue，或者提个pr。^_^
 
+## 实用网站
+
+- [百度用户体验中心](http://mux.baidu.com/)
+- [携程设计委员会](http://ued.ctrip.com/blog/)
+- [腾讯CDC](http://cdc.tencent.com/)
+- [京东设计中心JDC](http://jdc.jd.com/)
+- [京东凹凸实验室](https://aotu.io/)
+- [HTML5梦工厂](http://www.html5dw.com/)
+- [Can I Use](http://caniuse.com/)
+- [HTML5与CSS3技术应用评估](http://html5please.com/)
+- [各种奇妙的Hack](http://browserhacks.com/#hack-71627a771f70379e1704bbf6132792cb)
+- [webkit独有样式分析（携程UED）](http://ued.ctrip.com/webkitcss/index.html)
+
+
 ## 高性能动画
 
 CSS动画会比JS动画的性能更好，JS动画的优势主要在于
@@ -20,9 +34,11 @@ CSS动画会比JS动画的性能更好，JS动画的优势主要在于
 - 尽量让动画元素脱离文档流（document flow）中，以减少重排（reflow）；
 - 操作DOM的js语句能连着写尽量连着写，这样可借助浏览器的优化策略，将可触发重排的操作放于一个队列中，然后一次性进行一次重排；如果操作DOM的语句中间被其他诸如赋值语句之类的间断了，页面可能就会发生多次重排了。
 
+
 ## 高频率触发的事件的性能优化
 
 一些事件，比如touchmove可能会被高频率的触发，如果该事件对应的handler函数中需要处理的逻辑较多，可能会导致FPS下降影响程序流畅度，在这种情况下，可以考虑将handler中的执行体放于setTimeout(function () { //执行的代码  }, 0)中，程序会变流畅。
+
 
 ## 移动端常见问题
 
@@ -66,6 +82,7 @@ function longStringToDate (dateString) {
 }
 ```
 
+
 ## PC端常见问题
 
 IE8不支持CSS媒体查询，也无法识别html5中的新元素（nav、article等），可用在head中加入如下代码解决：
@@ -77,6 +94,7 @@ IE8不支持CSS媒体查询，也无法识别html5中的新元素（nav、articl
   <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 ```
+
 
 ## 常用meta标签
 
@@ -149,6 +167,7 @@ IE8不支持CSS媒体查询，也无法识别html5中的新元素（nav、articl
 <meta http-equiv="Window-target" content="_top">
 ```
 
+
 ## 参考
 
 - [高性能 CSS3 动画](https://github.com/Yakima-Teng/Mars/blob/master/performance/high-performance-css3-animation.md)
@@ -157,3 +176,4 @@ IE8不支持CSS媒体查询，也无法识别html5中的新元素（nav、articl
 - [Andorid Issues](https://github.com/Yakima-Teng/Mars/blob/master/issues/android.md)
 - [iOS Issues](https://github.com/Yakima-Teng/Mars/blob/master/issues/iOS.md)
 - [Supported Meta Tags](https://developer.apple.com/library/content/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html)
+- [资源与工具](https://github.com/AlloyTeam/Mars/tree/master/tools)
