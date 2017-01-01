@@ -30,28 +30,36 @@ CSS动画会比JS动画的性能更好，JS动画的优势主要在于
 - 只需给document绑定touchstart或touchend事件即可，如document.addEventListener('touchstart', function () {}, false)；
 - 更简单的方法是直接在html中body标签上添加属性ontouchstart=""；
 
+
 不让安卓手机识别邮箱：
 ```
 <meta content="email=no" name="format-detection">
 ```
+
 
 禁止IOS识别长串数字为电话：
 ```
 <meta content="telephone=no" name="format-detection">
 ```
 
+
 禁止iOS弹出各种操作窗口：-webkit-touch-callout: none;
 
+
 禁止用户选中文字：-webkit-user-select: none;
+
 
 input[type="date"]不支持placeholder：
 ```
 <input placeholder="占位符" type="text" onfocus="(this.type='date')">
 ```
 
+
 三星I9100 （Android 4.0.4）不支持display:-webkit-flex这种写法的弹性布局，但支持display:-webkit-box这种写法的布局,相关的属性也要相应修改，如-webkit-box-pack: center，移动端采用弹性布局时，建议直接写display:-webkit-box系列的布局。
 
+
 touchmove事件在Android部分机型(如LG Nexus 5 android4.4，小米2 android 4.1.1)上只会触发一次。解决方案是在触发函数里面加上e.preventDefault()。
+
 
 iOS部分版本的Date构造函数不支持规范标准中定义的YYYY-MM-DD格式，如new Date('2013-11-11')是Invalid Date, 但支持YYYY/MM/DD格式，可用new Date('2013/11/11')；类似的，对于yyyy-mm-dd hh:mm:ss格式的日期，可以通过类似下面的方法将其转换为Date对象实例（适用于所有设备）：
 ```
@@ -65,6 +73,7 @@ function longStringToDate (dateString) {
     return 'Invalid Date'
 }
 ```
+
 
 ## PC端常见问题
 
