@@ -137,7 +137,7 @@ typeof a // 'undefined'
 
 ### 普通对象与函数对象
 
-JS中，对象分*普通对象*和*函数对象*，Object、Function是JS自带的*函数对象*。凡是通过new Function()创建的对象都是函数对象，其他的都是普通对象。
+JS中，对象分**普通对象**和**函数对象**，Object、Function是JS自带的**函数对象**。凡是通过new Function()创建的对象都是函数对象，其他的都是普通对象。
 
 ``` javascript
 typeof Object // "function", 函数对象
@@ -197,7 +197,7 @@ yakima.getName() // "yakima"
 
 ### 原型链
 
-上面提到原型对象的主要作用是用于继承，其具体的实现就是通过原型链实现的。创建对象（不论是普通对象还是函数对象）时，都有一个叫做__proto__的内置属性，用于指向*创建它的函数对象的原型对象（即函数对象的prototype属性）*
+上面提到原型对象的主要作用是用于继承，其具体的实现就是通过原型链实现的。创建对象（不论是普通对象还是函数对象）时，都有一个叫做__proto__的内置属性，用于指向**创建它的函数对象的原型对象（即函数对象的prototype属性）**
 
 ``` javascript
 yakima.__proto__ === Person.prototype // true，对象的内置__proto__对象指向创建该对象的函数对象的prototype
@@ -214,7 +214,7 @@ typeof null // "object"
 
 1. yakima的__proto__属性指向Person.prototype对象；
 2. Person.prototype对象的__proto__属性指向Object.prototype对象；
-3. Object.prototype对象的__proto__属性指向null*对象*；
+3. Object.prototype对象的__proto__属性指向null**对象**；
 
 说明（下面这几种看完忘掉就可以了^_^）
 
@@ -294,9 +294,9 @@ var a = 1
 
 ## 数据类型
 
-*基本数据类型*有6个：Undefined、Null、Boolean、Number、String、Symbol。其中Symbol是ES 2015中新增的，特点就是如果给某个对象添加的某个方法或属性的key名是Symbol类型的话，该方法/属性将会是不可遍历的，只能通过obj[symbol]来访问，好处就是遍历对象时能减少对一些不必要方法/属性的遍历，遍历数组时不用担心数组长度会被改变了。
+**基本数据类型**有6个：Undefined、Null、Boolean、Number、String、Symbol。其中Symbol是ES 2015中新增的，特点就是如果给某个对象添加的某个方法或属性的key名是Symbol类型的话，该方法/属性将会是不可遍历的，只能通过obj[symbol]来访问，好处就是遍历对象时能减少对一些不必要方法/属性的遍历，遍历数组时不用担心数组长度会被改变了。
 
-除了基本数据类型，剩下的就是*对象数据类型*了。
+除了基本数据类型，剩下的就是**对象数据类型**了。
 
 ## ES5实现Promise
 
