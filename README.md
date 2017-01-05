@@ -17,7 +17,6 @@
 - [各种奇妙的Hack](http://browserhacks.com/#hack-71627a771f70379e1704bbf6132792cb)
 - [webkit独有样式分析（携程UED）](http://ued.ctrip.com/webkitcss/index.html)
 
-
 ## 高性能动画
 
 CSS动画会比JS动画的性能更好，JS动画的优势主要在于
@@ -73,15 +72,14 @@ iOS部分版本的Date构造函数不支持规范标准中定义的YYYY-MM-DD格
 ``` javascript
 // 将形如"yyyy-mm-dd hh:mm:ss"的日期字符串转换为日期对象（兼容IOS设备）
 function longStringToDate (dateString) {
-    if (dateString && dateString.length === 19) {
-        // Attention: there is a space between regular expression
-        let tempArr = dateString.split(/[- :]/)
-        return new Date(tempArr[0], tempArr[1] - 1, tempArr[2], tempArr[3], tempArr[4], tempArr[5])
-    }
-    return 'Invalid Date'
+  if (dateString && dateString.length === 19) {
+    // Attention: there is a space between regular expression
+    let tempArr = dateString.split(/[- :]/)
+    return new Date(tempArr[0], tempArr[1] - 1, tempArr[2], tempArr[3], tempArr[4], tempArr[5])
+  }
+  return 'Invalid Date'
 }
 ```
-
 
 ## PC端常见问题
 
@@ -95,6 +93,64 @@ IE8不支持CSS媒体查询，也无法识别html5中的新元素（nav、articl
 <![endif]-->
 ```
 
+parseInt问题：IE8及更早版本的IE中，会将parseInt('09')中的09当做八进制进行解析，但又发现09不是八进制，最后作为错误而抛出了0这个false。所以，如果要兼容IE8的话，记得写做parseInt('09', 10)，如果要兼容IE7的话，辞职。从IE9开始默认都会当做十进制进行解析了。或者，可以用下面的方法替换parseInt:
+``` javascript
+var a = 123.456
+var b = -123.456
+
+// 效果是截取整数部分，对正数相当于Math.floor()，对负数相当于Math.ceil()
+// 不建议这么用，代码可读性不好
+console.log(a | 0) // 123
+console.log(b | 0) // -123
+
+console.log(Math.floor(a), Math.ceil(a)) // 123, 124
+console.log(Math.floor(b), Math.ceil(b)) // -124, -123
+```
+
+## 判断JS全局变量是否存在
+
+``` javascript
+if (typeof localStorage !== 'undefined') {
+  // 此时访问localStorage不会出现引用错误
+}
+```
+或者
+``` javascript
+if ('localStorage' in self) { // 浏览器端全局处window/this/self三者彼此全等
+  // 此时访问 localStorage 绝对不会出现引用错误
+}
+```
+
+注意二者的区别：
+``` javascript
+var a // 或 var a = undefined
+'a' in self // true
+typeof a // 'undefined'
+```
+- var a = undefined或者var a相当于是给window对象添加了a属性，但是未赋值，即window.a === undefined为true
+- typeof a就是返回其变量类型，未赋值或者声明类型为undefined的变量，其类型就是undefined
+
+## Immediately-Invoked Function Expression与分号
+
+如果习惯写完一条语句后不加分号的写法，碰到需要写自执行函数函数的时候容易踩到下面的坑，而且此种问题有时候不易分析出来：
+``` javascript
+var a = 1
+(function () {})() // 会报错，因为上一行的1会和这一行一起被程序解析成var a = 1(function () {})()，然后报错说1不是函数
+```
+这时候可以这样写：
+``` javascript
+var a = 1
+void function () {}()
+// 或
+var a = 1
+void (function () {})()
+// 或者下面这种方式，但据说会多一次逻辑运算
+var a = 1
+!function () {}()
+```
+
+## z-index
+建议使用CSS预处理器语言的情况下，对所有涉及z-index的属性的值放在一个文件中统一进行管理。这个主意是从饿了么前端团队代码风格指南中看到的。另外补充一下，应该将同一条直系链里同一层级的元素的z-index分类到一起进行管理。因为不同层级或者非直系链里的同一层级的元素是无法直接根据z-index来判断元素前后排列顺序的。
 
 ## 常用meta标签
 
@@ -177,3 +233,4 @@ IE8不支持CSS媒体查询，也无法识别html5中的新元素（nav、articl
 - [iOS Issues](https://github.com/Yakima-Teng/Mars/blob/master/issues/iOS.md)
 - [Supported Meta Tags](https://developer.apple.com/library/content/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html)
 - [资源与工具](https://github.com/AlloyTeam/Mars/tree/master/tools)
+- [饿了么前端风格指南](https://github.com/ElemeFE/style-guide)
