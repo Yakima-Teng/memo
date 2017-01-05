@@ -6,6 +6,7 @@
 
 ## 实用网站
 
+- [MDN](https://developer.mozilla.org/en-US/)
 - [百度用户体验中心](http://mux.baidu.com/)
 - [携程设计委员会](http://ued.ctrip.com/blog/)
 - [腾讯CDC](http://cdc.tencent.com/)
@@ -81,7 +82,7 @@ function longStringToDate (dateString) {
 }
 ```
 
-## PC端常见问题
+## IE8不支持媒体查询和HTML5新header, article等元素的解决方法
 
 IE8不支持CSS媒体查询，也无法识别html5中的新元素（nav、article等），可用在head中加入如下代码解决：
 ``` html
@@ -92,6 +93,8 @@ IE8不支持CSS媒体查询，也无法识别html5中的新元素（nav、articl
   <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 ```
+
+## IE8下parseInt方法默认将0开头的参数当做八进制处理，异常时返回0问题
 
 parseInt问题：IE8及更早版本的IE中，会将parseInt('09')中的09当做八进制进行解析，但又发现09不是八进制，最后作为错误而抛出了0这个false。所以，如果要兼容IE8的话，记得写做parseInt('09', 10)，如果要兼容IE7的话，辞职。从IE9开始默认都会当做十进制进行解析了。或者，可以用下面的方法替换parseInt:
 ``` javascript
@@ -130,14 +133,150 @@ typeof a // 'undefined'
 - var a = undefined或者var a相当于是给window对象添加了a属性，但是未赋值，即window.a === undefined为true
 - typeof a就是返回其变量类型，未赋值或者声明类型为undefined的变量，其类型就是undefined
 
+## JS原型与原型链
+
+### 普通对象与函数对象
+
+JS中，对象分*普通对象*和*函数对象*，Object、Function是JS自带的*函数对象*。凡是通过new Function()创建的对象都是函数对象，其他的都是普通对象。
+
+``` javascript
+typeof Object // "function", 函数对象
+typeof Function // "function", 函数对象
+
+function f1 () {}
+var f2 = function () {}
+var f3 = new Function('str', 'console.log(str)')
+
+var o1 = new f1()
+var o2 = {}
+var o3 = new Object()
+
+typeof f1 // "function", 函数对象
+typeof f2 // "function", 函数对象
+typeof f3 // "function", 函数对象
+
+typeof o1 // "object", 普通对象
+typeof o2 // "object", normal object
+typeof o3 // "object", normal object
+
+```
+
+### 原型对象
+
+每当定义一个对象（函数）时，对象中都会包含一些预定义的属性。其中，函数对象会有一个prototype属性，就是我们所说的原型对象（普通对象没有prototype，但有_proto_属性；函数对象同时含有prototype和__proto__属性）。
+
+原型对象其实就是普通对象（Function.prototype除外，它是函数对象，单同时它又没有prototype属性）。
+
+``` javascript
+function f1 () {}
+console.log(f1.prototype) // Object{} with two properties constructor and __proto__
+typeof f1.prototype // "object"
+
+typeof Object.proto
+
+// 特例，没必要记住，平常根本用不到
+typeof Function.prototype // "function"
+typeof Function.prototype.prototype // "undefined"
+typeof Object.prototype // "object"
+```
+
+原型对象的主要作用是用于继承：
+
+``` javascript
+var Person = function (name) {
+  this.name = name
+}
+
+Person.prototype.getName = function () {
+  return this.name
+}
+
+var yakima = new Person('yakima')
+yakima.getName() // "yakima"
+```
+
+### 原型链
+
+上面提到原型对象的主要作用是用于继承，其具体的实现就是通过原型链实现的。创建对象（不论是普通对象还是函数对象）时，都有一个叫做__proto__的内置属性，用于指向*创建它的函数对象的原型对象（即函数对象的prototype属性）*
+
+``` javascript
+yakima.__proto__ === Person.prototype // true，对象的内置__proto__对象指向创建该对象的函数对象的prototype
+
+Person.prototype.__proto__ === Object.prototype // true
+
+// 继续，Object.prototype对象也有__proto__属性，但它比较特殊，为null
+Object.prototype.__proto__ === null // true
+
+typeof null // "object"
+```
+
+这个由__proto__串起来的直到Object.prototype.__proto__ ==> null对象的链称为原型链。
+
+1. yakima的__proto__属性指向Person.prototype对象；
+2. Person.prototype对象的__proto__属性指向Object.prototype对象；
+3. Object.prototype对象的__proto__属性指向null*对象*；
+
+说明（下面这几种看完忘掉就可以了^_^）
+
+Object是函数对象，是通过new Function ()创建的，所以Object.__proto__指向Function.prototype
+
+``` javascript
+Object.__proto__ === Function.prototype // true
+```
+
+Function是函数对象，是通过new Function()创建的，所以Function.__proto__指向Function.prototype。本类创建本类。。。唐僧也说过类似的话的，人是人他妈生的，妖是妖他妈生的。
+``` javascript
+Function.__proto__ === Function.prototype // true
+```
+
+另外：
+``` javascript
+Function.prototype.__proto__ === Object.prototype // true
+```
+
+### constructor
+
+原型对象中都有个constructor属性，用来引用它的函数对象。这是一种循环引用。
+
+``` javascript
+Person.prototype.constructor === Person // true
+Function.prototype.constructor === Function // true
+Object.prototype.constructor === Object // true
+```
+
+### 综合理解
+
+原型和原型链是JS实现继承的一种模型。
+
+``` javascript
+var Animal = function () {}
+var Dog = function () {}
+
+Animal.price = 2000
+Dog.prototype = Animal
+
+var tidy = new Dog()
+
+console.log(Dog.price) // undefined
+console.log(tidy.price) // 200
+```
+
+对上例的分析：
+- Dog自身没有price属性，沿着__proto__属性往上找，因为Dog赋值时的Dog = function () {}其实使用new Function ()创建的Dog，所以，Dog.__proto__ ==> Function.prototype, Function.prototype.__proto__ ===> Object.prototype，而Object.prototype.__proto__ ==> null。很明显，整条链上都找不到price属性，只能返回undefined了；
+- tidy自身没有price属性，沿着__proto__属性往上找，因为tidy对象是Dog函数对象的实例，tidy.__proto__ ==> Dog.prototype ==> Animal，从而tidy.price获取到了Animal.price的值。
+
+
 ## Immediately-Invoked Function Expression与分号
 
 如果习惯写完一条语句后不加分号的写法，碰到需要写自执行函数函数的时候容易踩到下面的坑，而且此种问题有时候不易分析出来：
+
 ``` javascript
 var a = 1
 (function () {})() // 会报错，因为上一行的1会和这一行一起被程序解析成var a = 1(function () {})()，然后报错说1不是函数
 ```
+
 这时候可以这样写：
+
 ``` javascript
 var a = 1
 void function () {}()
@@ -234,3 +373,4 @@ var a = 1
 - [Supported Meta Tags](https://developer.apple.com/library/content/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html)
 - [资源与工具](https://github.com/AlloyTeam/Mars/tree/master/tools)
 - [饿了么前端风格指南](https://github.com/ElemeFE/style-guide)
+- [JS原型与原型链终极详解](http://www.108js.com/article/article1/10201.html)
