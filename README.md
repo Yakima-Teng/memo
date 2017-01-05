@@ -234,6 +234,7 @@ Function.__proto__ === Function.prototype // true
 Function.prototype.__proto__ === Object.prototype // true
 ```
 
+<<<<<<< HEAD
 ### constructor
 
 原型对象中都有个constructor属性，用来引用它的函数对象。这是一种循环引用。
