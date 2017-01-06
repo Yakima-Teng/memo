@@ -234,7 +234,6 @@ Function.__proto__ === Function.prototype // true
 Function.prototype.__proto__ === Object.prototype // true
 ```
 
-<<<<<<< HEAD
 ### constructor
 
 原型对象中都有个constructor属性，用来引用它的函数对象。这是一种循环引用。
@@ -298,21 +297,6 @@ var a = 1
 
 除了基本数据类型，剩下的就是**对象数据类型**了。
 
-## ES5实现Promise
-
-一些说明：
-- promise有三种状态：pending、resolved、rejected，状态只能由pending转变成resolved或rejected，不可逆，并且后两者彼此也不可互相转换；
-- promise必须有一个then方法，而且要返回一个promise，供then链式调用，也就是必须是可thenable的；
-- promise接受两个回调（onResolved, onRejected），回调可返回promise，等待此promise被resolved后，继续触发then链。
-
-思路大致是，用2个数组doneList和failList分别存储成功时的回调函数队列和失败时的回调函数队列：
-- state：当前执行状态，有pending、resolved、rejected三种取值；
-- done：向doneList中添加一个成功回调函数；
-- fail：向failList中添加一个失败回调函数；
-- then：分别向doneList和failList中添加回调函数；
-- always：
-
-// TODO: go on reading http://www.cnblogs.com/chris-oil/p/5715073.html
 
 ## 常用meta标签
 
@@ -397,4 +381,3 @@ var a = 1
 - [资源与工具](https://github.com/AlloyTeam/Mars/tree/master/tools)
 - [饿了么前端风格指南](https://github.com/ElemeFE/style-guide)
 - [JS原型与原型链终极详解](http://www.108js.com/article/article1/10201.html)
-- [浅谈Javascript中Promise对象的实现](http://www.cnblogs.com/chris-oil/p/5715073.html)
