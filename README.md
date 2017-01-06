@@ -403,6 +403,98 @@ var li10 = getLiByIndex(9)
 var li501 = getLiByIndex(500)
 ```
 
+
+## merge two objects (only for enumerable properties)
+
+合并对象的**可枚举的**属性/方法到指定对象
+
+``` javascript
+
+// typeOf, return: 'array', 'object', 'function', 'null', 'undefined', 'string', 'number'
+
+const typeOf = exports.typeOf = input => {
+  return ({}).toString.call(input).slice(8, -1).toLowerCase()
+}
+
+// merge object properties
+const merge = exports.merge = (obj, options) => {
+  if (obj && options) {
+    for (let p in options) {
+      if (typeOf(options[p]) === 'object') {
+        merge(obj[p], options[p])
+      } else {
+        obj[p] = options[p]
+      }
+    }
+  }
+  return obj
+}
+
+```
+
+## isObjectEqual (only for enumerable properties)
+
+``` javascript
+function isObjectEqual (obj1, obj2) {
+  if (typeof obj1 !== 'object' || typeof obj2 !== 'object') {
+    return obj1 === obj2
+  }
+  // if refer to the same location
+  if (obj1 === obj2) {
+    return true
+  }
+
+  var keys1 = Object.keys(obj1)
+  var keys2 = Object.keys(obj2)
+
+  if (keys1.length !== keys2.length) {
+    return false
+  }
+
+  if (keys1.length === 0 && keys2.length === 0) {
+    return true
+  }
+
+  for (var i = 0, len = keys1.length; i < len; i++) {
+    if (!isObjectEqual(obj1[keys1[i]], obj2[keys2[i]])) {
+      return false
+    }
+  }
+  return true
+}
+```
+
+## flattenArray
+
+- 将数组中的所有数组元素扁平化成顶层元素，返回新数组，不修改原数组
+- 增加去重功能，重复的**为基本数据类型的元素**不显示
+
+``` javascript
+function flattenArray (arr) {
+  if (!Array.isArray(arr)) {
+    throw new TypeError('You should pass in an Array parameter')
+  }
+  var tempArr = []
+  var tempObj = {}
+
+  void function recurison (item) {
+    if (Array.isArray(item)) {
+      item.forEach(recurison)
+    } else {
+      if (typeof item === 'object') {
+        tempArr.push(item)
+      } else if (!tempObj[item]) {
+        tempArr.push(item)
+        tempObj[item] = true
+      }
+    }
+  }(arr)
+
+  return tempArr
+}
+```
+
+
 ## 常用meta标签
 
 ``` html
