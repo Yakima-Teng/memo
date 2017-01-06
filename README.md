@@ -420,10 +420,12 @@ const typeOf = exports.typeOf = input => {
 const merge = exports.merge = (obj, options) => {
   if (obj && options) {
     for (let p in options) {
-      if (typeOf(options[p]) === 'object') {
-        merge(obj[p], options[p])
-      } else {
-        obj[p] = options[p]
+      if (options.hasOwnProperty(p)) {
+        if (typeOf(options[p]) === 'object') {
+          merge(obj[p], options[p])
+        } else {
+          obj[p] = options[p]
+        }
       }
     }
   }
@@ -491,6 +493,76 @@ function flattenArray (arr) {
   }(arr)
 
   return tempArr
+}
+```
+
+
+## deepClone
+
+``` javascript
+function deepClone (obj) {
+  // if number, string, boolean, or undefined
+  if (typeof obj !== 'object') {
+    throw new TypeError('You should pass in an Array parameter')
+  }
+
+  // if null
+  if (obj === null) {
+    return null
+  }
+
+  // if array
+  if (Array.isArray(obj)) {
+    var tempArr = []
+    obj.forEach(function (elem, idx) {
+      tempArr[idx] = deepClone(elem)
+    })
+    return tempArr
+  }
+
+  // if obj
+  var tempObj = {}
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      tempObj[key] = deepClone(obj[key])
+    }
+  }
+  return tempObj
+}
+```
+
+
+## assign
+
+``` javascript
+function assign () {
+  var args = [].slice.call(arguments)
+  var target = args.shift()
+
+  // invalid target: undefined, null, none-object
+  if (!target || typeof target !== 'object') {
+    throw new TypeError('You have passed in some wrong arguments.')
+  }
+
+  args = (function () {
+    var tempArr = []
+    for (var i = 0, len = args.length; i < len; i++) {
+      if (args[i] && typeof args[i] === 'object') {
+        tempArr.push(args[i])
+      }
+    }
+    return tempArr
+  })()
+
+  args.forEach(function (item, idx) {
+    for (var key in item) {
+      if (item.hasOwnProperty(key)) {
+        target[key] = item[key]
+      }
+    }
+  })
+
+  return target
 }
 ```
 
