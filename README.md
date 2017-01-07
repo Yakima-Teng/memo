@@ -338,7 +338,7 @@ void function () {
       html += '<li>#' + i + '</li>'
     }
   }
-  document.getElementById('list').innerHTML = html
+  list.innerHTML = html
 }()
 
 // or, list.className += ' bar'
@@ -351,7 +351,6 @@ var newItem = document.createElement('LI')
 var textNode = document.createTextNode('<v2ex.com />')
 newItem.appendChild(textNode)
 
-var list = document.getElementById('list')
 // index for css nth-of-type is 1-based
 var li501 = document.querySelector('#list > li:nth-of-type(501)')
 list.insertBefore(newItem, li501)
