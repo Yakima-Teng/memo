@@ -362,22 +362,20 @@ list.addEventListener('click', function (e) {
     return
   }
   while (target.nodeName !== 'LI') {
-    console.log(target)
     target = target.parentNode
   }
-  if (target.nodeName === 'LI') {
-    var parentUl = target.parentNode
-    var children = parentUl.childNodes
-    var count = 0
-    for (var i = 0, len = children.length; i < len; i++) {
-      var node = children[i]
-      if (node.nodeName === 'LI') {
-        count++
-      }
-      if (node === target) {
-        alert('是当前第' + count + '项')
-        break
-      }
+
+  var parentUl = target.parentNode
+  var children = parentUl.childNodes
+  var count = 0
+  for (var i = 0, len = children.length; i < len; i++) {
+    var node = children[i]
+    if (node.nodeName === 'LI') {
+      count++
+    }
+    if (node === target) {
+      alert('是当前第' + count + '项')
+      break
     }
   }
 }, false)
