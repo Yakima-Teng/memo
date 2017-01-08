@@ -74,9 +74,9 @@ iOS部分版本的Date构造函数不支持规范标准中定义的YYYY-MM-DD格
 // 将形如"yyyy-mm-dd hh:mm:ss"的日期字符串转换为日期对象（兼容IOS设备）
 function longStringToDate (dateString) {
   if (dateString && dateString.length === 19) {
-    // Attention: there is a space between regular expression
-    let tempArr = dateString.split(/[- :]/)
-    return new Date(tempArr[0], tempArr[1] - 1, tempArr[2], tempArr[3], tempArr[4], tempArr[5])
+  // Attention: there is a space between regular expression
+  let tempArr = dateString.split(/[- :]/)
+  return new Date(tempArr[0], tempArr[1] - 1, tempArr[2], tempArr[3], tempArr[4], tempArr[5])
   }
   return 'Invalid Date'
 }
@@ -310,10 +310,10 @@ var nDivCounter = 0
 
 for (var i = 0, len = oChildren.length; i < len; i++) {
   if (oChildren[i].nodeName === 'DIV') {
-    nDivCounter++
-    if (nDivCounter === 2) {
-      oChildren[i].style.display = 'none'
-    }
+  nDivCounter++
+  if (nDivCounter === 2) {
+    oChildren[i].style.display = 'none'
+  }
   }
 }
 ```
@@ -347,15 +347,15 @@ var list = document.getElementById('list')
 void function () {
   var html = ''
   for (var i = 0; i <= 10000; i++) {
-    if (i === 1) {
-      html += '<li><span>#1</span></li>'
-    } else if (i === 4) {
-      html += '<li><ul><li>#4</li></ul></li>'
-    } else if (i === 9998) {
-      html += '<li><a href="//v2ex.com">#9998</a></li>'
-    } else {
-      html += '<li>#' + i + '</li>'
-    }
+  if (i === 1) {
+    html += '<li><span>#1</span></li>'
+  } else if (i === 4) {
+    html += '<li><ul><li>#4</li></ul></li>'
+  } else if (i === 9998) {
+    html += '<li><a href="//v2ex.com">#9998</a></li>'
+  } else {
+    html += '<li>#' + i + '</li>'
+  }
   }
   list.innerHTML = html
 }()
@@ -377,25 +377,25 @@ list.insertBefore(newItem, li501)
 list.addEventListener('click', function (e) {
   var target = e.target || e.srcElement
   if (target.id === 'list') {
-    alert('你点到最外层的ul上了，叫我怎么判断？')
-    return
+  alert('你点到最外层的ul上了，叫我怎么判断？')
+  return
   }
   while (target.nodeName !== 'LI') {
-    target = target.parentNode
+  target = target.parentNode
   }
 
   var parentUl = target.parentNode
   var children = parentUl.childNodes
   var count = 0
   for (var i = 0, len = children.length; i < len; i++) {
-    var node = children[i]
-    if (node.nodeName === 'LI') {
-      count++
-    }
-    if (node === target) {
-      alert('是当前第' + count + '项')
-      break
-    }
+  var node = children[i]
+  if (node.nodeName === 'LI') {
+    count++
+  }
+  if (node === target) {
+    alert('是当前第' + count + '项')
+    break
+  }
   }
 }, false)
 
@@ -407,12 +407,12 @@ var li501 = document.querySelector('#list > li:nth-of-type(501)')
 function getLiByIndex (index /* 0-based index */) {
   var count = -1
   for (var i = 0, len = list.childNodes.length; i < len; i++) {
-    if (list.childNodes[i].nodeName === 'LI') {
-      count++
-      if (count === index) {
-        return list.childNodes[i]
-      }
+  if (list.childNodes[i].nodeName === 'LI') {
+    count++
+    if (count === index) {
+    return list.childNodes[i]
     }
+  }
   }
 }
 var li10 = getLiByIndex(9)
@@ -435,15 +435,15 @@ const typeOf = exports.typeOf = input => {
 // merge object properties
 const merge = exports.merge = (obj, options) => {
   if (obj && options) {
-    for (let p in options) {
-      if (options.hasOwnProperty(p)) {
-        if (typeOf(options[p]) === 'object') {
-          merge(obj[p], options[p])
-        } else {
-          obj[p] = options[p]
-        }
-      }
+  for (let p in options) {
+    if (options.hasOwnProperty(p)) {
+    if (typeOf(options[p]) === 'object') {
+      merge(obj[p], options[p])
+    } else {
+      obj[p] = options[p]
     }
+    }
+  }
   }
   return obj
 }
@@ -455,28 +455,28 @@ const merge = exports.merge = (obj, options) => {
 ``` javascript
 function isObjectEqual (obj1, obj2) {
   if (typeof obj1 !== 'object' || typeof obj2 !== 'object') {
-    return obj1 === obj2
+  return obj1 === obj2
   }
   // if refer to the same location
   if (obj1 === obj2) {
-    return true
+  return true
   }
 
   var keys1 = Object.keys(obj1)
   var keys2 = Object.keys(obj2)
 
   if (keys1.length !== keys2.length) {
-    return false
+  return false
   }
 
   if (keys1.length === 0 && keys2.length === 0) {
-    return true
+  return true
   }
 
   for (var i = 0, len = keys1.length; i < len; i++) {
-    if (!isObjectEqual(obj1[keys1[i]], obj2[keys2[i]])) {
-      return false
-    }
+  if (!isObjectEqual(obj1[keys1[i]], obj2[keys2[i]])) {
+    return false
+  }
   }
   return true
 }
@@ -490,22 +490,22 @@ function isObjectEqual (obj1, obj2) {
 ``` javascript
 function flattenArray (arr) {
   if (!Array.isArray(arr)) {
-    throw new TypeError('You should pass in an Array parameter')
+  throw new TypeError('You should pass in an Array parameter')
   }
   var tempArr = []
   var tempObj = {}
 
   void function recurison (item) {
-    if (Array.isArray(item)) {
-      item.forEach(recurison)
-    } else {
-      if (typeof item === 'object') {
-        tempArr.push(item)
-      } else if (!tempObj[item]) {
-        tempArr.push(item)
-        tempObj[item] = true
-      }
+  if (Array.isArray(item)) {
+    item.forEach(recurison)
+  } else {
+    if (typeof item === 'object') {
+    tempArr.push(item)
+    } else if (!tempObj[item]) {
+    tempArr.push(item)
+    tempObj[item] = true
     }
+  }
   }(arr)
 
   return tempArr
@@ -519,29 +519,29 @@ function flattenArray (arr) {
 function deepClone (obj) {
   // if number, string, boolean, or undefined
   if (typeof obj !== 'object') {
-    throw new TypeError('You should pass in an Array parameter')
+  throw new TypeError('You should pass in an Array parameter')
   }
 
   // if null
   if (obj === null) {
-    return null
+  return null
   }
 
   // if array
   if (Array.isArray(obj)) {
-    var tempArr = []
-    obj.forEach(function (elem, idx) {
-      tempArr[idx] = deepClone(elem)
-    })
-    return tempArr
+  var tempArr = []
+  obj.forEach(function (elem, idx) {
+    tempArr[idx] = deepClone(elem)
+  })
+  return tempArr
   }
 
   // if obj
   var tempObj = {}
   for (var key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      tempObj[key] = deepClone(obj[key])
-    }
+  if (obj.hasOwnProperty(key)) {
+    tempObj[key] = deepClone(obj[key])
+  }
   }
   return tempObj
 }
@@ -557,25 +557,25 @@ function assign () {
 
   // invalid target: undefined, null, none-object
   if (!target || typeof target !== 'object') {
-    throw new TypeError('You have passed in some wrong arguments.')
+  throw new TypeError('You have passed in some wrong arguments.')
   }
 
   args = (function () {
-    var tempArr = []
-    for (var i = 0, len = args.length; i < len; i++) {
-      if (args[i] && typeof args[i] === 'object') {
-        tempArr.push(args[i])
-      }
+  var tempArr = []
+  for (var i = 0, len = args.length; i < len; i++) {
+    if (args[i] && typeof args[i] === 'object') {
+    tempArr.push(args[i])
     }
-    return tempArr
+  }
+  return tempArr
   })()
 
   args.forEach(function (item, idx) {
-    for (var key in item) {
-      if (item.hasOwnProperty(key)) {
-        target[key] = item[key]
-      }
+  for (var key in item) {
+    if (item.hasOwnProperty(key)) {
+    target[key] = item[key]
     }
+  }
   })
 
   return target
@@ -624,35 +624,35 @@ function (e) {
 // 只考虑IE 9&+
 function delegate (element, targetSelector, type, handler) {
   element.addEventListener(type, function (e) {
-    var targets = Array.prototype.slice.call(element.querySelectorAll(targetSelector))
-    var target = e.target
-    if (targets.indexOf(target) !== -1) {
-      return handler.apply(target, arguments)
-    }
+  var targets = Array.prototype.slice.call(element.querySelectorAll(targetSelector))
+  var target = e.target
+  if (targets.indexOf(target) !== -1) {
+    return handler.apply(target, arguments)
+  }
   })
 }
 
 // 兼容写法
 function delegate (element, targetClass, type, handler) {
   addEvent(element, type, function (e) {
-    e = e || window.event
-    var target = e.target || e.srcElement
-    if (target.className.indexOf(targetClass) !== -1) {
-      handler.apply(target, arguments)
-    }
+  e = e || window.event
+  var target = e.target || e.srcElement
+  if (target.className.indexOf(targetClass) !== -1) {
+    handler.apply(target, arguments)
+  }
   })
 }
 
 function addEvent (target, type, listener) {
   if (target.addEventListener) {
-    // non-IE, IE9&+
-    target.addEventListener(type, listener, false)
+  // non-IE, IE9&+
+  target.addEventListener(type, listener, false)
   } else if (target.attachEvent) {
-    // IE6 - IE10, not available in IE11
-    target.attachEvent('on' + type, listener)
+  // IE6 - IE10, not available in IE11
+  target.attachEvent('on' + type, listener)
   } else {
-    // all browsers
-    target['on' + type] = listener
+  // all browsers
+  target['on' + type] = listener
   }
 }
 ```
@@ -723,30 +723,30 @@ element.addEventListener(type, listener, useCapture)
 ``` javascript
 function addEvent (target, type, listener) {
   try {
-    // Chrome, FireFox, Opera, Safari, IE9&+
-    target.addEventListener(type, listener, false)
+  // Chrome, FireFox, Opera, Safari, IE9&+
+  target.addEventListener(type, listener, false)
   } catch (e) {
-    try {
-      // IE6 - IE10, not available in IE11
-      target.attachEvent('on' + type, listener)
-    } catch (err) {
-      // all browsers
-      target['on' + type] = listener
-    }
+  try {
+    // IE6 - IE10, not available in IE11
+    target.attachEvent('on' + type, listener)
+  } catch (err) {
+    // all browsers
+    target['on' + type] = listener
+  }
   }
 }
 
 // or shorter one like this:
 function addEvent (target, type, listener) {
   if (target.addEventListener) {
-    // non-IE, IE9&+
-    target.addEventListener(type, listener, false)
+  // non-IE, IE9&+
+  target.addEventListener(type, listener, false)
   } else if (target.attachEvent) {
-    // IE6 - IE10, not available in IE11
-    target.attachEvent('on' + type, listener)
+  // IE6 - IE10, not available in IE11
+  target.attachEvent('on' + type, listener)
   } else {
-    // all browsers
-    target['on' + type] = listener
+  // all browsers
+  target['on' + type] = listener
   }
 }
 ```
@@ -756,11 +756,11 @@ function addEvent (target, type, listener) {
 ``` javascript
 function removeEvent (target, type, listener) {
   if (target.removeEventListener) {
-    target.removeEventListener(type, listener, false)
+  target.removeEventListener(type, listener, false)
   } else if (target.detachEvent) {
-    target.detachEvent('on' + type, listener)
+  target.detachEvent('on' + type, listener)
   } else {
-    target.detachEvent['on' + type] = null
+  target.detachEvent['on' + type] = null
   }
 }
 ```
@@ -857,10 +857,10 @@ function removeEvent (target, type, listener) {
   display: block;
 
   .img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   }
 }
 ```
@@ -875,8 +875,8 @@ function removeEvent (target, type, listener) {
   vertical-align: middle;
 
   .img {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
   }
 }
 ```
@@ -890,7 +890,7 @@ function removeEvent (target, type, listener) {
   line-height: 300px;
 
   .img {
-    display: inline-block;
+  display: inline-block;
   }
 }
 ```
@@ -904,9 +904,9 @@ function removeEvent (target, type, listener) {
   height: 400px;
 
   .img {
-    display: block;
-    height: 100px;
-    margin: 150px auto 0;
+  display: block;
+  height: 100px;
+  margin: 150px auto 0;
   }
 }
 ```
@@ -920,11 +920,11 @@ function removeEvent (target, type, listener) {
   height: 400px;
 
   .img {
-    position: absolute;
-    width: 100px;
-    height: 300px;
-    top: 50px;
-    left: 250px;
+  position: absolute;
+  width: 100px;
+  height: 300px;
+  top: 50px;
+  left: 250px;
   }
 }
 ```
@@ -937,7 +937,7 @@ function removeEvent (target, type, listener) {
   display: inline-block; // 包围内部元素
 
   .img {
-    padding: 30px 20px; // 用来加大父元素的尺寸
+  padding: 30px 20px; // 用来加大父元素的尺寸
   }
 }
 ```
@@ -984,11 +984,11 @@ inherit：继承父元素position属性的值。
 <head></head>
 <body>
   <div class="container">
-    <aside class="left">Left</aside>
-    <div class="wrapper">
-      <article class="middle">Middle</article>
-      <article class="right">Right</article>
-    </div>
+  <aside class="left">Left</aside>
+  <div class="wrapper">
+    <article class="middle">Middle</article>
+    <article class="right">Right</article>
+  </div>
   </div>
 </body>
 </html>
@@ -997,12 +997,12 @@ inherit：继承父元素position属性的值。
 ``` less
 .clearfix() {
   &:after {
-    content: '';
-    clear: both;
-    display: block;
-    height: 0;
-    opacity: 0;
-    visibility: hidden;
+  content: '';
+  clear: both;
+  display: block;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
   }
 }
 html, body, div, aside, article {
@@ -1017,26 +1017,26 @@ html, body, container, .left, .wrapper, .middle, .right {
   .clearfix();
 
   .left {
-    float: left;
-    width: 200px;
-    margin-left: -200px;
-    background-color: skyblue;
+  float: left;
+  width: 200px;
+  margin-left: -200px;
+  background-color: skyblue;
   }
 
   .wrapper {
-    float: left;
-    width: 100%;
+  float: left;
+  width: 100%;
 
-    .middle, .right {
-      float: left;
-      width: 50%;
-    }
-    .middle {
-      background-color: gray;
-    }
-    .right {
-      background-color: yellow;
-    }
+  .middle, .right {
+    float: left;
+    width: 50%;
+  }
+  .middle {
+    background-color: gray;
+  }
+  .right {
+    background-color: yellow;
+  }
   }
 }
 ```
@@ -1146,11 +1146,11 @@ function test () {
 function fun (n, o) {
   console.log(o)
   return {
-    // mark B
-    fun: function (m) {
-      // mark C
-      return fun(m, n)
-    }
+  // mark B
+  fun: function (m) {
+    // mark C
+    return fun(m, n)
+  }
   }
 }
 var a = fun(0);  a.fun(1);  a.fun(2);  a.fun(3)
@@ -1259,7 +1259,7 @@ function* hello (name) {
   yield `hello ${name}!`
   yield 'I am glad to meet you!'
   if (0.6 > 0.5) {
-    yield `It is a good day!`
+  yield `It is a good day!`
   }
   yield 'See you later!'
 }
@@ -1285,14 +1285,14 @@ Generator函数与常见的函数的差异：
 
 - 大体
   + 减少服务器请求数：
-    * 将多个JS/CSS文件进行合并；
-    * 图片不需要经常改动时，可使用CSS sprite；
-    * 如果仅单个页面使用某JS/CSS文件，可以直接将文件内容放于html页面中（若多个页面公用相同的JS/CSS）文件，则不该这么做，应该利用好浏览器缓存功能。
+  * 将多个JS/CSS文件进行合并；
+  * 图片不需要经常改动时，可使用CSS sprite；
+  * 如果仅单个页面使用某JS/CSS文件，可以直接将文件内容放于html页面中（若多个页面公用相同的JS/CSS）文件，则不该这么做，应该利用好浏览器缓存功能。
   + 加快资源访问速度：
-    * CDN。
+  * CDN。
   + 减小文件大小：
-    * 将图片适当压缩；
-    * 压缩JS/CSS文件。
+  * 将图片适当压缩；
+  * 压缩JS/CSS文件。
   + 提高代码执行效率。
 - JS
   + 需要多次使用的值（比如需要遍历的数组对象的length），应先将其存为一个变量，然后调用该变量以减少JS查询的时间；
@@ -1305,11 +1305,52 @@ Generator函数与常见的函数的差异：
   + 主要是SEO方面的优化，添加name为keyword和description的meta标签，减少外链，外链上加上rel="nofollow"，标签尽量符合语义，减少不必要的嵌套标签。
 - 其他
   + 预解析
-    * 比如首页添加&lg;link rel="prerender" href="/about.html" />
+  * 比如首页添加&lg;link rel="prerender" href="/about.html" />
   + 利用缓存
-    * 比如可以使用百度静态资源公共库(cdn.code.baidu.com)，若用户以前访问过其他引用了相同资源地址的文件的话，缓存的优势就出来了。
+  * 比如可以使用百度静态资源公共库(cdn.code.baidu.com)，若用户以前访问过其他引用了相同资源地址的文件的话，缓存的优势就出来了。
 - 总结：像压缩图片这种方法对提高网页加载速度的效果是很明显的，但是有些优化方法对于访问量小的小型网站而言并没有啥好呢么必要，比如：如果某JS文件本来就只用100来行，压缩后减少的文件大小对页面访问速度的提高等于没有，对服务器压力的减少也没啥意义。
 
+
+
+
+## 快速排序
+
+快速排序由于排序效率在同为O(N*logN)的几种排序方法中效率较高，因此经常被采用，再加上快速排序思想——分治法也确实实用，因此很多软件公司的笔试面试，包括像腾讯，微软等知名IT公司都喜欢考这个。
+
+快速排序是C.R.A.Hoare于1962年提出的一种划分交换排序。它采用了一种分治的策略，通常称其为分治法(Divide-and-ConquerMethod)。
+
+该方法的基本思想是：
+- 先从数列中取出一个数作为基准数（一般是以中间项为基准）；
+- 分区过程，将比这个数大的数全放到它的右边，小于或等于它的数全放到它的左边；
+- 再对左右区间重复第二步，直到各区间只有一个数。
+
+``` javascript
+function quickSort (arr) {
+  if (arr.length <= 1) {
+    return arr
+  }
+
+  // pivot：枢纽、中心点
+  var pivotIndex = Math.floor(arr.length / 2)
+  // 找基准，并把基准从原数组中删除
+  var pivot = arr.splice(pivotIndex, 1)[0]
+  // 定义左右数组
+  var left = []
+  var right = []
+
+  // 比基准小的放在left，比基准打的放在right
+  arr.forEach(function (val) {
+    if (val <= pivot) {
+      left.push(val)
+    } else {
+      right.push(val)
+    }
+  })
+
+  // 递归
+  return quickSort(left).concat([pivot], quickSort(right))
+}
+```
 
 ## 常用meta标签
 
@@ -1403,3 +1444,5 @@ Generator函数与常见的函数的差异：
 - [Javascript异步编程的4种方法](http://www.ruanyifeng.com/blog/2012/12/asynchronous%EF%BC%BFjavascript.html)
 - [深入解析 ES6：Generator](http://web.jobbole.com/82903/)
 - [详解css3弹性盒模型（Flexbox）](https://segmentfault.com/a/1190000000707526)
+- [白话经典算法系列之六 快速排序 快速搞定](http://blog.csdn.net/morewindows/article/details/6684558)
+- [JS实现快速排序](http://www.cnblogs.com/dll-ft/p/5850487.html)
