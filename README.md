@@ -1016,6 +1016,17 @@ html, body, container, .left, .wrapper, .middle, .right {
 }
 ```
 
+
+## 边距塌陷及其修复
+
+竖直方向上相接触的margin-top/bottom会塌陷，若二者均为正/负值，取其绝对值大者；若二者中一负一正，取二者之和。
+
+## 清除浮动的原理
+
+清除浮动使用clear: left/right/both。业界常用的.clearfix也是这么做的，只不过是把该样式写进了父元素的:after伪元素中，并加了opacity: 0; display: block; height: 0; visibile: hidden;等使伪元素不可见。
+
+不清楚浮动但包围浮动元素的方法有 为浮动元素的父元素添加overflow: hidden、或将父元素也浮动起来等使父元素形成**BFC（Block Formatting Context）**的方式，但这些方式在应用上没有.clearfix这种方式理想。
+
 ## 常用meta标签
 
 ``` html
