@@ -299,7 +299,26 @@ var a = 1
 
 ## DOM基础
 
-### 问题
+### 问题1
+
+书写原生js脚本将body下的第二个div隐藏：
+
+``` javascript
+var oBody = document.getElementsByTagName('body')[0]
+var oChildren = oBody.childNodes
+var nDivCounter = 0
+
+for (var i = 0, len = oChildren.length; i < len; i++) {
+  if (oChildren[i].nodeName === 'DIV') {
+    nDivCounter++
+    if (nDivCounter === 2) {
+      oChildren[i].style.display = 'none'
+    }
+  }
+}
+```
+
+### 问题2
 
 ``` html
 <ul id="list" class="foo">
@@ -597,8 +616,9 @@ function (e) {
 - 可以大量节省内存占用，减少事件注册，比如在table上代理所有td的click事件就非常棒；
 - 可以实现当新增子孙节点时无需再次对其绑定事件，对于动态内容部分尤为合适。
 
-缺点：
-- 如果把所有事件都代理到一个比较顶层的DOM节点上的话，比较容易出现误判，给不需要绑定事件的节点绑定了事件，比如把页面中所有事件都绑定到document上进行委托，就不是很合适。
+缺点有：
+- 如果把所有事件都代理到一个比较顶层的DOM节点上的话，比较容易出现误判，给不需要绑定事件的节点绑定了事件，比如把页面中所有事件都绑定到document上进行委托，就不是很合适；
+- 事件逐级冒泡到外部dom上再执行肯定没有直接执行快。
 
 ``` javascript
 // 只考虑IE 9&+
@@ -668,7 +688,7 @@ $(a).click(function () {
   return false
 })
 
-document.getElementById('link').onclick = funtion (e) {
+document.getElementById('link').onclick = function (e) {
   // 阻止默认行为
   return false
 }
@@ -748,6 +768,7 @@ function removeEvent (target, type, listener) {
 ### 实现事件模型（绑定事件、触发事件、事件广播）
 
 // TODO：暂时涉及不到这些考点
+
 
 ## 页面加载
 
@@ -1036,6 +1057,130 @@ html, body, container, .left, .wrapper, .middle, .right {
 较常见的做法是使用CSS media query，而且通常会在meta标签中对viewport的宽度等进行设定（比如设定width: device-width）。但即便不用这种方法，只要页面能根据屏幕宽度做出自适应的调整，那就是响应式设计。
 
 
+## 弹性盒模型
+
+// TODO
+justify-content属性的常见属性值，并解释各属性值的含义
+
+
+## ES5中的闭包、作用域、变量/函数提升（hoisting）
+
+写出下面代码的执行结果：
+
+``` javascript
+// 当前位于全局作用域下
+function testObject () {
+  alert(this)
+}
+
+testObject()
+```
+上题的答案：在chrome中会弹出[object Window]
+
+``` javascript
+var msg = 'String A'
+function test () {
+  alert(msg)
+  var msg = 'String A'
+  alert(msg)
+}
+test()
+```
+
+上题的分析与答案：在函数内部声明的变量在函数内部会覆盖掉全局同名变量。在JS预解析时，定义变量的行为会在变量作用域内的顶部实现（hoisting），但是变量的赋值行为并不会提前，所以上述代码等价于如下代码，所以第一次alert弹出的是undefined，第二次alert弹出的是“String A”。
+
+``` javascript
+var msg = 'String A'
+function test () {
+  var msg
+  alert(msg)
+  msg = 'String A'
+  alert(msg)
+}
+```
+
+
+## 介绍自己最熟悉的JS库，该库有何特点，有哪些注意事项？
+
+jQuery的特点：通用性良好，适合大多数常规网站，省去了为浏览器兼容性写封装函数的麻烦（1+版本支持IE6&+，2+版本支持IE9&+的现代浏览器）。
+
+注意事项：通用性良好意味着特异性不好，jQuery并不适合特异性十足的网站，如邮箱网站、网页游戏等。
+
+## 说明js中call、apply、bind的区别
+
+call：func.call(obj, arg1, arg2)将func函数应用于obj对象上，此时func函数内部的this指向obj对象。
+
+apply：与call类似，只是传参是以数组的方式进行的，如func.apply(obj, [arg1, arg2])。
+
+bind：与call类似，修改了函数中this的指向，但并不立即执行，只是生成一个对应的新函数，需另行调用才会执行。
+
+
+## 说明jquery的bind和on的区别
+
+jQuery官方文档介绍bind方式时的原话：As of jQuery 1.7, the .on() method is the preferred method for attaching event handlers to a document. For earlier versions, the .bind() method is used for attaching an event handler directly to elements.，故我没去了解过jQuery的bind方法。
+
+总结：用on就对了。
+
+
+## AngularJS数据双向绑定的机制？哪些场合下会触发AngularJS的$digest？
+
+// TODO
+
+
+## 如果要自己开发一套实现数据双向绑定的系统，有何思路？
+
+// TODO
+
+
+## 常用的异步处理方法
+
+回调函数、事件监听、发布/订阅、Promise对象
+
+
+## 函数式编程的特点
+
+// TODO
+
+
+## for-of循环和for-in循环的区别
+
+基本上for in用于大部分常见的由key-value对构成的对象上以遍历对象内容。但是for in在遍历数组对象时并不方便，这时候用for of会很方便。
+
+## 说明生成器函数的写法，以及yield语句的作用
+
+// TODO
+
+
+## 常见的前端优化技巧
+
+- 大体
+  + 减少服务器请求数：
+    * 将多个JS/CSS文件进行合并；
+    * 图片不需要经常改动时，可使用CSS sprite；
+    * 如果仅单个页面使用某JS/CSS文件，可以直接将文件内容放于html页面中（若多个页面公用相同的JS/CSS）文件，则不该这么做，应该利用好浏览器缓存功能。
+  + 加快资源访问速度：
+    * CDN。
+  + 减小文件大小：
+    * 将图片适当压缩；
+    * 压缩JS/CSS文件。
+  + 提高代码执行效率。
+- JS
+  + 需要多次使用的值（比如需要遍历的数组对象的length），应先将其存为一个变量，然后调用该变量以减少JS查询的时间；
+  + 于页面底部引入脚本，先将页面内容呈现给用户；
+  + 提高代码复用率，减少代码冗余。
+- CSS
+  + 于页面头部引入样式，避免用户看到布局错乱的内容；
+  + 不要使用CSS表达式。
+- HTML
+  + 主要是SEO方面的优化，添加name为keyword和description的meta标签，减少外链，外链上加上rel="nofollow"，标签尽量符合语义，减少不必要的嵌套标签。
+- 其他
+  + 预解析
+    * 比如首页添加&lg;link rel="prerender" href="/about.html" />
+  + 利用缓存
+    * 比如可以使用百度静态资源公共库(http://cdn.code.baidu.com/)，若用户以前访问过其他引用了相同资源地址的文件的话，缓存的优势就出来了。
+- 总结：像压缩图片这种方法对提高网页加载速度的效果是很明显的，但是有些优化方法对于访问量小的小型网站而言并没有啥好呢么必要，比如：如果某JS文件本来就只用100来行，压缩后减少的文件大小对页面访问速度的提高等于没有，对服务器压力的减少也没啥意义。
+
+
 ## 常用meta标签
 
 ``` html
@@ -1125,3 +1270,4 @@ html, body, container, .left, .wrapper, .middle, .right {
 - [前端打包如何在减少请求数与利用并行下载之间找到最优解？](https://www.zhihu.com/question/37286611)
 - [从输入URL到页面加载发生了什么?](http://www.cnblogs.com/engeng/articles/5943382.html)
 - [根据 URL 请求页面过程](https://segmentfault.com/a/1190000003925803)
+- [Javascript异步编程的4种方法](http://www.ruanyifeng.com/blog/2012/12/asynchronous%EF%BC%BFjavascript.html)
