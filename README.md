@@ -955,6 +955,10 @@ function removeEvent (target, type, listener) {
 }
 ```
 
+### 使用弹性盒模型
+
+详见本页其他地方。
+
 
 ## 简述position属性各个值的区别
 
@@ -1057,7 +1061,42 @@ html, body, container, .left, .wrapper, .middle, .right {
 较常见的做法是使用CSS media query，而且通常会在meta标签中对viewport的宽度等进行设定（比如设定width: device-width）。但即便不用这种方法，只要页面能根据屏幕宽度做出自适应的调整，那就是响应式设计。
 
 
-## 弹性盒模型
+## 弹性盒（Flexible Box）模型
+
+justify-content：
+- flex-start：默认值，伸缩项目向一行的起始位置靠齐；
+- flex-end：伸缩项目向一行的结束位置靠齐；
+- center：项伸缩项目向一行的中间位置靠齐；
+- space-between：伸缩项目会平均地分布在行里。第一个伸缩项目一行中的最开始位置，最后一个伸缩项目在一行中最终点位置；
+- space-around：伸缩项目会平均地分布在行里，两端保留一半的空间；
+- initial：设置该属性为它的默认值；
+- inherit：从父元素继承该属性。
+
+align-items：
+- stretch：默认值，项目被拉伸以适应容器；
+- center：项目位于容器的中心；
+- flex-start：项目位于容器的开头；
+- flex-end：项目位于容器的结尾；
+- baseline：项目位于容器的基线上；
+- initial：设置该属性为它的默认值；
+- inherit：从父元素继承该属性。
+
+水平垂直居中效果：
+
+``` less
+.container {
+  // 创建flex容器
+  display: flex;
+
+  // 水平居中
+  align-items: center;
+
+  // 竖直垂直居中
+  justify-content: center;
+
+  .span {}
+}
+```
 
 // TODO
 justify-content属性的常见属性值，并解释各属性值的含义
@@ -1075,6 +1114,7 @@ function testObject () {
 
 testObject()
 ```
+
 上题的答案：在chrome中会弹出[object Window]
 
 ``` javascript
@@ -1099,6 +1139,46 @@ function test () {
 }
 ```
 
+写出下面代码a、b、c三行的输出分别是什么？
+
+``` javascript
+// mark A
+function fun (n, o) {
+  console.log(o)
+  return {
+    // mark B
+    fun: function (m) {
+      // mark C
+      return fun(m, n)
+    }
+  }
+}
+var a = fun(0);  a.fun(1);  a.fun(2);  a.fun(3)
+var b = fun(0).fun(1).fun(2).fun(3)
+var c = fun(0).fun(1); c.fun(2); c.fun(3)
+
+// 答案：
+// undefined, 0, 0, 0
+// undefined, 0, 1, 2
+// undefined, 0, 1, 1
+```
+
+首先，可以分析得到的结论：标记A下面的fun函数和标记C下面return的fun是同一个函数，标记B下面的fun属性对应的函数不同于标记A和标记C下方的函数。下文为了行文方便，将各个标记处下方的函数方便叫做A、B、C函数。
+
+a行的分析：
+- a = fun(0)：即a = fun (0) {console.log(undefined) return { // ... } }，故输出undefined；
+- a.fun(1)：相当于给B函数传了一个参数1，返回了C函数传参(1, 0)执行后的结果，即A函数传参(1, 0)后执行的结果，故输入0；
+- a.fun(2)和a.fun(2)同上，因为一开始a = fun(0)已经将n的值定为0了，后面console.log出来的就都是0了；
+
+b行的分析：
+- fun(0)：毫无疑问输出undefined；
+- fun(0).fun(1)：参考a行的分析，可知这里输出的是0；
+- fun(0).fun(1).fun(2)：类似的，输出1；
+- fun(0).fun(1).fun(2).fun(3)：类似的，输出2；
+
+c行的分析：
+- fun(0).fun(1)：参见上面的分析，输出undefined、0；
+- c.fun(2)、c.fun(3)：参见之前的分析，输出1、1。
 
 ## 介绍自己最熟悉的JS库，该库有何特点，有哪些注意事项？
 
@@ -1322,3 +1402,4 @@ Generator函数与常见的函数的差异：
 - [根据 URL 请求页面过程](https://segmentfault.com/a/1190000003925803)
 - [Javascript异步编程的4种方法](http://www.ruanyifeng.com/blog/2012/12/asynchronous%EF%BC%BFjavascript.html)
 - [深入解析 ES6：Generator](http://web.jobbole.com/82903/)
+- [详解css3弹性盒模型（Flexbox）](https://segmentfault.com/a/1190000000707526)
