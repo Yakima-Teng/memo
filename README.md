@@ -1090,6 +1090,7 @@ $(document).ready(() => {
 })
 ```
 
+
 ## 移动端click事件延时
 
 在移动端使用click事件会产生300ms的延迟
@@ -1491,6 +1492,101 @@ Math.max.apply(null, arr)
 ```
 
 
+## 二叉树及其遍历
+
+``` javascript
+// 节点对象的构造函数
+function Node (data, left, right) {
+  this.data = data
+  this.left = left
+  this.right = right
+}
+
+Node.prototype.getData = function () {
+  return this.data
+}
+
+// 二叉树的构造函数
+function BST () {
+  this.root = null
+}
+
+// 插入方法
+BST.prototype.insert = function (data) {
+  var n = new Node(data, null, null)
+  if (this.root === null) {
+    this.root = n
+  } else {
+    var current = this.root
+    var parent
+    while (true) {
+      parent = current
+      if (data < current.data) {
+        current = current.left
+        if (current === null) {
+          parent.left = n
+          break
+        }
+      } else {
+        current = current.right
+        if (current === null) {
+          parent.right = n
+          break
+        }
+      }
+    }
+  }
+}
+
+// 先序遍历二叉树
+BST.prototype.preOrder = function (node) {
+  if (node !== null) {
+    console.log(node.getData())
+    this.inOrder(node.left)
+    this.inOrder(node.right)
+  }
+}
+
+// 中序遍历二叉树
+BST.prototype.inOrder = function (node) {
+  if (node !== null) {
+    this.inOrder(node.left)
+    console.log(node.getData())
+    this.inOrder(node.right)
+  }
+}
+
+// 后序遍历二叉树
+BST.prototype.postOrder = function (node) {
+  if (node !== null) {
+    this.inOrder(node.left)
+    this.inOrder(node.right)
+    console.log(node.getData())
+  }
+}
+
+// 测试
+var nums = new BST()
+nums.insert(23)
+nums.insert(45)
+nums.insert(16)
+nums.insert(37)
+nums.insert(3)
+nums.insert(99)
+nums.insert(22)
+
+nums.inOrder(nums.root)
+
+// 依次输出如下内容：
+// 3
+// 16
+// 22
+// 23
+// 37
+// 45
+// 99
+```
+
 ## 常用meta标签
 
 ``` html
@@ -1585,3 +1681,4 @@ Math.max.apply(null, arr)
 - [详解css3弹性盒模型（Flexbox）](https://segmentfault.com/a/1190000000707526)
 - [白话经典算法系列之六 快速排序 快速搞定](http://blog.csdn.net/morewindows/article/details/6684558)
 - [啦啦啦（博客）](http://www.cnblogs.com/dll-ft/)
+- [JS递归与二叉树的遍历](https://segmentfault.com/a/1190000004010854?utm_source=tuicool&utm_medium=referral)
