@@ -1060,6 +1060,63 @@ html, body, container, .left, .wrapper, .middle, .right {
 
 较常见的做法是使用CSS media query，而且通常会在meta标签中对viewport的宽度等进行设定（比如设定width: device-width）。但即便不用这种方法，只要页面能根据屏幕宽度做出自适应的调整，那就是响应式设计。
 
+``` javascript
+function fit () {
+  const scale = $('body').width() / 640
+  $('html').css('font-size', 100 * scale + 'px')
+}
+
+$(document).ready(() => {
+  const userAgent = window.navigator.userAgent.toLowerCase()
+  if (userAgent.indexOf('android') === -1 && userAgent.indexOf('iphone') === -1) {
+    $('body').addClass('pc')
+  }
+  fit()
+  $('html').css('height', $(window).height() + 'px')
+  $(window).resize(fit)
+  if (userAgent.indexOf('android') !== -1) {
+    const originalHeight = $(window).height()
+    // 部分安卓机弹出输入法时底部的fixed定位的按钮也会被谈起来导致输入框被遮住
+    $(window).resize(() => {
+      const scale = $('body').width() / 640
+      // .footer-button-container是被fixed定位在页面底部的元素
+      if (Math.abs(originalHeight - $('.footer-button-container').offset().top - 108 * scale) < 100 || $('.footer-button-container').offset().top === 0) {
+        $('.footer-button-container').show()
+      } else {
+        $('.footer-button-container').hide()
+      }
+    })
+  }
+})
+```
+
+## 移动端click事件延时
+
+在移动端使用click事件会产生300ms的延迟
+
+问题的产生：移动端存在双击放大的问题，所以在移动端点击事件发生时，为了判断用户的行为（到底是要双击还是要点击），浏览器通常会等待300ms，如果300ms之内，用户没有再次点击，则判定为点击事件，否则判定为双击缩放。
+
+为什么要解决：现代web对性能的极致追求，对用户体验的高标准，让着300ms的卡顿变得难以接受
+
+如何解决：
+
+1、user-scalable:no  禁止缩放——没有缩放就不存在双击，也就没有点击延迟
+
+2、指针事件：CSS：-ms-touch-action:none   点击后浏览器不会启用缩放操作，也就不存在延迟。然而这种方法兼容性很不好。
+
+3、FastClick库：针对这个问题所开发的轻量级库。FastClick在检测到touchend事件后，会立即触发一个模拟的click事件，并把300ms后真正的click事件阻止掉
+
+用法：
+
+``` javascript
+window.addEventListener('load', function () {
+  // 虽然可以绑定到更具体的元素，但绑定到body上能使整个应用都受益
+  FastClick.attach(document.body)
+})
+```
+
+当FastClick检测到页面中使用了user-scalable:no或者touch-action:none方案时，会静默退出。
+
 
 ## 弹性盒（Flexible Box）模型
 
@@ -1407,6 +1464,7 @@ function binarySearch (arr, num) {
 }
 ```
 
+
 ## 将数组中奇数放在右边，偶数放在左边，不允许使用额外空间
 
 说明：从一个数组中间删除元素splice的运行代价是比较大的
@@ -1417,6 +1475,21 @@ arr.sort(function (a, b) {
   return a % 2 !== 0
 })
 ```
+
+
+## 求一个数组中第二大的元素
+
+要求：
+- 不能对这个数组进行整体排序；
+- 若要用循环，只能一重循环；
+- 不适用额外空间。
+
+``` javascript
+var arr = [1, 3, 5, 2, 7, 6]
+arr[arr.indexOf(Math.max.apply(null, arr))] = null
+Math.max.apply(null, arr)
+```
+
 
 ## 常用meta标签
 
