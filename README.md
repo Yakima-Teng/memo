@@ -1407,6 +1407,17 @@ function binarySearch (arr, num) {
 }
 ```
 
+## 将数组中奇数放在右边，偶数放在左边，不允许使用额外空间
+
+说明：从一个数组中间删除元素splice的运行代价是比较大的
+
+``` javascript
+var arr = [1, 4, 5, 2, 3, 7, 8]
+arr.sort(function (a, b) {
+  return a % 2 !== 0
+})
+```
+
 ## 常用meta标签
 
 ``` html
@@ -1500,4 +1511,4 @@ function binarySearch (arr, num) {
 - [深入解析 ES6：Generator](http://web.jobbole.com/82903/)
 - [详解css3弹性盒模型（Flexbox）](https://segmentfault.com/a/1190000000707526)
 - [白话经典算法系列之六 快速排序 快速搞定](http://blog.csdn.net/morewindows/article/details/6684558)
-- [JS实现快速排序](http://www.cnblogs.com/dll-ft/p/5850487.html)
+- [啦啦啦（博客）](http://www.cnblogs.com/dll-ft/)
