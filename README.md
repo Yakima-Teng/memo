@@ -723,30 +723,30 @@ element.addEventListener(type, listener, useCapture)
 ``` javascript
 function addEvent (target, type, listener) {
   try {
-  // Chrome, FireFox, Opera, Safari, IE9&+
-  target.addEventListener(type, listener, false)
+    // Chrome, FireFox, Opera, Safari, IE9&+
+    target.addEventListener(type, listener, false)
   } catch (e) {
-  try {
-    // IE6 - IE10, not available in IE11
-    target.attachEvent('on' + type, listener)
-  } catch (err) {
-    // all browsers
-    target['on' + type] = listener
-  }
+    try {
+      // IE6 - IE10, not available in IE11
+      target.attachEvent('on' + type, listener)
+    } catch (err) {
+      // all browsers
+      target['on' + type] = listener
+    }
   }
 }
 
 // or shorter one like this:
 function addEvent (target, type, listener) {
   if (target.addEventListener) {
-  // non-IE, IE9&+
-  target.addEventListener(type, listener, false)
+    // non-IE, IE9&+
+    target.addEventListener(type, listener, false)
   } else if (target.attachEvent) {
-  // IE6 - IE10, not available in IE11
-  target.attachEvent('on' + type, listener)
+    // IE6 - IE10, not available in IE11
+    target.attachEvent('on' + type, listener)
   } else {
-  // all browsers
-  target['on' + type] = listener
+    // all browsers
+    target['on' + type] = listener
   }
 }
 ```
