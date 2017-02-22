@@ -74,11 +74,18 @@ iOS部分版本的Date构造函数不支持规范标准中定义的YYYY-MM-DD格
 // 将形如"yyyy-mm-dd hh:mm:ss"的日期字符串转换为日期对象（兼容IOS设备）
 function longStringToDate (dateString) {
   if (dateString && dateString.length === 19) {
-  // Attention: there is a space between regular expression
-  let tempArr = dateString.split(/[- :]/)
-  return new Date(tempArr[0], tempArr[1] - 1, tempArr[2], tempArr[3], tempArr[4], tempArr[5])
+    // Attention: there is a space between regular expression
+    let tempArr = dateString.split(/[- :]/)
+    return new Date(tempArr[0], tempArr[1] - 1, tempArr[2], tempArr[3], tempArr[4], tempArr[5])
   }
   return 'Invalid Date'
+}
+```
+
+### input框加入disabled属性后字体颜色变淡
+```css
+input[disabled] {
+  opacity: 1;
 }
 ```
 
