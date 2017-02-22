@@ -1669,6 +1669,8 @@ nums.inOrder(nums.root)
 通过这种方式创建一个值为undefined的变量。
 传window是出于性能考虑，js寻找一个变量是沿着作用域链逐级往上找的，把window变为函数内部的局部变量后，就不再需要每次都沿着作用域链一直到顶级才找到window了。
 
+## JS中除了使用new关键字还有什么方法可以创建对象？
+可以通过Object.create(proto, [, propertiesObject])实现。详见：[Object.create()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create)
 
 ## 参考
 
@@ -1693,3 +1695,4 @@ nums.inOrder(nums.root)
 - [白话经典算法系列之六 快速排序 快速搞定](http://blog.csdn.net/morewindows/article/details/6684558)
 - [啦啦啦（博客）](http://www.cnblogs.com/dll-ft/)
 - [JS递归与二叉树的遍历](https://segmentfault.com/a/1190000004010854?utm_source=tuicool&utm_medium=referral)
+- [Object.create()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create)
