@@ -1672,6 +1672,63 @@ nums.inOrder(nums.root)
 ## JS中除了使用new关键字还有什么方法可以创建对象？
 可以通过Object.create(proto, [, propertiesObject])实现。详见：[Object.create()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create)
 
+## 弹性盒（flexbox）实现竖向九宫格
+要求：使用flexbox布局将9个格子排列成3*3的九宫格，且第一列排完才排第二列。
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Flexbox竖向九宫格</title>
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        margin: 0;
+      }
+      .boxs-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-wrap:  wrap;
+        height: 320px;
+        width: 320px;
+        margin: 0 auto;
+      }
+      .box {
+        background: aqua;
+        height: 100px;
+        width: 100px;
+        text-align: center;
+        line-height: 100px;
+        margin: 0 10px 10px 0;
+      }
+      .box:nth-of-type(3n) {
+        margin-bottom: 0;
+      }
+      .box:nth-of-type(n+7) {
+        margin-right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="boxs-wrapper">
+      <article class="box">1</article>
+      <article class="box">2</article>
+      <article class="box">3</article>
+      <article class="box">4</article>
+      <article class="box">5</article>
+      <article class="box">6</article>
+      <article class="box">7</article>
+      <article class="box">8</article>
+      <article class="box">9</article>
+    </section>
+  </body>
+</html>
+```
+
+
 ## 参考
 
 - [高性能 CSS3 动画](https://github.com/Yakima-Teng/Mars/blob/master/performance/high-performance-css3-animation.md)
