@@ -8,7 +8,7 @@
 
 如果是要面试别人，你也可以在这里筛选出你想用的面试题。
 
-详细内容请点击[《中国大陆前端常见面试题》](https://yakima-teng.github.io/memo/)
+详细内容请点击[《中国大陆前端常见面试题》](https://yakima-teng.github.io/memo/)。
 
 ## 关于语言的说明
 
