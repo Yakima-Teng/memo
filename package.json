@@ -1,0 +1,9 @@
+{
+  "name": "memo",
+  "version": "0.0.1",
+  "scripts": {
+    "docs": "cd docs && gitbook serve",
+    "docs:deploy": "bash ./deploy-docs.sh"
+  },
+  "dependencies": {}
+}
