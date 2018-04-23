@@ -3,7 +3,11 @@
   "version": "0.0.1",
   "scripts": {
     "docs": "cd docs && gitbook serve",
-    "docs:deploy": "bash ./deploy-docs.sh"
+    "docs:deploy": "bash ./deploy-docs.sh",
+    "docs:generateSummary": "gulp docs:generateSummary"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
 }
