@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "README.md",
   "scripts": {
-    "docs": "cd docs && gitbook serve",
+    "dev": "cd docs && gitbook serve",
+    "deploy": "npm-run-all --serial docs:generateSummary --parallel docs:deploy deployToServer",
     "docs:deploy": "bash ./deploy-docs.sh",
     "docs:generateSummary": "gulp docs:generateSummary",
     "deployToServer": "gulp deployToServer"
@@ -26,6 +27,7 @@
   "dependencies": {},
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-scp2": "^0.2.0"
+    "gulp-scp2": "^0.2.0",
+    "npm-run-all": "^4.1.2"
   }
 }
