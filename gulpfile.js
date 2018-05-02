@@ -2,6 +2,8 @@
 
 const gulp = require('gulp')
 const fs = require('fs')
+const scp = require('gulp-scp2')
+const config = require('./config')
 let arrFileNames = []
 
 // 自动生成docs/SUMMARY.md文件（手动生成该文件太麻烦了-_-）
@@ -31,5 +33,20 @@ gulp.task('docs:generateSummary', () => {
           console.log("文件写入成功");
         }
       })
+    })
+})
+
+const deploymentConfig = config.deployment
+gulp.task('deployToServer', () => {
+  return gulp.src(deploymentConfig.src)
+    .pipe(scp({
+      host: deploymentConfig.host,
+      username: deploymentConfig.username,
+      password: deploymentConfig.password,
+      dest: deploymentConfig.dest,
+      readyTimeout: deploymentConfig.readyTimeout
+    }))
+    .on('error', e => {
+      console.log(e)
     })
 })

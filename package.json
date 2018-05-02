@@ -5,7 +5,8 @@
   "scripts": {
     "docs": "cd docs && gitbook serve",
     "docs:deploy": "bash ./deploy-docs.sh",
-    "docs:generateSummary": "gulp docs:generateSummary"
+    "docs:generateSummary": "gulp docs:generateSummary",
+    "deployToServer": "gulp deployToServer"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   "homepage": "https://github.com/Yakima-Teng/memo#readme",
   "dependencies": {},
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-scp2": "^0.2.0"
   }
 }
