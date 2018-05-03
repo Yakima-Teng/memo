@@ -4,6 +4,7 @@
   "main": "README.md",
   "scripts": {
     "docs": "cd docs && gitbook serve",
+    "installGitPlugins": "cd docs && gitbook install",
     "deploy": "npm-run-all --serial docs:generateSummary --parallel docs:deploy deployToServer",
     "docs:deploy": "bash ./deploy-docs.sh",
     "docs:generateSummary": "gulp docs:generateSummary",

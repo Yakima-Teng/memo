@@ -9,7 +9,7 @@
     "theme-code",
     "splitter",
     "prism",
-    "expandable-chapters",
+    "folding-chapters",
     "-sharing"
   ],
   "pluginsConfig": {
