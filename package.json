@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "README.md",
   "scripts": {
-    "dev": "cd docs && gitbook serve",
+    "docs": "cd docs && gitbook serve",
     "deploy": "npm-run-all --serial docs:generateSummary --parallel docs:deploy deployToServer",
     "docs:deploy": "bash ./deploy-docs.sh",
     "docs:generateSummary": "gulp docs:generateSummary",

@@ -14,7 +14,7 @@
   ],
   "pluginsConfig": {
     "theme-default": {
-      "showLevel": false
+      "showLevel": true
     }
   }
 }
