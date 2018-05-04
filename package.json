@@ -5,7 +5,7 @@
   "scripts": {
     "docs": "cd docs && gitbook serve",
     "installGitPlugins": "cd docs && gitbook install",
-    "deploy": "npm-run-all --serial docs:generateSummary --parallel docs:deploy deployToServer",
+    "deploy": "npm-run-all --serial docs:generateSummary docs:deploy deployToServer",
     "docs:deploy": "bash ./deploy-docs.sh",
     "docs:generateSummary": "gulp docs:generateSummary",
     "deployToServer": "gulp deployToServer"
