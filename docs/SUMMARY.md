@@ -1,8 +1,8 @@
 # 目录
 
 * [前言](README.md)
-* [测试](./测试/README.md)
-  * [test](./测试/test.md)
+* [软技能](./软技能/README.md)
+  * [科学上网](./软技能/科学上网.md)
 * [面试](./面试/README.md)
   * [AngularJS数据双向绑定的机制？哪些场合下会触发AngularJS的$digest](./面试/AngularJS数据双向绑定的机制？哪些场合下会触发AngularJS的$digest.md)
   * [DOM基础](./面试/DOM基础.md)
