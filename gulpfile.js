@@ -55,7 +55,7 @@ gulp.task('docs:generateSummary', () => {
         arrFileNames.map(folder => {
           const folderName = folder.folderName
           if (folderName !== '_root') {
-            let text = `* [${folder.folderName}](./${folderName}/README.md)\n`
+            let text = `* [${folderName}](./${folderName}/README.md)\n`
             text += folder.fileNames.filter(fileName => fileName !== 'README.md').map(fileName => {
               return `  * [${fileName.replace('.md', '')}](./${folderName}/${fileName})`
             }).join('\n')

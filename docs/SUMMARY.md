@@ -5,7 +5,7 @@
   * [科学上网](./软技能/科学上网.md)
 * [运维](./运维/README.md)
   * [MySQL启动失败故障排查](./运维/MySQL启动失败故障排查.md)
-  * [VIM编辑器常用命令](运维/Vim编辑器常用快捷键.md)
+  * [Vim编辑器常用快捷键](./运维/Vim编辑器常用快捷键.md)
   * [linux系统和常用命令](./运维/linux系统和常用命令.md)
 * [面试](./面试/README.md)
   * [AngularJS数据双向绑定的机制？哪些场合下会触发AngularJS的$digest](./面试/AngularJS数据双向绑定的机制？哪些场合下会触发AngularJS的$digest.md)
