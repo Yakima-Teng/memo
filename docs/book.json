@@ -5,6 +5,9 @@
   "description": "JavaScript基础教程、Javascript入门和进阶",
   "language": "zh-hans",
   "copyright": "Yakima Teng &nbsp;版权所有Copyright 2018, All Rights Reserved",
+  "variables": {
+    "homePage": "/"
+  },
   "plugins": [
     "theme-code",
     "splitter",
