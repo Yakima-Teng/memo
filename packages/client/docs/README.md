@@ -1,8 +1,8 @@
 ---
 home: true
 heroImage: https://www.orzzone.com/projects/cdn/books.jpg
-heroText: 前端程序员备忘录
-tagline: 前端基础知识、面试题集锦
+heroText: 《前端程序员备忘录》
+tagline: ——前端基础知识、面试题集锦
 actionText: 开始阅读 →
 actionLink: /SUMMARY/
 features:

@@ -1,6 +1,6 @@
 module.exports = {
     title: '前端程序员备忘录',
-    description: 'Just playing around',
+    description: '《前端程序员备忘录》是前端基础知识和前端面试题的集锦。',
     base: '/memo/',
     head: [
         ['link', { rel: 'icon', href: 'https://www.orzzone.com/projects/cdn/favicon.ico' }]
