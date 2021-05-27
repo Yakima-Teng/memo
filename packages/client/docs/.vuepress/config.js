@@ -2,8 +2,11 @@ module.exports = {
     title: '前端程序员备忘录',
     description: 'Just playing around',
     base: '/memo/',
+    head: [
+        ['link', { rel: 'icon', href: 'https://www.orzzone.com/projects/cdn/favicon.ico' }]
+    ],
     themeConfig: {
-        logo: 'https://www.orzzone.com/projects/cdn/favicon.ico',
+        logo: 'https://www.orzzone.com/projects/cdn/favicon.png',
         nav: [
             { text: 'Home', link: '/' },
             { text: 'Guide', link: '/guide/' },
