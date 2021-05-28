@@ -51,11 +51,11 @@ npm run buildAndDeploy
 
 ```
 if ($http_accept_language ~* ^zh){
-    rewrite ^/$ /memo/index.html?lang=zh redirect;
+    rewrite ^/$ /memo?lang=zh redirect;
 }
 
 if ($http_accept_language ~* ^en){
-    rewrite ^/$ /memo/index.html?lang=en redirect;
+    rewrite ^/$ /memo?lang=en redirect;
 }
 location /memo {
     alias /www/wwwroot/www.lookmaths.com/client/dist/;
