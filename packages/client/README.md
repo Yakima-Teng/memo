@@ -41,6 +41,12 @@ npm run buildAndDeployToServer
 
 其实质是`npm run docs:build && npm run deploy:server`。
 
+### 编译并部署到所有远端（gh-pages和服务器）
+
+```bash
+npm run buildAndDeploy
+```
+
 ## nginx配置
 
 ```

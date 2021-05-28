@@ -8,7 +8,8 @@
     "docs:build": "vuepress build docs",
     "deploy:gh-pages": "bash ./build/deploy-gh-pages.sh",
     "deploy:server": "node ./build/deploy-server.js",
-    "buildAndDeployToServer": "npm run docs:build && npm run deploy:server"
+    "buildAndDeployToServer": "npm run docs:build && npm run deploy:server",
+    "buildAnddeploy": "npm run deploy:gh-pages && npm run buildAndDeployToServer"
   },
   "author": "",
   "license": "MIT",
