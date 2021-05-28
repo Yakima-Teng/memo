@@ -11,6 +11,6 @@ features:
 - title: 面试导向
   details: 这里整理的知识偏向于为面试服务（平时的知识还是要靠日常积累）。面试和学习本身其实是没冲突的。
 - title: WLB彩蛋
-  details: 文末收集了一些Work-Life Balance（工作生活平衡）的公司，您可以针对此类公司进行面试准备。
+  details: 文末有一些Work-Life Balance（工作生活平衡）的公司，您可以针对此类公司进行面试准备。
 footer: MIT Licensed | Copyright © 2018-present Yakima Teng
 ---
