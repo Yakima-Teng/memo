@@ -1,6 +1,5 @@
 # 目录
 
-
 * [前言](README.md)
 * [软技能](./软技能/README.md)
   * [科学上网](./软技能/科学上网.md)
@@ -10,7 +9,7 @@
   * [ES5中的闭包、作用域、变量（函数）提升](./面试/ES5中的闭包、作用域、变量（函数）提升.md)
   * [IE8下parseInt方法默认将0开头的参数当做八进制处理，异常时返回0问题](./面试/IE8下parseInt方法默认将0开头的参数当做八进制处理，异常时返回0问题.md)
   * [IE8不支持媒体查询和HTML5新header、article等元素的解决方法](./面试/IE8不支持媒体查询和HTML5新header、article等元素的解决方法.md)
-  * [Immediately-Invoked Function Expression与分号](./面试/Immediately-Invoked Function Expression与分号.md)
+  * [IIFE与分号](./面试/IIFE与分号.md)
   * [JS中除了使用new关键字还有什么方法可以创建对象](./面试/JS中除了使用new关键字还有什么方法可以创建对象.md)
   * [JS原型与原型链](./面试/JS原型与原型链.md)
   * [assign](./面试/assign.md)
