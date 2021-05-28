@@ -33,10 +33,25 @@ npm run deploy:server
 说明：先要将config-example.js文件重命名为config.js，
 然后填上服务器的部署信息。再执行上述命令。
 
-## 编译并部署到服务器上
+### 编译并部署到服务器上
 
 ```bash
 npm run buildAndDeployToServer
 ```
 
 其实质是`npm run docs:build && npm run deploy:server`。
+
+## nginx配置
+
+```
+if ($http_accept_language ~* ^zh){
+    rewrite ^/$ /memo/index.html?lang=zh redirect;
+}
+
+if ($http_accept_language ~* ^en){
+    rewrite ^/$ /memo/index.html?lang=en redirect;
+}
+location /memo {
+    alias /www/wwwroot/www.lookmaths.com/client/dist/;
+}
+```
