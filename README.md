@@ -1,4 +1,4 @@
-# 《前端志》
+# 《前端程序员备忘录》
 
 本书计划涉及以下几个方面：
 
@@ -12,7 +12,7 @@
 
 本书内容采用markdown编写，使用gitbook生成网站静态内容，拥有较好的阅读体验，在线阅读地址：
 
-- [前端志](http://www.lookjavascript.com/)：http://www.lookjavascript.com/
+- [前端程序员备忘录](https://www.lookmaths.com/)：https://www.lookmaths.com/
 
 
 ## 源码地址
@@ -29,4 +29,4 @@
 
 本书为开源项目，可在线免费阅读。未经允许不得用于商业用途。但允许出于学习目的的少量转载，转载请以链接形式注明出处：
 
-- 来源：[前端志](http://www.lookjavascript.com/)：http://www.lookjavascript.com/
+- 来源：[前端程序员备忘录](https://www.lookmaths.com/)：https://www.lookmaths.com/
