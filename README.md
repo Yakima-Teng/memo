@@ -1,18 +1,13 @@
 # 《前端程序员备忘录》
 
-本书计划涉及以下几个方面：
-
-- 基础知识；
-- 简单算法题；
-- 几个短小JS库的源码解析；
-- 几个JS框架的介绍；
-- 前端面试/笔试题。
+前端基础知识、面试题集锦。
 
 有点地方可能自己写得不好，不完善，甚至是不对，希望看发现的朋友能提个issue，或者提个pr。^_^
 
-本书内容采用markdown编写，使用gitbook生成网站静态内容，拥有较好的阅读体验，在线阅读地址：
+本书内容采用markdown编写，使用vuepress生成网站静态内容，拥有较好的阅读体验，在线阅读地址：
 
-- [前端程序员备忘录](https://www.lookmaths.com/)：https://www.lookmaths.com/
+- [前端程序员备忘录-正式地址](https://www.lookmaths.com/)：https://www.lookmaths.com/
+- [前端程序员备忘录-备用地址](https://yakima-teng.github.io/memo/)：https://yakima-teng.github.io/memo/
 
 
 ## 源码地址
