@@ -2,14 +2,7 @@
   "name": "memo",
   "version": "0.0.1",
   "main": "README.md",
-  "scripts": {
-    "docs": "cd docs && gitbook serve",
-    "installGitPlugins": "cd docs && gitbook install",
-    "deploy": "npm-run-all --serial docs:generateSummary docs:deploy deployToServer",
-    "docs:deploy": "bash ./deploy-docs.sh",
-    "docs:generateSummary": "gulp docs:generateSummary",
-    "deployToServer": "gulp deployToServer"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Yakima-Teng/memo.git"
@@ -26,9 +19,5 @@
   },
   "homepage": "https://github.com/Yakima-Teng/memo#readme",
   "dependencies": {},
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-scp2": "^0.2.0",
-    "npm-run-all": "^4.1.2"
-  }
+  "devDependencies": {}
 }

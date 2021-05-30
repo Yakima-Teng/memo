@@ -39,7 +39,4 @@ jspm_packages
 # Ignore .idea folder
 .idea
 
-docs/_book
-/config.js
 .DS_Store
-
