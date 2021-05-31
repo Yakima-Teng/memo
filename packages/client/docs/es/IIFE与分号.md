@@ -1,4 +1,4 @@
-## Immediately-Invoked Function Expression与分号
+# Immediately-Invoked Function Expression与分号
 
 如果习惯写完一条语句后不加分号的写法，碰到需要写自执行函数函数的时候容易踩到下面的坑，而且此种问题有时候不易分析出来：
 

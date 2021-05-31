@@ -1,5 +1,7 @@
 # 总论
 
+> 本文档尚在更新中，请过段时间再看。
+
 ## 仓库地址
 
 本项目为开源项目，仓库地址：[https://github.com/Yakima-Teng/memo](https://github.com/Yakima-Teng/memo)

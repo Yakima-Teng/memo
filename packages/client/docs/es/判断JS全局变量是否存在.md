@@ -1,4 +1,4 @@
-## 判断JS全局变量是否存在
+# 判断JS全局变量是否存在
 
 ``` javascript
 if (typeof localStorage !== 'undefined') {

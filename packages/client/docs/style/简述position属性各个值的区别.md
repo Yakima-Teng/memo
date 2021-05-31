@@ -1,4 +1,4 @@
-## 简述position属性各个值的区别
+# 简述position属性各个值的区别
 
 fixed：类似absolute，但是是相对浏览器窗口而非网页页面进行定位。
 

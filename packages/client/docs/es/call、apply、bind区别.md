@@ -1,4 +1,4 @@
-## 说明js中call、apply、bind的区别
+# 说明js中call、apply、bind的区别
 
 call：func.call(obj, arg1, arg2)将func函数应用于obj对象上，此时func函数内部的this指向obj对象。
 

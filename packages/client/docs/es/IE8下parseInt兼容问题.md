@@ -1,4 +1,4 @@
-## IE8下parseInt兼容问题
+# IE8下parseInt兼容问题
 
 parseInt问题：IE8及更早版本的IE中，会将parseInt('09')中的09当做八进制进行解析，
 但又发现09不是八进制，最后作为错误而抛出了0这个false。

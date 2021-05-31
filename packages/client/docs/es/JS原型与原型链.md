@@ -1,6 +1,6 @@
-## JS原型与原型链
+# JS原型与原型链
 
-### 普通对象与函数对象
+## 普通对象与函数对象
 
 JS中，对象分**普通对象**和**函数对象**，Object、Function是JS自带的**函数对象**。凡是通过new Function()创建的对象都是函数对象，其他的都是普通对象。
 
@@ -26,7 +26,7 @@ typeof o3 // "object", normal object
 
 ```
 
-### 原型对象
+## 原型对象
 
 每当定义一个对象（函数）时，对象中都会包含一些预定义的属性。其中，函数对象会有一个prototype属性，就是我们所说的原型对象（普通对象没有prototype，但有_proto_属性；函数对象同时含有prototype和__proto__属性）。
 
@@ -60,7 +60,7 @@ var yakima = new Person('yakima')
 yakima.getName() // "yakima"
 ```
 
-### 原型链
+## 原型链
 
 上面提到原型对象的主要作用是用于继承，其具体的实现就是通过原型链实现的。创建对象（不论是普通对象还是函数对象）时，都有一个叫做__proto__的内置属性，用于指向**创建它的函数对象的原型对象（即函数对象的prototype属性）**
 
@@ -99,7 +99,7 @@ Function.__proto__ === Function.prototype // true
 Function.prototype.__proto__ === Object.prototype // true
 ```
 
-### constructor
+## constructor
 
 原型对象中都有个constructor属性，用来引用它的函数对象。这是一种循环引用。
 
@@ -109,7 +109,7 @@ Function.prototype.constructor === Function // true
 Object.prototype.constructor === Object // true
 ```
 
-### 综合理解
+## 综合理解
 
 原型和原型链是JS实现继承的一种模型。
 
