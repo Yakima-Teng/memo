@@ -13,7 +13,7 @@
 回答：
 
 ``` javascript
-function binarySearch (arr, num) {
+function dichotomySearch (arr, num) {
   var low = 0
   var high = arr.length - 1
   var mid = Math.floor((low + high) / 2)
