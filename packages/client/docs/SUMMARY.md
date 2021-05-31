@@ -1,5 +1,11 @@
 # 总论
 
+## 仓库地址
+
+本项目为开源项目，仓库地址：[https://github.com/Yakima-Teng/memo](https://github.com/Yakima-Teng/memo)
+
+## 面试准备
+
 备战面试，应该从4个方向进行准备：
 
 - 1. 日常知识体系的搭建：包括各种渠道获取到的知识，比如书籍、视频、文章。
