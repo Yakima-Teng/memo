@@ -2,6 +2,20 @@ const path = require('path')
 const glob = require('glob')
 const fse = require('fs-extra')
 
+const MapFolderNames = {
+    'dom': 'DOM操作',
+    'es': 'ES语法',
+    'html': 'HTML',
+    'else': '其他',
+    'style': '样式',
+    'source': '源码',
+    'algorithms': '算法',
+    'comprehensive': '综合',
+    'soft-skill': '软技能',
+    'maintenance': '运维',
+    'site': '网站',
+}
+
 // 注意路径的末尾要放一个斜杠，这样才会只匹配目录（不会匹配文件）
 let arr = glob.sync(path.join(__dirname, '../docs/*/'))
 arr = arr.map((folderPath) => {
@@ -36,18 +50,11 @@ console.log(JSON.stringify(arr, null, 2))
 exports.generateSidebarMenus = () => {
     const menus = [
         ['/SUMMARY', '总论'],
-        {
-            title: '软技能',
-            initialOpenGroupIndex: -1, // optional, defaults to 0, defines the index of initially opened subgroup
-            children: [
-                ['/软技能/科学上网', '科学上网'],
-            ],
-        },
     ]
 
     arr.forEach((folder) => {
         menus.push({
-            title: folder.folderName,
+            title: MapFolderNames[folder.folderName],
             initialOpenGroupIndex: -1, // optional, defaults to 0, defines the index of initially opened subgroup
             children: (folder.files || []).map((file) => {
                 const targetPath = `/${folder.folderName}/${file.fileName}`
@@ -57,13 +64,6 @@ exports.generateSidebarMenus = () => {
         })
     })
 
-    menus.push({
-        title: '实用网站',   // required
-        path: '/其他/实用网站',      // optional, link of the title, which should be an absolute path and must exist
-        collapsable: false, // optional, defaults to true
-        sidebarDepth: 1,    // optional, defaults to 1
-        children: [],
-    })
     menus.push({
         title: '955工作生活平衡名单',   // required
         path: 'https://github.com/formulahendry/955.WLB',      // optional, link of the title, which should be an absolute path and must exist
