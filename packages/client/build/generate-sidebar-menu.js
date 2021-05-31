@@ -45,7 +45,6 @@ arr = arr.map((folderPath) => {
         })(),
     }
 })
-console.log(JSON.stringify(arr, null, 2))
 
 exports.generateSidebarMenus = () => {
     const menus = [

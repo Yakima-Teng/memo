@@ -16,6 +16,7 @@
   "devDependencies": {
     "fs-extra": "^10.0.0",
     "glob": "^7.1.7",
+    "markdown-it-imsize": "^2.0.1",
     "ssh2-sftp-client": "^6.0.1",
     "vuepress": "^1.8.2"
   }
