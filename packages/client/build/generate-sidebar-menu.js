@@ -53,7 +53,7 @@ exports.generateSidebarMenus = () => {
 
     arr.forEach((folder) => {
         menus.push({
-            title: MapFolderNames[folder.folderName],
+            title: MapFolderNames[folder.folderName] || folder.folderName,
             initialOpenGroupIndex: -1, // optional, defaults to 0, defines the index of initially opened subgroup
             children: (folder.files || []).map((file) => {
                 const targetPath = `/${folder.folderName}/${file.fileName}`
