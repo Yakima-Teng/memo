@@ -1,14 +1,24 @@
-## 二分法查找
+# 二分法查找
 
-前提：数组已预先排序。
+英语科普：二分法，[dichotomy](https://www.google.com/search?q=dichotomy)。
+
+## 前提
+
+数组已预先排序。
+
+## 面试题
+
+问题：在已从小到大排序的数组（数组内元素均为数字）中找到给定的数字对应的下标。
+
+回答：
 
 ``` javascript
 function binarySearch (arr, num) {
-  // assume arr has been sorted in advance
   var low = 0
   var high = arr.length - 1
   var mid = Math.floor((low + high) / 2)
 
+  // while循环的判断条件是high - low > 1
   while (high - low > 1) {
     if (num === arr[low]) {
       return low
@@ -25,7 +35,7 @@ function binarySearch (arr, num) {
     }
   }
 
-  // if not found
+  // 如果没找到，则返回-1
   return -1
 }
 ```
