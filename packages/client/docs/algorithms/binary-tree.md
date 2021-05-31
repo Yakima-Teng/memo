@@ -74,8 +74,8 @@ BST.prototype.insert = function (data) {
 BST.prototype.preOrder = function (node) {
   if (node !== null) {
     console.log(node.getData())
-    this.inOrder(node.left)
-    this.inOrder(node.right)
+    this.preOrder(node.left)
+    this.preOrder(node.right)
   }
 }
 
@@ -91,30 +91,26 @@ BST.prototype.inOrder = function (node) {
 // 后序遍历二叉树
 BST.prototype.postOrder = function (node) {
   if (node !== null) {
-    this.inOrder(node.left)
-    this.inOrder(node.right)
+    this.postOrder(node.left)
+    this.postOrder(node.right)
     console.log(node.getData())
   }
 }
 
 // 测试
 var nums = new BST()
-nums.insert(23)
-nums.insert(45)
-nums.insert(16)
-nums.insert(37)
+nums.insert(8)
 nums.insert(3)
-nums.insert(99)
-nums.insert(22)
+nums.insert(10)
+nums.insert(1)
+nums.insert(6)
+nums.insert(14)
+nums.insert(4)
+nums.insert(7)
+nums.insert(13)
 
 nums.inOrder(nums.root)
 
 // 依次输出如下内容：
-// 3
-// 16
-// 22
-// 23
-// 37
-// 45
-// 99
+1 3 4 6 7 8 10 13 14
 ```
