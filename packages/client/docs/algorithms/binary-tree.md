@@ -185,9 +185,36 @@ function inOrder (bst) {
 
 ### 4.3、后序遍历的非递归实现
 
+后续遍历比前中/序遍历是要麻烦一些的。
+
+遍历顺序：左右根。左路的遍历和上面的思路是类似的，区别是元素出栈时不能直接打印，
+因为如果有**没访问过的**右侧子树的话，需要先访问右侧子树。
+右侧子树访问结束后才访问根（一些列子树的根）。
+
 ```javascript
 function postOrder (bst) {
-    // TODO
+    let p = bst.root
+    let last = null
+    const arr = []
+    while (p !== null || arr.length > 0) {
+        while (p !== null) {
+            arr.push(p)
+            p = p.left
+        }
+
+        if (arr.length > 0) {
+            p = arr[arr.length - 1] // 栈顶元素
+            // 当p不存在右子树或右子树已被访问过的话，直接访问当前节点数据
+            if (!p.right || p.right === last) {
+                p = arr.pop()
+                console.log(p.getData())
+                last = p // 记录上一次访问过的节点
+                p = null // 这个容易漏掉，避免下个循环继续访问左子树
+            } else {
+                p = p.right
+            }
+        }
+    }
 }
 ```
 
