@@ -13,7 +13,8 @@ module.exports = {
     nav: [
       {text: '首页', link: '/'},
       {text: '总论', link: '/SUMMARY'},
-      {text: '作者博客', link: 'https://www.orzzone.com'}
+      {text: '作者博客', link: 'https://www.orzzone.com'},
+      {text: '去github点赞', link: 'https://github.com/Yakima-Teng/memo'}
     ],
     navbar: true,
     sidebarDepth: 1,
