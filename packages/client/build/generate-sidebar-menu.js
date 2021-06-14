@@ -3,11 +3,11 @@ const glob = require('glob')
 const fse = require('fs-extra')
 
 const MapFolderNames = {
-  'algorithms': '算法',
+  'algorithms': '1.算法',
+  'dom': '2.DOM操作',
   'build': '构建',
   'component': '组件',
   'comprehensive': '综合',
-  'dom': 'DOM操作',
   'else': '其他',
   'es': 'ES语法',
   'html': 'HTML',
