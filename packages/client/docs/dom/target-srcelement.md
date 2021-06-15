@@ -51,3 +51,5 @@ Be aware that this feature may cease to work at any time.
 ## 参考资料
 
 - [Event.srcElement](https://developer.mozilla.org/en-US/docs/Web/API/Event/srcElement)
+- [Event.currentTarget](https://developer.mozilla.org/en-US/docs/Web/API/Event/currentTarget)
+- [Event.target](https://developer.mozilla.org/en-US/docs/Web/API/Event/target)
