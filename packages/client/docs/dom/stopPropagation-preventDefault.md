@@ -1,6 +1,6 @@
 # 阻止事件传播和默认行为
 
-## 阻止事件传播
+## 1、阻止事件传播
 
 The stopPropagation() method of the Event interface
 prevents further propagation of the current event in the
@@ -19,7 +19,7 @@ if (e.stopPropagation) {
 }
 ```
 
-## 阻止事件的默认行为
+## 2、阻止事件的默认行为
 
 ```javascript
 e = e || window.event
@@ -32,7 +32,7 @@ if (e.preventDefault) {
 }
 ```
 
-## Event.stopImmediatePropagation
+## 3、stopImmediatePropagation
 
 The stopImmediatePropagation() method of the Event interface prevents
 other listeners of the same event from being called.
@@ -42,12 +42,12 @@ they are called in the order in which they were added.**
 If stopImmediatePropagation() is invoked during one such call,
 no remaining listeners will be called.
 
-## stopPropagation和stopImmediatePropagation
+## 4、stopPropagation和stopImmediatePropagation
 
 - stopPropagation will prevent any **parent** handlers from being executed;
 - stopImmediatePropagation will prevent any **parent** handlers and also any **other handlers from executing**.
 
-## jQuery中的return false
+## 5、jQuery中的return false
 
 原生JS中return false只会阻止默认行为，
 而用jQuery的话会同时阻止事件传播和阻止事件的默认行为：

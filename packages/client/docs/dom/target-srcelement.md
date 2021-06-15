@@ -1,13 +1,13 @@
 # 事件的几种target
 
-## 1、Event.target
+## 1、target
 
 The target property of the Event interface is a reference to the object
 onto which the event was dispatched.
 It is different from Event.currentTarget when the event handler is called
 during the bubbling or capturing phase of the event.
 
-## 2、Event.currentTarget
+## 2、currentTarget
 
 The currentTarget read-only property of the Event interface identifies
 the current target for the event, as the event traverses the DOM.
@@ -30,7 +30,7 @@ function (e) {
 }
 ```
 
-## 4、Event.srcElement
+## 4、srcElement
 
 Initially implemented in Internet Explorer,
 Event.srcElement is a now-standard alias
