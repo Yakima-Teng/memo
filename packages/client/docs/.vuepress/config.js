@@ -19,7 +19,8 @@ module.exports = {
     navbar: true,
     sidebarDepth: 1,
     displayAllHeaders: true,
-    lastUpdated: '最近更新时间', // string | boolean
+    // lastUpdated: '最近更新时间', // string | boolean
+    lastUpdated: false,
     sidebar: sidebarMenus,
   },
   markdown: {
