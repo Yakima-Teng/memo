@@ -59,7 +59,7 @@ arr = arr.map((folderPath) => {
 
 exports.generateSidebarMenus = () => {
   const menus = [
-    ['/SUMMARY', '总论'],
+    { title: '0.序言', path: '/SUMMARY' },
   ]
 
   arr.forEach((folder) => {
@@ -74,8 +74,23 @@ exports.generateSidebarMenus = () => {
     })
   })
 
+  menus.sort((menuA, menuB) => {
+    // 标题带数字的排到最前面
+    if (/^[0-9]+\./.test(menuA.title) && !/^[0-9]+\./.test(menuB.title)) {
+      return -1
+    }
+    // 两个菜单标题都带数字的话，数字小的排前面
+    if (/^[0-9]+\./.test(menuA.title) && /^[0-9]+\./.test(menuB.title)) {
+      const orderA = menuA.title.match(/^[0-9]+\./)[1] * 1
+      const orderB = menuB.title.match(/^[0-9]+\./)[1] * 1
+      return orderA - orderB
+    }
+    // 其余情况，顺序不变
+    return 0
+  })
+
   menus.push({
-    title: '955工作生活平衡名单',   // required
+    title: '附录:955工作生活平衡名单',   // required
     path: 'https://github.com/formulahendry/955.WLB',      // optional, link of the title, which should be an absolute path and must exist
     collapsable: false, // optional, defaults to true
     sidebarDepth: 1,    // optional, defaults to 1
