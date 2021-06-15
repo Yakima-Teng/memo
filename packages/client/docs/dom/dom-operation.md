@@ -1,6 +1,6 @@
 # DOM操作
 
-## 问题1
+## 1、获取元素
 
 书写原生js脚本将body下的第二个div隐藏：
 
@@ -19,7 +19,7 @@ for (var i = 0, len = oChildren.length; i < len; i++) {
 }
 ```
 
-## 问题2
+## 2、创建元素
 
 ``` html
 <ul id="list" class="foo">
@@ -44,7 +44,7 @@ for (var i = 0, len = oChildren.length; i < len; i++) {
 - 在第500个li后面添加一个li，其文字内容为“&lt;v2ex.com />”
 - 点击任意li弹框显示其为**当前列表**中的第几项
 
-## 解答
+### 解答
 
 ``` javascript
 // 还原题目真实DOM结构
