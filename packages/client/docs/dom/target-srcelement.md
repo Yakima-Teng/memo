@@ -1,4 +1,4 @@
-# target、currentTarget、srcElement
+# 事件的几种target
 
 ## 1、Event.target
 
