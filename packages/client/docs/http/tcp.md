@@ -1,4 +1,4 @@
-# TCP三次握手
+# TCP三次握手四次挥手
 
 ## 1、TCP的特性
 
@@ -27,4 +27,4 @@ TCP 的连接的拆除需要发送四个包，因此称为四次挥手(Four-way 
 
 ## 参考资料
 
-- [TCP 的特性](https://hit-alibaba.github.io/interview/basic/network/TCP.html)
+- [TCP的特性](https://hit-alibaba.github.io/interview/basic/network/TCP.html)
