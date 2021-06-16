@@ -1,5 +1,7 @@
 # Promise和setTimeout执行顺序
 
+## 1、例1
+
 ![](https://pic1.zhimg.com/80/v2-96a9f64788d8831c2b9e193ef38fdda0_1440w.jpg)
 
 上面的执行结果是2，1。
@@ -8,6 +10,8 @@
 而Promise的异步没有这个问题。
 
 从具体实现上来说，这两个的异步队列不一样，Promise所在的那个异步队列优先级要高一些。具体讲解看第二个例子：
+
+## 2、例2
 
 ![](https://pic4.zhimg.com/80/v2-b64bd5dd66fb75c287ea2110ec3b8dcb_1440w.jpg)
 
