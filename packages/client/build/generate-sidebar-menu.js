@@ -8,7 +8,7 @@ const MapFolderNames = {
   'http': '3.HTTP',
   'react': '4.React',
   'vue': '5.Vue',
-  'es': '6、ES语法',
+  'es': '6.ES语法',
   'build': '构建',
   'component': '组件',
   'comprehensive': '综合',
@@ -82,8 +82,8 @@ exports.generateSidebarMenus = () => {
     }
     // 两个菜单标题都带数字的话，数字小的排前面
     if (/^[0-9]+\./.test(menuA.title) && /^[0-9]+\./.test(menuB.title)) {
-      const orderA = menuA.title.match(/^[0-9]+\./)[1] * 1
-      const orderB = menuB.title.match(/^[0-9]+\./)[1] * 1
+      const orderA = menuA.title.match(/^([0-9]+)\./)[1] * 1
+      const orderB = menuB.title.match(/^([0-9]+)\./)[1] * 1
       return orderA - orderB
     }
     // 其余情况，顺序不变
