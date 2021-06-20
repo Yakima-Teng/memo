@@ -10,7 +10,7 @@ const MapFolderNames = {
   'vue': '5.Vue',
   'es': '6.ES语法',
   'design-pattern': '7.设计模式',
-  'build': '构建',
+  'build': '8.构建',
   'component': '组件',
   'comprehensive': '综合',
   'else': '其他',
