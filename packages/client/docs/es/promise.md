@@ -85,8 +85,15 @@ class WPromise {
         this.status = WPromise.pending; // 初始化状态为pending
         this.value = undefined; // 存储 this._resolve 即操作成功 返回的值
         this.reason = undefined; // 存储 this._reject 即操作失败 返回的值
-        // 存储then中传入的参数
-        // 至于为什么是数组呢？因为同一个Promise的then方法可以调用多次
+        /**
+         * 存储then中传入的参数
+         * 至于为什么是数组呢？因为同一个Promise的then方法可以调用多次
+         * 比如:
+         * const p = new Promise((resolve, reject) => resolve('3'));
+         * p.then(console.log);
+         * p.then(console.log);
+         * 上面后面的两句p.then(console.log)都会打印'3'，都是基于p的结果3进行处理的（两个p.then互相无关）
+         */
         this.callbacks = [];
         executor(this._resolve.bind(this), this._reject.bind(this));
     }
