@@ -205,3 +205,27 @@ module.exports = function (source /* 逐个处理的文件内容 */) {
     return resource
 }
 ```
+
+## 5、如何写一个plugin
+
+```javascript
+module.exports = class FixedChunkIdPlugin {
+    constructor (options) {
+        this.options = options || {}
+    }
+
+    apply (compiler) {
+        compiler.plugin('compilation', (compilation) =>
+            compilation.plugin('before-chunk-ids', (chunks) => {
+                chunks.forEach((chunk) => {
+                    if (!chunk.id) {
+                        // 要求定义路由的chunk名时不要重名
+                        // 我们现有的逻辑，如果页面chunk名重复的话会生成同一个页面js，本来就是不允许重名的
+                        chunk.id = chunk.name
+                    }
+                })
+            })
+        )
+    }
+}
+```
