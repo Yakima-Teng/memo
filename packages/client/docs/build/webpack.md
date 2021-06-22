@@ -189,3 +189,19 @@ module.exports = {
     ]
 }
 ```
+
+## 4、如何写一个loader
+
+```javascript
+const loaderUtils = require('loader-utils');
+
+module.exports = function (source /* 逐个处理的文件内容 */) {
+    const self = this
+    const options = loaderUtils.getOptions(self)
+    const resourcePath = self.resourcePath
+
+    // 根据上面的一些信息处理resource
+
+    return resource
+}
+```
