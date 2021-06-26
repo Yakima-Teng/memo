@@ -11,6 +11,7 @@ const MapFolderNames = {
   'es': '6.ES语法',
   'design-pattern': '7.设计模式',
   'build': '8.构建',
+  'performance': '9.性能',
   'component': '组件',
   'comprehensive': '综合',
   'else': '其他',
