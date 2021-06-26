@@ -11,7 +11,7 @@
     "buildAndDeployToServer": "npm run docs:build && npm run deploy:server",
     "buildAnddeploy": "npm run deploy:gh-pages && npm run buildAndDeployToServer"
   },
-  "author": "",
+  "author": "yakima.public@gmail.com",
   "license": "MIT",
   "devDependencies": {
     "fs-extra": "^10.0.0",
