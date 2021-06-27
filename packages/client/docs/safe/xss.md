@@ -1,4 +1,4 @@
-# Cross-site scripting
+# XSS
 
 XSS攻击: Cross-site scripting
 
