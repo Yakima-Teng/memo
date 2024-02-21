@@ -86,3 +86,5 @@ layout: book-home
 <!--@include: ./last.md{3,}-->
 
 <!--@include: ./reference.md{3,}-->
+
+<!--@include: ./thanks.md{3,}-->
