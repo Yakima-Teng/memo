@@ -26,11 +26,16 @@
 ### HTTP方法 {#http-methods}
 
 - GET -- 获取资源
-- POST -- 传输资源
-- PUT -- 更新资源，常用来做传输文件
+- POST -- 创建一个新的资源
+- PUT -- 更新资源，常用来做传输文件，更新整个资源对象
+- PATCH -- 更新资源，更新部分属性，例如只更新某个用户的 `nickname` 属性
 - DELETE -- 删除资源
 - HEAD -- 获取请求报文首部
-- OPTIONS -- 询问支持的方法，查询针对请求URI指定的资源支持的方法
+- OPTIONS -- 询问支持的方法，查询针对请求URI指定的资源支持的方法，在跨域请求中，由客户端（浏览器）发送
+
+> 上述方法，只有 GET 和 POST 才能在 <form /> 表单中使用，
+>
+> 但是现在也有很多公司使用 Only Post 的规则：接口只接收 POST 请求。
 
 ### GET和POST请求的区别 {#http-get-post}
 
@@ -43,6 +48,10 @@
 - GET参数通过URL传输，而POST参数放在request body中
 
 注意：上面有些说法严格来说也是不对的，因为post请求你可以在url上加query参数，服务端也能获取。
+
+> 两种方法除了自身的参数限制、缓存限制，通常情况下它们根本的区别：
+>
+> GET 不会产生副作用，而 POST 会。
 
 ### 常见HTTP状态码
 
@@ -140,6 +149,41 @@ TCP/IP最重要的一个特点就是分层管理，分别为：
 - [ETag,If-None-Match]：原理与上面相同，区别是浏览器向服务器请求一个资源，服务器在返回这个资源的同时，在response的header中加上一个Etag字段，这个字段是服务器根据当前请求的资源生成的**唯一标识字符串**，只有资源有变化这个串就会发生改动。当缓存过期后,浏览器会把这个字符串放在If-None-Match去请求服务器，比较字符串的值判断是否有更新，Etag的优先级比Last-Modified的更高, Etag的出现是为了解决一个缓存文件在短时间内被多次修改的问题,**因为Last-Modified只能精确到秒**。
 
 - [ETag,If-None-Match]这么厉害我们为什么还需要[Last-Modified,If-Modified-Since]呢？有一个例子就是，**分布式系统尽量关掉ETag，因为每台机器生成的ETag不一样**，[Last-Modified,If-Modified-Since]和[ETag,If-None-Match]一般都是同时启用。
+
+**常用场景举例：**
+
+前端 SPA 应用发布后，为了保证客户端总能直接加载最新的静态资源文件，结合 `nginx.conf` 对缓存做出如下配置：
+
+```nginx
+server {
+  listen 80;
+  server_name localhost;
+  root /usr/share/app;
+  index index.php index.html index.htm;
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  # 静态资源文件 缓存30天；
+  location ~ \.(css|js|gif|jpg|jpeg|png|bmp|swf|ttf|woff|otf|ttc|pfa)$ {
+    expires 30d;
+  }
+
+  # `html` 不缓存
+  location ~ \.(html|htm)$ {
+    add_header Cache-Control "no-store, no-cache, must-relalidate";
+  }
+}
+```
+
+同时为 `index.html` 增加缓存相关的 `<meta />` 标签：
+
+```html
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+```
 
 ### 303 See Other {#http-303}
 
