@@ -6,8 +6,10 @@
 说明：
 
 1. 有意见和建议，请到这里提交：[https://github.com/Yakima-Teng/memo/issues](https://github.com/Yakima-Teng/memo/issues)。
-2. 如果你想修改内容后自用，可以访问[https://github.com/Yakima-Teng/memo](https://github.com/Yakima-Teng/memo)，进行fork。
+2. 如果你想修改内容后自用，可以访问[https://github.com/Yakima-Teng/memo](https://github.com/Yakima-Teng/memo)，进行fork（也环境提PR/MR）。
 3. 作者GitHub上如有其他项目对你有些许帮助，不妨star以表支持，万分感谢：[https://github.com/Yakima-Teng](https://github.com/Yakima-Teng)。
+4. 如果添加了新的章节或者移除了某个章节，请更新index.md文件中的引用关系。
+5. 该仓库最终会被脚本git clone后用VitePress进行编译转html后进行部署。所以不要删除index.md中诸如`<!--@include: ./safety.md{3,}-->`、`layout: book-home`、`::: warning 获取最新版`等非标准的Markdown写法，它们是会被VitePress正确解析的。
 
 ## 前言
 
@@ -52,6 +54,4 @@
 - [写在最后](./last.md)
 - [参考文档](./reference.md)
 
-## 说明
-
-该仓库是程序自动force push更新的，所以看到的历史提交记录很少，实际内容是经过了长期维护的。
+## 致谢
