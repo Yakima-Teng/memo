@@ -55,3 +55,5 @@
 - [参考文档](./reference.md)
 
 ## 致谢
+
+- [PassionZale](https://github.com/PassionZale): [perf: http methods & cache](https://github.com/Yakima-Teng/memo/pull/19).
