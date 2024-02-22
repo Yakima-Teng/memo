@@ -268,3 +268,115 @@ console.log(a===b);
 // 返回true
 console.log(a.name === b.name)
 ```
+
+#### 使用单例模式 {#singleton-pattern-use}
+
+责任链模式、观察者模式、策略模式 这三种在日常的前端开发中，经常遇到：
+
+-   责任链模式通常在分布提交表单中，前一步表单满足后才能进入下一步，例如新建商品、营促销活动等；
+
+-   观察者模式通常应用在组件之间的通讯中；
+
+-   策略模式通常用来优化过多的 `if/else` 或 `switch/case`；
+
+那么单例模式有哪些场景使用呢？
+
+不借助第三方库，我们可以使用单例模式来制作一个全局的状态存储。
+
+例如在小程序这种移动端，需要开发一个新建商品的需求，由于商品的属性很多，会将基本信息、规格属性、商品详情（富文本）等做成三个页面，规格属性选择又会多出一个页面。
+
+总共 4 个页面以及各种组件，都需要能共享到“商品”这个对象用来进行回显。
+
+这个时候就可以用单例模式来存储“商品”数据：
+
+```javascript
+// store.js
+
+const PRODUCT_MODEL = Object.freeze({
+    productName: "",
+    productBrand: "",
+    productSkuList: [],
+    // etc...
+});
+
+class Storage {
+    static getInstance() {
+        if (!this.instance) {
+            this.instance = new Storage();
+        }
+
+        return this.instance;
+    }
+
+    constructor() {
+        this.data = Object.assign({}, PRODUCT_MODEL);
+    }
+
+    init(obj) {
+        this.data = { ...this.data, ...obj };
+    }
+
+    set(key, value) {
+        if (!key) {
+            throw new Error("A store key must be provided");
+        }
+
+        this.data[String(key)] = value;
+
+        return this;
+    }
+
+    get(key) {
+        const value = key ? this.data[String(key)] : this.data;
+
+        return value;
+    }
+
+    removeItem(key) {
+        delete this.data[String(key)];
+    }
+
+    reset(obj = {}) {
+        this.data = Object.assign({}, PRODUCT_MODEL, obj);
+    }
+}
+
+module.exports = Storage.getInstance();
+```
+
+这份 `store.js` 模块，暴露了几个函数用来共享给页面和组件：
+
+-   `init()` 用来在编辑模式下回填接口返回的商详数据；
+-   `reset()` 用来清空并重置当前存储的数据；
+
+    ```javascript
+    // 在保存或某个场景结束操作时，需要重置单例所存储的数据
+    const store = require("./store.js");
+
+    onUnload() {
+    	storage.reset();
+    }
+    ```
+
+-   `set()` 用来设置某个属性的值，同时它返回了 `this`，这样可以链式调用：
+
+    ```javascript
+    const store = require("./store.js");
+
+    store.set("productName", "商品名称").set("productBrand", "商品品牌");
+    ```
+
+-   `get()` 用来获取指定属性或全部属性的值；
+
+    ```javascript
+    const store = require("./store.js");
+
+    onShow() {
+    	// 获取全部属性的值
+    	const productInfo = storage.get();
+    	// 获取指定属性的值
+    	const productName = storage.get("productName");
+    }
+    ```
+
+-   `removeItem()` 用来移除某个属性的值；
