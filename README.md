@@ -1,19 +1,26 @@
 # 前端进阶指南
 
+<div align="center" style="display: flex;align-items: center;justify-content: center;gap:8px;">
+  <img style="width:200px;" src="https://github.com/Yakima-Teng/memo/raw/main/attachments/logo.svg">
+</div>
+
+## 阅读方式
+
+你可以通过以下方式进行阅读。
+
 - [多页在线版本](https://www.orzzone.com/writings)。
 - [单页在线版本](https://www.orzzone.com/frontend)：读者可以直接利用浏览器的打印功能将单页在线版本打印成PDF电子书放到电纸书阅读器中阅读，对眼睛更友好。
+- [安卓apk安装包](https://github.com/Yakima-Teng/memo/raw/main/apps/memo.apk)：可以下载apk文件安装到安卓手机/平板设备上，方便在移动设备上进行阅读。
 
 说明：
 
 1. 有意见和建议，请到这里提交：[https://github.com/Yakima-Teng/memo/issues](https://github.com/Yakima-Teng/memo/issues)。
-2. 如果你想修改内容后自用，可以访问[https://github.com/Yakima-Teng/memo](https://github.com/Yakima-Teng/memo)，进行fork（也环境提PR/MR）。
+2. 正文内容已开源到GibHub：[https://github.com/Yakima-Teng/memo](https://github.com/Yakima-Teng/memo)，欢迎提交PR（提交PR时可以主动更新下致谢名单把自己加上去，格式参考已有内容）。
 3. 作者GitHub上如有其他项目对你有些许帮助，不妨star以表支持，万分感谢：[https://github.com/Yakima-Teng](https://github.com/Yakima-Teng)。
 4. 如果添加了新的章节或者移除了某个章节，请更新index.md文件中的引用关系。
 5. 该仓库最终会被脚本git clone后用VitePress进行编译转html后进行部署。所以不要删除index.md中诸如`<!--@include: ./safety.md{3,}-->`、`layout: book-home`、`::: warning 获取最新版`等非标准的Markdown写法，它们是会被VitePress正确解析的。
 
 ## 前言
-
-> [线上访问地址](https://www.orzzone.com/writings)
 
 本书动笔最早是在2018年左右，起因是自己找工作准备面试，一边准备面试一边总结当时的常见面试题，于是有了本书的“初稿"。说是初稿，但其实内容并不成体系，东一块西一块的，只是简单按目录进行了归类，并不能称之为“书”。
 
