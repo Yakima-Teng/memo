@@ -1,32 +1,10 @@
 # 程序员备忘录
 
 <div align="center" style="display: flex;align-items: center;justify-content: center;gap:8px;">
-  <img style="width:200px;" src="https://github.com/Yakima-Teng/memo/raw/master/attachments/logo.svg">
+  <img style="width:200px;" src="https://www.orzzone.com/book-cover.svg">
 </div>
 
-> 程序员备忘录记录了WEB程序员常用的知识点，方便温故知新，自我成长。
-
-## 阅读方式
-
-你可以通过以下方式进行阅读。
-
-- [多页在线版本](https://www.orzzone.com/writings)。
-- [单页在线版本](https://www.orzzone.com/frontend)：可用浏览器直接打印成PDF电子书放到水墨屏电纸书阅读器中阅读，更护眼。
-- [百度网盘资源](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：
-  - 程序员备忘录.pdf：这个pdf不一定是最新的，需要最新的请直接访问单页在线版本手动打印成PDF格式。
-  - memo.apk：安卓客户端。
-  - memo.exe：Windows客户端。
-
-说明：
-
-1. 有意见和建议，请到这里提交：[https://github.com/Yakima-Teng/memo/issues](https://github.com/Yakima-Teng/memo/issues)。
-2. 欢迎提交PR（提交PR时可以主动更新下致谢名单把自己加上去，格式参考已有内容）。
-3. 正文内容已开源到GibHub：[https://github.com/Yakima-Teng/memo](https://github.com/Yakima-Teng/memo)。Gitee/码云上只做代码同步，不要在Gitee/码云上提Issue和PR。
-4. 作者GitHub上如有其他项目对你有些许帮助，不妨star以表支持，万分感谢：[https://github.com/Yakima-Teng](https://github.com/Yakima-Teng)。
-5. 如果添加了新的章节或者移除了某个章节，请更新index.md文件中的引用关系。
-6. 该仓库最终会被脚本git clone后用VitePress进行编译转html后进行部署。所以不要删除index.md中诸如`<!--@include: ./safety.md{3,}-->`、`layout: book-home`、`::: warning 获取最新版`等非标准的Markdown写法，它们是会被VitePress正确解析的。
-
-## 前言
+> 《程序员备忘录》记录了WEB程序员常用的知识点，方便温故知新，自我成长。
 
 本书动笔最早是在2018年左右，起因是自己找工作准备面试，一边准备面试一边总结当时的常见面试题，于是有了本书的“初稿"。说是初稿，但其实内容并不成体系，东一块西一块的，只是简单按目录进行了归类，并不能称之为“书”。
 
@@ -34,11 +12,34 @@
 
 **这本书的目标读者不包括零基础的纯新手**，主要是帮助初、中级开发进阶高级开发，或者帮助高级开发进一步进阶用的。不过光靠看书是不够的，工作经验也是很重要的，工作久了你会有些自己感悟。所以大家在平时工作中还是要多注意代码质量，想想怎么样写更好，平时多进行小范围的重构。这样不仅自己后面维护代码更轻松，而且也对自己的技能进行了实际意义上的打磨，对以后的职业发展更有助益。
 
+你可以通过以下方式/渠道阅读本书：
+
+- [Github仓库](https://github.com/Yakima-Teng/memo)
+- [多网页版本](https://www.orzzone.com/writings)。
+- [单网页版本](https://www.orzzone.com/frontend)：可用浏览器直接打印成PDF电子书放到水墨屏电纸书阅读器中阅读，更护眼。
+- [PDF电子书](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“程序员备忘录.pdf”。
+- [安卓客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“memo.apk”。
+- [Windows客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“memo.exe”。
+
+::: warning 保护你的眼睛
+本书提供单页HTML版本：[https://www.orzzone.com/frontend](https://www.orzzone.com/frontend)。读者可以直接利用浏览器的打印功能打印成PDF电子书放到水墨屏电纸书阅读器中阅读。以减少对眼睛的损害。
+:::
+
+由于编写时间仓促，如您发现有错误或需要补充、删减的地方，或是有想讨论的内容，请到这里提交：[https://github.com/Yakima-Teng/memo/issues](https://github.com/Yakima-Teng/memo/issues)。
+
 最后，希望本书的内容能给大家带来一些帮助。如读者有宝贵意见和建议，欢迎邮件指出，我会及时更新本书内容。
 
-**本书中引用的他人文章版权归原作者/平台所有，本人自己写的部分版权归本人所有。仅用于个人私下学习。谢绝商用。**
+::: tip 版权说明
+说是书，其实当前版本也有不少内容是对网络上的优质内容进行了“拿来主义”，对部分内容进行了调整，希望有时间能慢慢磨好这本电子书的质量。
+参考的文档已列与本书末处，但由于整理的部分笔记时间较早，当时的出处已不可考，可能少列了。
+若您发现文字和图片有侵犯到您的权益，请务必联系我。
 
-作者邮箱：[yakima.public@gmail.com](mailto:yakima.public@gmail.com?subject=github-memo)。
+本书中引用的他人文章版权归原作者/平台所有，本人自己写的部分版权归本人所有。本书仅用于个人私下学习。谢绝商用。
+:::
+
+作者邮箱：[yakima.public@gmail.com](mailto:yakima.public@gmail.com?subject=www.orzzone.com/writings)。
+
+——2024年1月18日，于上海
 
 **目录**
 
@@ -65,8 +66,5 @@
 - [安全](./safety.md)
 - [简历与工作](./job.md)
 - [写在最后](./last.md)
-- [参考文档](./reference.md)
-
-## 致谢名单
-
-见[致谢名单](./thanks.md)。
+- [附录1：参考文档](./reference.md)
+- [附录2：致谢名单](./thanks.md)
