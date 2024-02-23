@@ -1,6 +1,6 @@
 
 
-## 致谢 {#thanks}
+## 附录2：致谢 {#thanks}
 
 - [PassionZale](https://github.com/PassionZale):
   - [perf: http methods & cache #19](https://github.com/Yakima-Teng/memo/pull/19).

@@ -37,7 +37,7 @@
 本书中引用的他人文章版权归原作者/平台所有，本人自己写的部分版权归本人所有。本书仅用于个人私下学习。谢绝商用。
 :::
 
-作者邮箱：[yakima.public@gmail.com](mailto:yakima.public@gmail.com?subject=www.orzzone.com/writings)。
+作者：Yakima Teng
 
 ——2024年1月18日，于上海
 
