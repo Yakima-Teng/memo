@@ -12,7 +12,9 @@
 
 - [多页在线版本](https://www.orzzone.com/writings)。
 - [单页在线版本](https://www.orzzone.com/frontend)：读者可以直接利用浏览器的打印功能将单页在线版本打印成PDF电子书放到电纸书阅读器中阅读，对眼睛更友好。
-- [安卓apk安装包](https://github.com/Yakima-Teng/memo/raw/master/apps/memo.apk)：可以下载apk文件安装到安卓手机/平板设备上，方便在移动设备上进行阅读。
+- 安卓.apk安装包、Windows系统.exe安装包（找memo.apk和memo.exe）：
+  - 链接: https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh
+  - 提取码: 82xh
 
 说明：
 
