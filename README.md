@@ -14,7 +14,7 @@
 
 你可以通过以下方式/渠道阅读本书：
 
-- [Github仓库](https://github.com/Yakima-Teng/memo)
+- [Github仓库](https://github.com/Yakima-Teng/memo)。
 - [多网页版本](https://www.orzzone.com/writings)。
 - [单网页版本](https://www.orzzone.com/frontend)：可用浏览器直接打印成PDF电子书放到水墨屏电纸书阅读器中阅读，更护眼。
 - [PDF电子书](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“程序员备忘录.pdf”。
