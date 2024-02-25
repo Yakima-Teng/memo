@@ -128,7 +128,7 @@ for (const value of iterable) {
 
 ### IIFE（Immediately-Invoked Function Expression）与分号 {#iife}
 
-如果习惯写完一条语句后不加分号的写法，碰到需要写IIFE（自执行函数函数）的时候容易踩到下面的坑：
+如果习惯写完一条语句后不加分号的写法，碰到需要写IIFE（自执行函数）的时候容易踩到下面的坑：
 
 ``` javascript
 const a = 1
@@ -383,7 +383,7 @@ me.isHuman = true;
 me.printIntroduction();
 ```
 
-**用Object.create()实现类式继承**
+**用 `Object.create()` 实现类式继承**
 
 ```javascript
 // Shape——父类
@@ -424,7 +424,7 @@ console.log("rect 是 Shape 类的实例吗？", rect instanceof Shape); // true
 rect.move(1, 1); // 打印 'Shape moved.'
 ```
 
-**使用 Object.create() 的 propertyObject 参数**
+**使用 `Object.create()` 的 `propertyObject` 参数**
 
 Object.create() 方法允许对对象创建过程进行精细的控制。实际上，字面量初始化对象语法是 Object.create() 的一种语法糖。使用 Object.create()，我们可以创建具有指定原型和某些属性的对象。请注意，第二个参数将键映射到属性描述符，这意味着你还可以控制每个属性的可枚举性、可配置性等，而这在字面量初始化对象语法中是做不到的。
 
@@ -456,7 +456,7 @@ o = Object.create(Object.prototype, {
 o = Object.create({}, { p: { value: 42 } });
 ```
 
-使用 Object.create()，我们可以创建一个原型为 null 的对象。在字面量初始化对象语法中，相当于使用 __proto__ 键。
+使用 `Object.create()`，我们可以创建一个原型为 `null` 的对象。在字面量初始化对象语法中，相当于使用 `__proto__` 键。
 
 ```javascript
 o = Object.create(null);
@@ -464,7 +464,7 @@ o = Object.create(null);
 o = { __proto__: null };
 ```
 
-你可以使用 Object.create() 来模仿 new 运算符的行为。
+你可以使用 `Object.create()` 来模仿 `new` 运算符的行为。
 
 ```javascript
 function Constructor() {}
@@ -473,7 +473,7 @@ o = new Constructor();
 o = Object.create(Constructor.prototype);
 ```
 
-当然，如果 Constructor 函数中有实际的初始化代码，那么 Object.create() 方法就无法反映它。
+当然，如果 `Constructor` 函数中有实际的初始化代码，那么 `Object.create()` 方法就无法反映它。
 
 ### 判断JS全局变量是否存在 {#global-variable-exist}
 
@@ -500,10 +500,16 @@ var a // 或 var a = undefined
 typeof a // 'undefined'
 ```
 
-- var a = undefined或者var a相当于是给window对象添加了a属性，但是未赋值，即window.a === undefined为true
-- typeof a就是返回其变量类型，未赋值或者声明类型为undefined的变量，其类型就是undefined
+- `var a = undefined` 或者 `var a` 相当于是给 `window` 对象添加了 `a` 属性，但是未赋值，即 `window.a === undefined` 为 `true`
+- `typeof a` 就是返回其变量类型，未赋值或者声明类型为 `undefined` 的变量，其类型就是 `undefined`
 
-### 判断2个对象是否相等 {#object-equality}
+### 判断2个对象是否**相等**（不是**相同**） {#object-equality}
+
+**前提假设**
+
+不是只根据引用地址来判断，只要两个对象的键值对的值对的上就认为是相等的，比如分开创建的 `{ a: 1 }` 和 `{ a: 1 }`，被认为是相等的对象。
+
+**实现**
 
 ```javascript
 function isObjectEqual (obj1, obj2) {
@@ -511,13 +517,13 @@ function isObjectEqual (obj1, obj2) {
         return obj1 === obj2
     }
 
-    // if refer to the same location
+    // 如果两个对象指向的是同一个引用地址，则为相同对象
     if (obj1 === obj2) {
         return true
     }
 
-    var keys1 = Object.keys(obj1)
-    var keys2 = Object.keys(obj2)
+    const keys1 = Object.keys(obj1)
+    const keys2 = Object.keys(obj2)
 
     if (keys1.length !== keys2.length) {
         return false
@@ -527,7 +533,7 @@ function isObjectEqual (obj1, obj2) {
         return true
     }
 
-    for (var i = 0, len = keys1.length; i < len; i++) {
+    for (let i = 0, len = keys1.length; i < len; i++) {
         if (!isObjectEqual(obj1[keys1[i]], obj2[keys2[i]])) {
             return false
         }
