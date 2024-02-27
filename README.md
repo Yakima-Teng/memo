@@ -77,4 +77,4 @@
 
 **安卓客户端**
 
-<img src="./attachments/memo_android.jpg" style="display:blcok;max-width:320px;margin:0 auto;">
+<img src="./attachments/memo_android.jpg" style="display:block;width:320px;height:auto;margin:15px auto;">
