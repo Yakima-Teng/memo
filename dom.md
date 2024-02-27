@@ -143,17 +143,21 @@ JS中事件流的三个阶段：捕获（低版本IE不支持）==>目标==>冒�
 
 ### addEventListener {#add-event-listener}
 
+语法如下：
+
+```javascript
 element.addEventListener(type, listener, useCapture)
 element.addEventListener(type, listener, options)
+```
 
 - element: 要绑定事件的对象，或HTML节点；
 - type：事件名称（不带“on”），如“click”、“mouseover”；
 - listener：要绑定的事件监听函数；
-- userCapture：事件监听方式，只能是true或false。true，采用捕获（capture）模式；false，采用冒泡（bubbling）模式。若无特殊要求，一般是false。
+- useCapture：事件监听方式，只能是true或false。true，采用捕获（capture）模式；false，采用冒泡（bubbling）模式。若无特殊要求，一般是false。
 - options
     - options.capture：一个布尔值，表示 listener 会在该类型的事件捕获阶段传播到该 EventTarget 时触发。
     - options.once：一个布尔值，表示 listener 在添加之后最多只调用一次。如果为 true，listener 会在其被调用之后自动移除。
-    - options.passive：一个布尔值，设置为 true 时，表示 listener 永远不会调用 preventDefault()。如果 listener 仍然调用了这个函数，客户端将会忽略它并抛出一个控制台警告。查看使用 passive 改善滚屏性能以了解更多。
+    - options.passive：一个布尔值，设置为 true 时，表示 listener 永远不会调用 preventDefault()。如果 listener 仍然调用了这个函数，客户端将会忽略它并抛出一个控制台警告。
 
 ::: tip addEventListener
 addEventListener() 的工作原理是将实现 EventListener 的函数或对象添加到调用它的 EventTarget 上的指定事件类型的事件侦听器列表中。**如果要绑定的函数或对象已经被添加到列表中，该函数或对象不会被再次添加**。
@@ -166,6 +170,40 @@ removeEventListener的入参和addEventListener一样。
 
 警告：如果同一个事件监听器分别为“事件捕获（capture 为 true）”和“事件冒泡（capture 为 false）”注册了一次，这两个版本的监听器需要分别移除。移除捕获监听器不会影响非捕获版本的相同监听器，反之亦然。
 :::
+
+#### 使用 `passive` 改善滚屏性能
+
+将 `passive` 设为 `true` 可以启用性能优化，并可大幅改善应用性能，正如下面这个例子：
+
+```javascript
+/* 检测浏览器是否支持该特性 */
+let passiveIfSupported = false;
+
+try {
+  window.addEventListener(
+    "test",
+    null,
+    Object.defineProperty({}, "passive", {
+      get() {
+        passiveIfSupported = { passive: true };
+      },
+    }),
+  );
+} catch (err) {}
+
+window.addEventListener(
+  "scroll",
+  (event) => {
+    /* do something */
+    // 不能使用 event.preventDefault();
+  },
+  passiveIfSupported,
+);
+```
+
+根据规范，`addEventListener()` 的 `passive` 默认值始终为 `false`。然而，这会导致触摸事件和滚轮事件（如）的事件监听器在浏览器尝试滚动页面时可能会阻塞浏览器主线程——这可能会大大降低浏览器处理页面滚动时的性能。
+
+* [EventTarget.addEventListener()](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener)
 
 ### 事件代理/委托 {#event-delegate}
 
@@ -180,9 +218,8 @@ removeEventListener的入参和addEventListener一样。
 
 缺点有：
 
-- 如果把所有事件都代理到一个比较顶层的DOM节点上的话，比较容易出现误判，给不需要绑定事件的节点绑定了事件，比如把页面中所有事件都绑定到document上进行委托，就不是很合适；
-- 事件逐级冒泡到外部dom上再执行肯定没有直接执行快。
-
+- 如果把所有事件都代理到一个比较顶层的 DOM 节点上的话，比较容易出现误判，给不需要执行逻辑的节点执行了逻辑。比如把页面中所有事件都绑定到 document 上进行委托，就不是很合适；
+- 事件逐级冒泡到外层 DOM 上再执行肯定没有直接执行快。
 
 **实现**
 
@@ -225,7 +262,7 @@ function addEvent(target, type, listener) {
 }
 ```
 
-说明：上面的实现方案中addEvent方法的最后一种实现方式，即`target['on' + type]`的方式会将之前绑定的事件覆盖掉，是有点问题的。但是考虑到兼容性，一般来说代码是走不到这个地方的，所以也没有问题。
+说明：上面的实现方案中addEvent方法的最后一种实现方式，即 `target['on' + type]` 的方式会将之前绑定的同名事件的回调逻辑覆盖掉，是有点问题的。但是考虑到兼容性，一般来说代码是走不到这个地方的，如果要处理的话这里可以对 `target` 的 `'on' + type` 属性进行 set 和 get 拦截，再弄个队列。
 
 ### 阻止事件传播和默认行为 {#event-stop-propagation-prevent-default}
 

@@ -27,46 +27,46 @@
 
 ```less
 .clearfix() {
-    &:after {
-        content: '';
-        clear: both;
-        display: block;
-        height: 0;
-        opacity: 0;
-        visibility: hidden;
+  &:after {
+    content: '';
+    clear: both;
+    display: block;
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+html, body, div, aside, article {
+    margin: 0;
+    padding: 0;
+}
+html, body, .container, .left, .wrapper, .middle, .right {
+    height: 100%;
+}
+.container {
+    padding-left: 200px;
+    .clearfix();
+    
+    .left {
+        float: left;
+        width: 200px;
+        margin-left: -200px;
+        background-color: skyblue;
     }
-    html, body, div, aside, article {
-        margin: 0;
-        padding: 0;
-    }
-    html, body, .container, .left, .wrapper, .middle, .right {
-        height: 100%;
-    }
-    .container {
-        padding-left: 200px;
-        .clearfix();
+    
+    .wrapper {
+        float: left;
+        width: 100%;
         
-        .left {
+        .middle, .right {
             float: left;
-            width: 200px;
-            margin-left: -200px;
-            background-color: skyblue;
+            width: 50%;
         }
-        
-        .wrapper {
-            float: left;
-            width: 100%;
-            
-            .middle, .right {
-                float: left;
-                width: 50%;
-            }
-            .middle {
-                background-color: gray;
-            }
-            .right {
-                background-color: yellow;
-            }
+        .middle {
+            background-color: gray;
+        }
+        .right {
+            background-color: yellow;
         }
     }
 }
@@ -197,7 +197,8 @@ input[disabled] {
 .parent {
     display: block;
     height: 300px;
-    background: transparent url('./example.png') scroll no-repeat center center;
+    background:
+        transparent url('./example.png') scroll no-repeat center center;
     background-size: 100px 200px;
 }
 ```
@@ -312,6 +313,6 @@ CSS动画会比JS动画的性能更好，JS动画的优势主要在于
 - 利用`transform: translate3d(x, y, z);`可借助3D变形开启GPU加速（这会消耗更多内存与功耗，确有性能问题时再考虑）。
 - 若动画开始时有闪烁，可尝试：`backface-visibility: hidden; perspective: 1000;`。
 - 尽可能少用`box-shadows`和`gradients`这两页面性能杀手。
-- CSS动画属性可能会触发整个页面的重排（reflow/relayout）、重绘（repaint）和重组（recomposite）。其中paint通常是最花费性能的，进可能避免使用触发paint的CSS动画属性。所以要尽可能通过修改translate代替修改top/left/bottom/right来实现动画效果，可以减少页面重绘（repaint），前者只触发页面的重组，而后者会额外触发页面的重排和重绘。
+- CSS动画属性可能会触发整个页面的重排（reflow/relayout）、重绘（repaint）和重组（recomposite）。其中paint通常是最花费性能的，尽可能避免使用触发paint的CSS动画属性。所以要尽可能通过修改translate代替修改top/left/bottom/right来实现动画效果，可以减少页面重绘（repaint），前者只触发页面的重组，而后者会额外触发页面的重排和重绘。
 - 尽量让动画元素脱离文档流（document flow）中，以减少重排（reflow）。
 - 操作DOM的js语句能连着写尽量连着写，这样可借助浏览器的优化策略，将可触发重排的操作放于一个队列中，然后一次性进行一次重排；如果操作DOM的语句中间被其他诸如赋值语句之类的间断了，页面可能就会发生多次重排了。

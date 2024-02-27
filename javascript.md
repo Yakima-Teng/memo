@@ -1069,15 +1069,15 @@ typeof o3 // "object", normal object
 ::: tip 原型对象
 每当定义一个对象（函数）时，对象中都会包含一些预定义的属性。
 
-其中，函数对象会有一个`prototype`属性，就是我们所说的原型对象（普通对象没有`prototype`，但有`__proto__`属性；函数对象同时含有`prototype`和`__proto__`属性）。
+其中，函数对象会有一个 `prototype` 属性，就是我们所说的原型对象（普通对象没有 `prototype`，但有 `__proto__` 属性；函数对象同时含有 `prototype` 和 `__proto__` 属性）。
 :::
 
-原型对象其实就是普通对象（Function.prototype除外，它是函数对象，单同时它又没有prototype属性）。
+原型对象其实就是普通对象（`Function.prototype` 除外，它是函数对象，但同时它又没有 `prototype` 属性）。
 
 ``` javascript
 function f1 () {}
 
-// Object{} with two properties constructor and __proto__
+// Object{} with two properties: `constructor` and `__proto__`
 console.log(f1.prototype)
 
 // "object"
@@ -1157,7 +1157,7 @@ console.log(tidy.price) // 2000
 
 #### constructor {#object-constructor}
 
-原型对象中都有个constructor属性，用来引用它的函数对象。这是一种循环引用。
+原型对象中都有个 `constructor` 属性，用来引用它的函数对象。这是一种循环引用。
 
 ```javascript
 Person.prototype.constructor === Person // true
@@ -1215,8 +1215,8 @@ f();//输出结果10
 **闭包案例3**
 
 ```javascript
-var fn  =function(){
-    var sum = 0
+const fn = function() {
+    let sum = 0
     return function(){
         sum++
         console.log(sum);
@@ -1233,39 +1233,50 @@ fn()() //1
 那如何不被回收呢？
 
 ```javascript
-var fn  =function(){
-    var sum = 0
+const fn = function() {
+    let sum = 0
     return function(){
         sum++
         console.log(sum);
     }
 }
-fn1=fn() 
-fn1()   //1
-fn1()   //2
-fn1()   //3
+fn1 = fn()
+// 1
+fn1()
+// 2
+fn1()
+// 3
+fn1()
 ```
 
-这种情况下，fn1一直在引用fn()，此时内存就不会被释放，就能实现值的累加。
+这种情况下，`fn1` 一直在引用 `fn()`，此时内存就不会被释放，就能实现值的累加。
 那么问题又来了，这样的函数如果太多，就会造成内存泄漏。
 
 内存泄漏了怎么办呢？我们可以手动释放一下。
 
 ```javascript
-var fn  =function(){
-    var sum = 0
+const fn = function() {
+    let sum = 0
     return function(){
         sum++
         console.log(sum);
     }
 }
-fn1=fn() 
-fn1()   //1
-fn1()   //2
-fn1()   //3
-fn1 = null // fn1的引用fn被手动释放了
-fn1=fn()  //num再次归零
-fn1() //1
+fn1 = fn()
+
+// 1
+fn1()
+// 2
+fn1()
+// 3
+fn1()
+
+// `fn1` 的引用 `fn` 被手动释放了
+fn1 = null
+// num再次归零
+fn1 = fn()
+// 1
+fn1()
 ```
 
 ### 实现assign {#assign}
@@ -1274,13 +1285,13 @@ fn1() //1
 function assign () {
     const args = Array.from(arguments)
     const target = args.shift()
-    
+
     if (!target || typeof target !== 'object') {
         throw new TypeError('入参错误')
     }
-    
+
     const objects = args.filter((obj) => typeof obj === 'object')
-    
+
     objects.forEach((obj) => {
         for (const key in obj) {
             if (obj.hasOwnProperty(key)) {
@@ -1288,7 +1299,7 @@ function assign () {
             }
         }
     })
-    
+
     return target
 }
 ```
@@ -1324,9 +1335,7 @@ function merge(target, obj) {
 
 ### 快速填充数字数组 {#quick-fill-array}
 
-假设你需要一个数组，数据长度为100，数组元素依次为0、1、2、3、4...98、99。
-该如何实现呢？直接写个for循环当然是可以的。
-不过这里有更方便的方法。
+假设你需要一个数组，数据长度为100，数组元素依次为0、1、2、3、4...98、99。该如何实现呢？直接写个for循环当然是可以的。不过这里有更方便的方法。
 
 ```javascript
 Array.from(Array(100).keys())
@@ -1335,18 +1344,28 @@ Array.from(Array(100).keys())
 或者
 
 ```javascript
-[...Array(10).keys()]
+[...Array(100).keys()]
 ```
 
-如果你想要直接从1开始到100，可以用Array.from方法实现
-（下面这种传参方法不太常见，第二个参数是一个map function，
-可以对第一个参数传进去的类数组元素进行遍历更改）：
+如果你想要直接从1开始到100，可以用 `Array.from` 方法实现（下面这种传参方法不太常见，第二个参数是一个 **map function**，可以对第一个参数传进去的**类数组对象**或者**可迭代对象**进行处理）：
+
+`Array.from`的语法如下：
+
+```javascript
+Array.from(arrayLike)
+Array.from(arrayLike, mapFn)
+Array.from(arrayLike, mapFn, thisArg)
+```
+
+所以，可以这么写：
 
 ```javascript
 Array.from({ length: 100 }, (_, i) => i + 1)
 ```
 
-注意，上面的例子里可以认为`{ length: 100 }`是一种对欺骗的方式，让Array.from认为这是一个类数组。
+注意，上面的例子里可以认为 `{ length: 100 }` 是一个**类数组**。
+
+* [Array.from()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
 
 ### Promise的实现 {#promise}
 
@@ -1596,10 +1615,10 @@ p
 
 除了广义的同步任务和异步任务，我们可以分的更加精细一点：
 
-- macro-task(宏任务)：包括整体代码脚本，setTimeout，setInterval
-- micro-task(微任务)：Promise，process.nextTick
+- macro-task（宏任务）：包括整体代码脚本、`setTimeout`、`setInterval`
+- micro-task（微任务）：`Promise`、`process.nextTick`
 
-不同的任务会进入到不同的event queue。比如setTimeout和setInterval会进入相同的Event Queue。
+不同类型的任务会进入到不同的 **事件队列（event queue）**。相同类型的任务会进入相同的事件队列。比如 `setTimeout` 和 `setInterval` 会进入相同的事件队列。
 
 ![事件循环，宏任务，微任务的关系图](./attachments/event-loop.webp)
 
@@ -1636,16 +1655,9 @@ console.log('console');
 
 区分微任务和宏任务是为了将异步队列任务划分优先级，通俗的理解就是为了插队。
 
-一个 Event Loop中，Microtask是在Macrotask之后调用，
-Microtask 会在下一个 Event Loop 之前执行调用完，
-**并且其中会将 Microtask 执行当中新注册的 Microtask 一并调用执行完，**
-然后才开始下一次 Event Loop，所以如果有新的 Macrotask 就需要一直等待，等到上一个 Event Loop 当中 Microtask 被清空为止。
-由此可见，**我们可以在下一次 Event Loop 之前进行插队。**
+一个事件队列（Event Loop）中，**microtask** 是在 **macrotask** 之后被调用的，**microtask** 会在下一个 Event Loop 之前执行完，**并且会将 **microtask** 执行当中新注册的 `Microtask` 一并调用执行完，**然后才开始下一次 Event Loop，所以如果有新的 Macrotask 就需要一直等待，等到上一个 Event Loop 当中 Microtask 被清空为止。由此可见，**我们可以在下一次 Event Loop 之前进行插队。**
 
-如果不区分 Microtask 和 Macrotask，
-那就无法在下一次 Event Loop 之前进行插队，
-其中新注册的任务得等到下一个 Macrotask 完成之后才能进行，
-这中间可能你需要的状态就无法在下一个 Macrotask 中得到同步。
+如果不区分 Microtask 和 Macrotask，那就无法在下一次 Event Loop 之前进行插队，其中新注册的任务得等到下一个 Macrotask 完成之后才能进行，这中间可能你需要的状态就无法在下一个 Macrotask 前得到同步。
 
 #### setTimeout的时间误差 {#set-timeout-accuracy}
 

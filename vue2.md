@@ -133,7 +133,7 @@ function remove(arr, item) {
 这是因为 Object.defineProperty 只会对属性进行监测，而不会对对象进行监测，
 为了可以监测对象 Vue2 创建了一个 Observer 类。
 Observer 类的作用就是把一个对象全部转换成响应式对象，包括子属性数据，
-当对象新增或删除属性的时候负债通知对应的 Watcher 进行更新操作。
+当对象新增或删除属性的时候负责通知对应的 Watcher 进行更新操作。
 
 ```javascript
 // 定义一个属性
@@ -234,10 +234,9 @@ arr.forEach((val, index) => {
 
 所以 Object.defineProperty 也能监听数组变化，那么为什么 Vue2 弃用了这个方案呢？
 
-首先这种直接通过下标获取数组元素的场景就比较少，
-其次即便通过了 Object.defineProperty 对数组进行监听，但也监听不了 push、pop、shift 等对数组进行操作的方法，
-所以还是需要通过对数组原型上的那 7 个方法进行重写监听。
-所以为了性能考虑 Vue2 直接弃用了使用 Object.defineProperty 对数组进行监听的方案。
+这种直接通过下标获取数组元素的场景就并不少，但是即便可以通过 `Object.defineProperty` 对数组已有的数字下标 key 进行监听，但 `Object.defineProperty` 方案监听不了 `push`、`pop`、`shift` 等对数组进行操作的方法，而且如果数组元素较多的话，监听每个下标带来的内存占用也会比较多。
+
+所以还是需要通过对数组原型上的那 7 个方法进行重写监听（这比对每个数组的所有下标进行监听要省内存多了）。所以为了性能考虑 Vue2 直接弃用了使用 `Object.defineProperty` 对数组进行监听的方案。
 
 ### Vue2 中是怎么监测数组的变化的？ {#vue2-watch-array-change}
 

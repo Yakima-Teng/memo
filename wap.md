@@ -83,16 +83,19 @@ window.addEventListener('load', function () {
 ### input[type="date"]不支持placeholder {#input-date-placeholder}
 
 ``` html
-<input placeholder="占位符" type="text" onfocus="(this.type='date')">
+<input
+    placeholder="占位符"
+    type="text"
+    onfocus="(this.type='date')"
+    onblur="(this.type='text')"
+>
 ```
 
 ### iOS部分版本Date构造函数不支持YYYY-MM-DD格式入参 {#ios-date-yyyy-mm-dd}
 
-iOS部分版本的Date构造函数不支持规范标准中定义的YYYY-MM-DD格式，
-如new Date('2013-11-11')是Invalid Date,
-但支持YYYY/MM/DD格式，可用new Date('2013/11/11')；
-类似的，对于yyyy-mm-dd hh:mm:ss格式的日期，
-可以通过类似下面的方法将其转换为Date对象实例（适用于所有设备）：
+iOS 部分版本的 `Date` 构造函数不支持规范标准中定义的 `YYYY-MM-DD` 格式，如 `new Date('2013-11-11')` 是 `Invalid Date`，但支持 `YYYY/MM/DD` 格式，可用 `new Date('2013/11/11')`。最通用的还是直接年月日注入传入的方式，即 `new Date(year, month, date)`。
+
+类似的，对于 `yyyy-mm-dd hh:mm:ss` 格式的日期，可以通过类似下面的方法将其转换为 `Date` 对象实例（适用于所有设备）：
 
 ```javascript
 // 将形如"yyyy-mm-dd hh:mm:ss"的日期字符串转换为日期对象（兼容IOS设备）

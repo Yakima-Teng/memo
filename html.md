@@ -19,7 +19,10 @@ todo。
 <!-- 国产360浏览器默认采用高速模式渲染页面 -->
 <meta name="renderer" content="webkit">
 
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, user-scalable=no"
+>
 
 <!-- 禁止设备检测手机号和邮箱 -->
 <meta name="format-detection" content="telephone=no,email=no">
