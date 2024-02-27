@@ -19,23 +19,23 @@
 - [单网页版本](https://www.orzzone.com/frontend)：可用浏览器直接打印成PDF电子书放到水墨屏电纸书阅读器中阅读，更护眼。
 - [PDF电子书](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“程序员备忘录.pdf”。
 - [安卓客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“memo.apk”。
-- [Windows客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“memo.exe”。
+- [Windows客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“memo.exe”。免安装，点击直接运行。
 
-::: warning 保护你的眼睛
-本书提供单页HTML版本：[https://www.orzzone.com/frontend](https://www.orzzone.com/frontend)。读者可以直接利用浏览器的打印功能打印成PDF电子书放到水墨屏电纸书阅读器中阅读。以减少对眼睛的损害。
-:::
+**保护你的眼睛**
+
+> 本书提供单页HTML版本：[https://www.orzzone.com/frontend](https://www.orzzone.com/frontend)。读者可以直接利用浏览器的打印功能打印成PDF电子书放到水墨屏电纸书阅读器中阅读。以减少对眼睛的损害。
 
 由于编写时间仓促，如您发现有错误或需要补充、删减的地方，或是有想讨论的内容，请到这里提交：[https://github.com/Yakima-Teng/memo/issues](https://github.com/Yakima-Teng/memo/issues)。
 
 最后，希望本书的内容能给大家带来一些帮助。如读者有宝贵意见和建议，欢迎邮件指出，我会及时更新本书内容。
 
-::: tip 版权说明
-说是书，其实当前版本也有不少内容是对网络上的优质内容进行了“拿来主义”，对部分内容进行了调整，希望有时间能慢慢磨好这本电子书的质量。
+**版权说明**
+
+> 说是书，其实当前版本也有不少内容是对网络上的优质内容进行了“拿来主义”，对部分内容进行了调整，希望有时间能慢慢磨好这本电子书的质量。
 参考的文档已列与本书末处，但由于整理的部分笔记时间较早，当时的出处已不可考，可能少列了。
 若您发现文字和图片有侵犯到您的权益，请务必联系我。
-
-本书中引用的他人文章版权归原作者/平台所有，本人自己写的部分版权归本人所有。本书仅用于个人私下学习。谢绝商用。
-:::
+>
+> 本书中引用的他人文章版权归原作者/平台所有，本人自己写的部分版权归本人所有。本书仅用于个人私下学习。谢绝商用。
 
 作者：Yakima Teng
 
@@ -68,3 +68,13 @@
 - [写在最后](./last.md)
 - [附录1：参考文档](./reference.md)
 - [附录2：致谢名单](./thanks.md)
+
+## 客户端预览
+
+**Windows客户端**
+
+![Windows客户端](./attachments/memo-pc.png)
+
+**安卓客户端**
+
+<img src="./attachments/memo_android.jpg" style="display:blcok;max-width:320px;margin:0 auto;">
