@@ -853,6 +853,25 @@ obj.m = test;
 obj.m.apply(obj) // 1
 ```
 
+#### 匿名函数的 `this` {#this-anonymous}
+
+匿名函数里的 `this` 指向 `window`。
+
+```javascript
+// 等价于 window.name = 'The Window'
+var name = "The Window";
+var object = {
+    name : "My Object",
+    getNameFunc : function() {
+        return function() {
+　　　　　   return this.name;
+　　　　　};
+　　　}
+};
+// 输出为 `The Window`
+alert(object.getNameFunc()());
+```
+
 * 参考：[面试官：谈谈this对象的理解](https://vue3js.cn/interview/JavaScript/this.html)
 
 ### 箭头函数的 `this` 指向 {#this-arrow-function}

@@ -56,21 +56,37 @@
 ### 常见HTTP状态码
 
 - 1XX --- 指示信息，表示请求已接受，继续处理
+  - 100 Continue
+  - 101 Switching Protocols
+  - 102 Processing
+  - 103 Early Hints
 - 2XX --- 成功，表示请求已被成功接受
-    - 200 --- OK，客户端请求成功
-    - 206 --- 客户端发送了一个带有Range头的GET请求，视频/音频可能会用到
+  - 200 --- OK，客户端请求成功
+  - 201 Created
+  - 202 Accepted
+  - 203 Non-Authoritative Information
+  - 204 No Content
+  - 205 Reset Content
+  - 206 Partial Content --- 客户端发送了一个带有Range头的GET请求，视频/音频可能会用到
 - 3XX --- 重定向，要完成请求，必需进行近一步操作
-    - 301 --- 重定向，所请求的界面转移到新的url，永久重定向
-    - 302 --- 同上301，但是是临时重定向
-    - 304 --- 缓存，服务端告诉客户端有缓存可用，不用重新请求
+  - 301 Moved Permanently --- 重定向，所请求的界面转移到新的url，永久重定向
+  - 302 Found --- 同上301，但是是临时重定向
+  - 303 See Other
+  - 304 Not Modified --- 缓存，服务端告诉客户端有缓存可用，不用重新请求
+  - 307 Temporary Redirect
+  - 308 Permanent Redirect
 - 4XX --- 客户端错误，请求有语法错误或请求无法实现
-    - 400 --- Bad Request， 客户端请求有语法错误
-    - 401 --- Unauthorized, 请求未授权
-    - 403 --- Forbidden, 禁止页面访问
-    - 404 --- Not found， 请求资源不存在
+  - 400 Bad Request， 客户端请求有语法错误
+  - 401 Unauthorized, 请求未授权
+  - 403 Forbidden, 禁止页面访问
+  - 404 Not found， 请求资源不存在
+  - 405 Method Not Allowed
 - 5XX --- 服务端错误，服务器未能实现合法的请求
-    - 500 --- Internal Server Error, 服务器错误
-    - 503 --- Server Unavailable, 请求未完成，服务器临时过载或者宕机，一段时间后可恢复正常
+  - 500 Internal Server Error, 服务器错误
+  - 501 Not Implemented
+  - 502 Bad Gateway
+  - 503 Server Unavailable, 请求未完成，服务器临时过载或者宕机，一段时间后可恢复正常
+  - 504 Gateway Timeout
 
 ### 持久连接 {#http-keep-alive}
 
