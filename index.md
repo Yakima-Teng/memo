@@ -87,6 +87,8 @@
 
 <!--@include: ./safety.md{3,}-->
 
+<!--@include: ./cache.md{3,}-->
+
 <!--@include: ./job.md{3,}-->
 
 <!--@include: ./last.md{3,}-->
