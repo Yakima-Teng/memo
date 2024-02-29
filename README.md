@@ -65,6 +65,7 @@
 - [前端优化](./optimize.md)
 - [安全](./safety.md)
 - [缓存](./cache.md)
+- [MySQL](./mysql.md)
 - [简历与工作](./job.md)
 - [写在最后](./last.md)
 - [附录1：参考文档](./reference.md)
