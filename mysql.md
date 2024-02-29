@@ -193,6 +193,100 @@ MySQL 支持 JSON 数据类型，JSON 数据类型具有如下优点：
 
 ### MySQL 数据表分区 {#mysql-table-partition}
 
+MySQL 目前仅支持使用 InnoDB 和 NDB 存储引擎对数据表进行分区，不支持其他存储引擎。
+
+使用分区的优点有：
+
+- 数据表被分区后，其中的数据可以分布在不同的物理设备上，从而高效地利用多个硬件设备。
+- 分区上的数据更容易维护。例如，想批量删除大量数据时，可以使用清楚整个分区的方式来处理。另外，还可以对一个独立分区进行优化、检查、修复等操作。
+- 可以使用分区来避免某些特殊的瓶颈，例如 InnoDB 的单个索引的互斥访问。
+- 在大数据集的应用场景下，可以备份和恢复独立的分区，这样能够更好地提高性能。
+- 某些查询也可以被极大地优化，因为满足给定 where 子句的数据只能存储在一个或多个分区上，所以会自动搜索相关分区数据，而不是扫描所有的表数据。
+- 由于在创建分区后可以更改分区，因此用户可以重新组织数据，提高查询效率。
+
+MySQL 目前支持多种分区：
+
+- 范围（range）分区：基于一个给定连续区间的列值，把区间列值对应的多行分配给分区。
+- 列表（list）分区：类似范围分区，不同之处在于列表分区是根据列值域离散集合中的某个值的匹配来选择的。
+- 列（column）分区：数据根据某个或多个列的值进行划分，是列表分区和范围分区的变体。
+- 哈希（hash）分区：基于用户定义的表达式的返回值进行分区选择，该表达式使用将要插入表中的行的列值来进行计算。哈希函数可以包含**在 MySQL 中有效且产生非负整数的表达式**。
+- 键（key）分区：类似哈希分区，区别在于键分区只支持计算一列或多列，并且 MySQL 服务器为此提供了自身的哈希函数。
+- 子分区：又称复合分区，是对分区表中每个分区的进一步划分。
+
+#### MySQL 范围分区 {#mysql-partition-by-range}
+
+范围分区应该是连续且不重叠的，使用 value less than 运算符来定义。
+
+创建表，并通过 `partition by range` 子句将表按 `salary` 列进行分区：
+
+```sql
+create table employees
+(
+    empno varchar(20) not null,
+    empname varchar(20),
+    deptno int,
+    birthdate date,
+    salary int
+)
+partition by range (salary) (
+    partition p0 values less than (5000),
+    partition p1 values less than (10000),
+    partition p2 values less than (15000),
+    partition p3 values less than (20000),
+    partition p4 values less than maxvalue
+);
+```
+
+* `maxvalue` 表示是中大于最大可能得整数值。
+
+当员工工资增长到 25000、30000 或更多时，可以使用 `alter table` 语句为 20000~25000 的工资范围添加新分区。
+
+针对上面这个员工表，我们也可以根据员工的出生日期（`birthdate`）进行分区，把同一年出生的员工信息存储在同一个分区中，像下面这样（以 `year(birthdate)` 作为分区依据）。
+
+```sql
+create table employees
+(
+    empno varchar(20) not null,
+    empname varchar(20),
+    deptno int,
+    birthdate date,
+    salary int
+)
+partition by range (year(birthdate) (
+    partition p2018 values less than (2018),
+    partition p2019 values less than (2019),
+    partition p2020 values less than (2020),
+    partition p2021 values less than (2021),
+    partition pmax values less than maxvalue
+);
+```
+
+**查询每个分区中分配的数据量**
+
+```sql
+select partition_name as "", table_rows as "" from information_schema.partitions where table_name="employees";
+```
+
+得到结果格式如下：
+
+| /  | / |
+|----|---|
+| p0 | 0 |
+| p1 | 1 |
+| p2 | 1 |
+| p3 | 1 |
+| p4 | 0 |
+
+#### MySQL 列表分区
+
+#### MySQL 列分区
+
+#### MySQL 哈希分区
+
+#### MySQL 键分区
+
+#### MySQL 子分区
+
 ### MySQL 视图、存储过程 {#mysql-view-procedure}
 
 ### MySQL 数据查询优化 {#mysql-query-optimization}

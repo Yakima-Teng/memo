@@ -2,6 +2,12 @@
 
 ## 附录1：参考文档 {#reference}
 
+参考的书籍：
+
+- 张文亮《MySQL 8.0从入门到实战》
+
+参考的文章：
+
 - [AST反混淆之路——babel基本知识及常用转换操作](https://blog.csdn.net/qq_41392887/article/details/108218164)
 - [面试官的步步紧逼：Vue2 和 Vue3 的响应式原理比对](https://juejin.cn/post/7124351370521477128)
 - [有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
