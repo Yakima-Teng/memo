@@ -228,7 +228,7 @@ create table employees
     birthdate date,
     salary int
 )
-partition by range (salary) (
+partition by range(salary) (
     partition p0 values less than (5000),
     partition p1 values less than (10000),
     partition p2 values less than (15000),
@@ -252,7 +252,7 @@ create table employees
     birthdate date,
     salary int
 )
-partition by range (year(birthdate) (
+partition by range(year(birthdate) (
     partition p2018 values less than (2018),
     partition p2019 values less than (2019),
     partition p2020 values less than (2020),
@@ -277,11 +277,129 @@ select partition_name as "", table_rows as "" from information_schema.partitions
 | p3 | 1 |
 | p4 | 0 |
 
-#### MySQL 列表分区
+#### MySQL 列表分区 {#mysql-partition-by-list}
 
-#### MySQL 列分区
+```sql
+create table employees_list
+(
+    empno varchar(20) not null,
+    empname varchar(20),
+    deptno int,
+    birthdate date,
+    salary int
+)
+partition by list(deptno) (
+    partition p0 values in (10,20,30),
+    partition p1 values in (40,50,60),
+    partition p2 values in (70,80,90)
+);
+```
 
-#### MySQL 哈希分区
+在列表分区的方案中，如果插入的数据中分区字段的值不在分区列表中，则会报错：`Table has no partition for value blabla`。如果要在一条语句中批量添加多条数据，并忽略错误数据，可以使用 `ignore` 关键字：
+
+```sql
+insert ignore into employees_list (empno,empname,deptno,birthdate,salary)
+values
+(6, 'name1', 10, '2021-06-20', 12998),
+(7, 'name2', 100, '2021-06-20', 12998);
+```
+
+#### MySQL 列分区 {#mysql-partition-by-column}
+
+列（column）分区是范围分区和列表分区的变体，分为范围列（range column）分区和列表列（list column）分区。
+
+**范围列分区**
+
+```sql
+create table rtable(
+    a int,
+    b int,
+    c char(8),
+    d int
+)
+partition by range columns(a,d,c) (
+    partition p0 values less than (5,20,'aa'),
+    partition p1 values less than (10,30,'cc'),
+    partition p2 values less than (15,80,'dd'),
+    partition p3 values less than (maxvalue,maxvalue,maxvalue) 
+);
+```
+
+**列表列分区**
+
+```sql
+create table customers (
+    name varchar(25),
+    street_1 varchar(30),
+    street_2 varchar(30),
+    city varchar(15),
+    renewal date
+)
+partition by list columns(city) (
+    partition pregion_1 values in('河南省', '湖北省', '湖南省'),
+    partition pregion_2 values in('广东省', '广西壮族自治区', '海南省'),
+    partition pregion_3 values in('上海市', '江苏省', '浙江省'),
+    partition pregion_4 values in('北京市', '天津市', '河北省')
+);
+```
+
+#### MySQL 哈希分区 {#mysql-partition-by-hash}
+
+##### 常规哈希分区 {#mysql-partition-by-normal-hash}
+
+要对表进行哈希分区，必须在 `create table` 语句后附加一个子句，**这个子句可以是一个返回整数的表达式，也可以是 MySQL 整数类型列的名称**。
+
+根据表中 `store_id` 列进行哈希分区，并分为4个分区，示例 SQL 语句如下：
+
+```sql
+create table employees (
+    id int not null,
+    fname varchar(30),
+    lname varchar(30),
+    hired date not null default '1970-01-01',
+    separated date not null default '9999-12-31',
+    job_code int,
+    store_id int
+)
+partition by hash(store_id)
+partitions 4;
+```
+
+如果分区不包含 `partition` 子句，则分区数默认为1；如果分区语句包含 `partition` 子句，则必须在后面指定分区的数量，否则会提示语法错误。
+
+哈希分区中，还可以使用为 SQL 返回整数的表达式，比如：
+
+```sql
+create table employees (
+    id int not null,
+    fname varchar(30),
+    lname varchar(30),
+    hired date not null default '1970-01-01',
+    separated date not null default '9999-12-31',
+    job_code int,
+    store_id int
+)
+partition by hash( year(hired) )
+partitions 4;
+```
+
+##### 线性哈希分区 {#mysql-partition-by-linear-hash}
+
+MySQL 还支持线性哈希，它与常规哈希的不同之处在于：线性哈希使用线性二次幂算法，二常规哈希使用哈希函数值的模数。在语法上，线性哈希分区唯一区别于常规哈希的地方是在 `partition by` 子句中添加了 `linear` 关键字。
+
+```sql
+create table employees (
+    id int not null,
+    fname varchar(30),
+    lname varchar(30),
+    hired date not null default '1970-01-01',
+    separated date not null default '9999-12-31',
+    job_code int,
+    store_id int
+)
+partition by linear hash( year(hired) )
+partitions 4;
+```
 
 #### MySQL 键分区
 
