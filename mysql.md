@@ -27,41 +27,23 @@ mysql -u user -p
 
 #### 创建数据库和表 {#mysql-create-database-table}
 
-**查询当前服务器上存在哪些数据库**
-
-```sql
-show databases;
-```
-
-**切换使用指定数据库**
-
-```sql
-use database_name;
-```
-
-**查询当前数据库下的所有表**
-
-```sql
-show tables;
-```
-
 **创建数据库**
 
 * 在 UNIX 操作系统中，数据库的名称是区分字母大小写的。
 
-```sql
-create database database_name;
+```mysql
+CREATE DATABASE database_name;
 ```
 
 **创建表**
 
-```sql
+```mysql
 create table table_name (column_name column_type);
 ```
 
 例子：
 
-```sql
+```mysql
 create table if not exists `userinfo` (
     `id` int unsigned auto_increment,
     `name` varchar(100) not null,
@@ -77,7 +59,7 @@ create table if not exists `userinfo` (
 
 **查询指定表的结构**
 
-```sql
+```mysql
 describe table_name;
 ```
 
@@ -111,7 +93,7 @@ describe table_name;
 
 decimal 列声明中，可以指定精度和小数位数：
 
-```sql
+```mysql
 # 精度为5，小数位数为2，取值范围为 -999.99 ~ 999.99
 salary decimal(5,2)
 ```
@@ -138,7 +120,7 @@ bit 类型的表示方式为 `bit(m)`，m 的取值范围为 1~64（换算成十
 
 当列定义为 char、varchar、enum 和 set 的数据类型时，同时还可以指定列的字符集，尤其在存储中文时，建议指定字符集格式为 utf8，以防止出现乱码问题。
 
-```sql
+```mysql
 create table mytable
 (
     c1 varchar(255) character set utf8,
@@ -157,7 +139,7 @@ enum 类型（即枚举类型）的列值表示一个字符串对象，其值选
 
 定义时，注意枚举值必须是带引号的字符串。
 
-```sql
+```mysql
 create table mytable (
     name varchar(40),
     size enum('x-small', 'small', 'medium')
@@ -168,14 +150,14 @@ create table mytable (
 ::: tip set 类型
 set 类型（集合类型）的列值表示可以有零个或多个字符串对象。一个 set 类型的列最多可以有64个不同的成员值，并且每个值都必须从定义列时指定的值列表中选择。set 类型成员值本身不应包含英文逗号。
 
-```sql
+```mysql
 create table myset (col set('a', 'b', 'c', 'd'));
 ```
 :::
 
 ##### JSON 数据类型 {#mysql-data-type-json}
 
-```sql
+```mysql
 create table mytable (jdoc json);
 ```
 
@@ -188,6 +170,519 @@ MySQL 支持 JSON 数据类型，JSON 数据类型具有如下优点：
 在 MySQL 中，JSON 类型列的值会被写为字符串。如果字符串不符合 JSON 数据格式，则会产生错误。
 
 ### MySQL 基本操作 {#mysql-operation}
+
+#### 数据库和数据表的创建与查看 {#mysql-create-database-table}
+
+查看 MySQL 服务器中的所有数据库：
+
+```mysql
+show databases;
+```
+
+切换使用指定数据库：
+
+```mysql
+USE database_name;
+```
+
+查询当前操作的数据库名称：
+
+```mysql
+SELECT DATABASE();
+```
+
+查询当前数据库下的所有表：
+
+```mysql
+SHOW TABLES;
+```
+
+删除数据库：
+
+```mysql
+drop database if exists mydb;
+```
+
+重新创建 `mydb` 数据库，指定编码为 utf8：
+
+```mysql
+create database mydb charset utf8;
+```
+
+查看建库时的雨具（并验证数据库使用的编码）：
+
+```mysql
+show create database mydb;
+```
+
+进入 `mydb` 库，然后删除 `student` 表（如果存在）：
+
+```mysql
+use mydb;
+
+drop table if exists student;
+```
+
+创建 `student` 表：
+
+```mysql
+drop table if exists student;
+
+create table student (
+    id int primary key auto_increment,
+    name varchar(50),
+    gender varchar(2),
+    birthday date,
+    score double
+);
+```
+
+上述语句创建的表结构如下：
+
+| Field | Type | Null | Key | Default | Extra |
+| --- | --- | --- | --- | --- | --- |
+| id | int(11) | NO | PRI | NULL | auto_increment |
+| name | varchar(50) | YES | | NULL | |
+| gender | varchar(2) | YES | | NULL | |
+| birthday |  date | YES | | NULL | |
+| score | double | YES | | NULL | |
+
+查看创建时的语句：
+
+```mysql
+show create table student;
+
+# 得到如下内容：
+CREATE TABLE `student` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(50) DEFAULT NULL,
+    `gender` varchar(20) DEFAULT NULL,
+    `birthday` date DEFAULT NULL,
+    `score` double DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+```
+
+#### 新增、修改、删除表数据 {#mysql-crud-table-data}
+
+插入记录：
+
+```mysql
+insert into student(name,gender,birthday,score)
+values('zhangsan','m','1999-2-2',70);
+
+insert into student
+values(null,'lisi','m','1997-2-2',80);
+
+insert into student
+values(null,'wangwu','m','1989-2-2',75);
+```
+
+查询表中所有学生的信息：
+
+```mysql
+select * from student;
+```
+
+得到：
+
+|id|name|gender|birthday|score|
+|---|---|---|---|---|
+|1|zhangsan|m|1999-02-02|70|
+|2|lisi|m|1997-02-02|80|
+|3|wangwu|m|1989-02-02|75|
+
+修改student表中所有学生的成绩，加10分特长分：
+
+```mysql
+update student set score=score+10;
+```
+
+修改 student 表中 zhangsan 的成绩，将成绩改为 98 分：
+
+```mysql
+update student set score=98 where name='zhangsan';
+```
+
+删除性别是w的数据：
+
+```mysql
+delete from student  where gender='w';
+```
+
+删除表中所有数据，数据还能找回：
+
+```mysql
+delete from student;
+```
+
+清空表数据，效率高，但是数据找不回：
+
+```mysql
+truncate studen;
+```
+
+#### MySQL 基础查询和 `where` 子查询 {#mysql-query-where}
+
+准备数据（部门表和员工表）：
+
+```mysql
+# 创建部门表
+drop table if exists dept;
+create table dept (
+    deptno int(2) not null,
+    dname varchar(14) collate utf8_bin default null,
+    loc varchar(13) collate utf8_bin default null,
+    primary key (deptno)
+) engine=innodb default charset = utf8 collate = utf8_bin;
+
+# 创建员工表
+drop table if exists emp;
+create table emp (
+    eno integer not null,
+    ename varchar(20) not null,
+    sex varchar(20) not null,
+    birthday varchar(20) not null,
+    jdate varchar(20) not null,
+    salary integer not null,
+    bonus integer not null,
+    epost varchar(20) not null,
+    deptno int(2) not null,
+    primary key (eno)
+);
+```
+
+查询emp表中的所有员工，显示姓名、薪资、奖金：
+
+```mysql
+select ename, salary, bonus from emp;
+```
+
+查询emp表中的所有部门和职位：
+
+```mysql
+select deptno, epost from emp;
+```
+
+查询emp表中的所有部门和职位，并对数据去重：
+
+```mysql
+select distinct deptno, epost from emp;
+```
+
+查询emp表中薪资大于5000的所有员工，显示员工姓名、薪资：
+
+```mysql
+select ename, salary from emp where salary > 5000;
+```
+
+查询emp表中总薪资（薪资+奖金）大于6500的所有员工，显示员工姓名、总薪资：
+
+```mysql
+select ename, salary + bonus from emp
+where salary + bonus > 6500;
+```
+
+得到：
+
+|ename|salary + bonus|
+| --- | --- |
+| wanger | 8500 |
+| lisi | 7000 |
+| wangming | 9000 |
+
+注意上面查询结果中的表头，将表头中的“salavy+bonus”修改为“total-salary”：
+
+```mysql
+select ename, salary + bonus 'total-salary' from emp
+where salary + bonus > 6500;
+```
+
+得到：
+
+|ename| total-salary |
+| --- |--------------|
+| wanger | 8500         |
+| lisi | 7000         |
+| wangming | 9000         |
+
+查询emp表中薪资在7000和10000之间的员工，显示员工姓名和薪资：
+
+```mysql
+-- 普通写法
+select ename, salary
+from emp
+where salary >= 7000 and salary <= 10000;
+
+-- 使用 `between and` 的写法
+select ename, salary
+from emp
+where salary between 7000 and 10000;
+```
+
+查询emp表中薪资为5000、6000、8000的员工，显示员工姓名和薪资：
+
+```mysql
+-- 普通写法
+select ename, salary
+from emp
+where salary = 5000 or salary = 6000 or salary = 8000;
+
+-- 使用 `in` 的写法
+select ename, salary
+from emp
+where salary in (5000, 6000, 8000);
+```
+
+查询emp表中薪资不为5000、6000、8000的员工，显示员工姓名和薪资：
+
+```mysql
+-- 普通写法
+select ename, salary
+from emp
+where not (
+    salary = 5000 or salary = 6000 or salary = 8000
+);
+
+-- 使用 `not in` 的写法
+select ename, salary
+from emp
+where salary not in (5000, 6000, 8000);
+```
+
+查询emp表中薪资大于4000和薪资小于2000的员工，显示员工姓名、薪资：
+
+```mysql
+select ename, salary
+from emp
+where salary > 4000 or salary < 2000;
+```
+
+#### MySQL `like` 模糊查询 {#mysql-query-like}
+
+查询emp表中姓名中以“li”开头的员工，显示员工姓名、薪资：
+
+```mysql
+select ename, salary sal
+from emp where ename like 'li%';
+```
+
+查询emp表中姓名中包含“li”的员工，显示员工姓名、薪资：
+
+```mysql
+select ename, salary sal
+from emp where ename like '%li%';
+```
+
+查询emp表中姓名以“li”结尾的员工，显示员工姓名、薪资：
+
+```mysql
+select ename, salary sal
+from emp
+where ename like '%li';
+```
+
+#### MySQL 分组查询、聚合函数、排序查询 {#mysql-query-group-order}
+
+对emp表按照职位进行分组，并统计每个职位的人数，显示职位和对应人数：
+
+```mysql
+select epost, count(*) from emp group by epost;
+```
+
+按照部门分组，显示部门、最高薪资：
+
+```mysql
+select deptno, max(salary)
+from emp
+group by deptno;
+```
+
+**查询每个部门的最高薪资，显示部门、员工姓名、最高薪资：**
+
+```mysql
+select emp.deptno, ename, t1.msal
+from emp,
+    (
+        select deptno, max(salary) msal
+        from emp group by deptno
+    ) t1
+where emp.deptno = t1.deptno and emp.salary = t1.msal;
+```
+
+统计emp表中薪资大于3000的员工个数：
+
+```mysql
+select count(eno) from emp where salary > 3000;
+```
+
+统计emp表中所有员工的薪资总和（不包含奖金）：
+
+```mysql
+select sum(salary) from emp;
+```
+
+统计emp表中员工的平均薪资（不包含奖金）：
+
+```mysql
+-- 普通方式计算平均数
+select sum(salary) / count(*) from emp;
+
+-- 使用 `avg` 函数求平均数
+select avg(salary) from emp;
+```
+
+查询emp表中所有在1978年和1985年之间出生的员工，显示姓名、出生日期：
+
+```mysql
+select ename, birthday
+from emp
+where year(birthday) between 1978 and 1985;
+```
+
+查询要在本月过生日的所有员工：
+
+```mysql
+SELECT *
+FROM emp
+WHERE MONTH(CURDATE()) = MONTH(birthday);
+```
+
+对emp表中所有员工的薪资进行升序（从低到高）排序，显示员工姓名、薪资：
+
+```mysql
+-- 默认就是升序排序，所以 `asc` 可以省略不写
+select ename, salary from emp order by salary;
+```
+
+对emp表中所有员工奖金进行降序（从高到低）排序，显示员工姓名、奖金：
+
+```mysql
+select ename, bonus
+from emp
+order by bonus desc;
+```
+
+查询emp表中的所有记录，分页显示首页记录（前3条记录）：
+
+```mysql
+select * from emp limit 0,3;
+```
+
+查询emp表中的所有记录，分页显示（每页显示3条记录），返回第2页：
+
+```mysql
+select * from emp limit 3,3;
+```
+
+#### MySQL 关联查询 {#mysql-correlated-query}
+
+查询部门和部门对应的员工信息：
+
+```mysql
+select *
+from dept, emp
+where dept.deptno = emp.deptno;
+```
+
+查询所有部门和部门下的员工，如果部门下没有员工，则员工显示为null（一定要列出所有部门）：
+
+```mysql
+select *
+from dept
+left join emp no dept.deptno = emp.deptno;
+```
+
+上面这个 SQL 查询语句使用了 `left join` 关键字来连接 `dept` 和 `emp` 表，并以 `deptno` 字段为连接条件，查询并返回两张表中相关记录的字段值。具体地说，该查询会遍历 `dept` 表中的每一行记录，然后查找与之对应的 `emp` 表中的记录，如果两者中存在符合连接关系的记录，则会将它们的字段值合并为一条查询结果，并以列的形式呈现在最终的查询结果中。如果某个部门在 `emp` 表中没有关联记录，则该部门在查询结果中也会被保留，但其关联字段值会被填充为 `null`。
+
+查询每个部门的员工的数量：
+
+```mysql
+select dept.deptno, count(emp.deptno)
+from dept
+left join emp on dept.deptno = emp.deptno
+group by dept.deptno;
+```
+
+#### MySQL 子查询、多表查询 {#mysql-sub-query}
+
+列出与lisi从事相同职位的所有员工，显示姓名、职位、部门编号：
+
+```mysql
+select ename, epost, deptno
+from emp
+where epost = (
+        select epost from emp where ename = 'lisi'
+    );
+```
+
+列出薪资比部门编号为30（销售部）的所有员工薪资都高的员工信息，显示员工姓名、薪资和部门名称：
+
+```mysql
+-- 外连接查询：查询所有员工、员工薪资和员工对应的部门名称
+select emp.ename, salary, dept.dname
+from emp
+left join dept on emp.deptno = dept.deptno;
+
+-- 假设销售部门的最高薪资为 3000，列出薪资比 3000 高的员工信息
+select emp.ename, salary, dept.dname
+from emp
+left join dept on emp.deptno = dept.deptno
+where salary > 3000;
+
+-- 求出销售部门的最高薪资
+select max(salary) from emp where deptno = 30;
+
+-- 合并两条查询 SQL
+select emp.ename, salary, dept.dname
+from emp
+    left join dept
+    on emp.deptno = dept.deptno
+    where salary > (
+        select max(salary) from emp where deptno = 30
+        );
+```
+
+列出最低薪资大于6500的各种职位，显示职位和该职位的最低薪资：
+
+```mysql
+select epost, min(salary)
+from emp
+group by epost
+having min(salary) > 6500;
+```
+
+::: tip `having` 子句
+需要注意的是，在 `group by` 子句之后使用 `having` 子句可以对分组后的结果进行条件过滤，而在 `where` 子句中则不能使用聚合函数（如 `min` 函数）。
+:::
+
+列出在每个部门就职的员工数量、平均薪资，显示部门编号、员工数量、平均薪资：
+
+```mysql
+select deptno, count(*), AVG(salary)
+from emp
+group by deptno;
+```
+
+列出每个部门薪资最高的员工信息，显示部门编号、员工姓名、薪资：
+
+```mysql
+-- 查询 `emp` 表中所有员工的部门编号、姓名、薪资
+select deptno, ename, salary from emp;
+
+-- 查询 `emp` 表中每个部门的最高薪资，显示部门编号、最高薪资
+select deptno, max(salary) from emp group by deptno;
+
+-- 第二次查询的结果作为一张临时表和第一次查询进行关联查询
+select emp.deptno, emp.ename, emp.salary
+from emp,
+    (
+        select deptno, max(salary) maxsal
+        from emp
+        group by deptno
+    ) t1
+where t1.deptno = emp.deptno and emp.salary = t1.maxsal;
+```
 
 ### MySQL 高级查询函数 {#mysql-advanced-query}
 
@@ -219,7 +714,7 @@ MySQL 目前支持多种分区：
 
 创建表，并通过 `partition by range` 子句将表按 `salary` 列进行分区：
 
-```sql
+```mysql
 create table employees
 (
     empno varchar(20) not null,
@@ -243,7 +738,7 @@ partition by range(salary) (
 
 针对上面这个员工表，我们也可以根据员工的出生日期（`birthdate`）进行分区，把同一年出生的员工信息存储在同一个分区中，像下面这样（以 `year(birthdate)` 作为分区依据）。
 
-```sql
+```mysql
 create table employees
 (
     empno varchar(20) not null,
@@ -263,7 +758,7 @@ partition by range(year(birthdate) (
 
 **查询每个分区中分配的数据量**
 
-```sql
+```mysql
 select partition_name as "", table_rows as "" from information_schema.partitions where table_name="employees";
 ```
 
@@ -279,7 +774,7 @@ select partition_name as "", table_rows as "" from information_schema.partitions
 
 #### MySQL 列表分区 {#mysql-partition-by-list}
 
-```sql
+```mysql
 create table employees_list
 (
     empno varchar(20) not null,
@@ -297,7 +792,7 @@ partition by list(deptno) (
 
 在列表分区的方案中，如果插入的数据中分区字段的值不在分区列表中，则会报错：`Table has no partition for value blabla`。如果要在一条语句中批量添加多条数据，并忽略错误数据，可以使用 `ignore` 关键字：
 
-```sql
+```mysql
 insert ignore into employees_list (empno,empname,deptno,birthdate,salary)
 values
 (6, 'name1', 10, '2021-06-20', 12998),
@@ -310,7 +805,7 @@ values
 
 **范围列分区**
 
-```sql
+```mysql
 create table rtable(
     a int,
     b int,
@@ -327,7 +822,7 @@ partition by range columns(a,d,c) (
 
 **列表列分区**
 
-```sql
+```mysql
 create table customers (
     name varchar(25),
     street_1 varchar(30),
@@ -351,7 +846,7 @@ partition by list columns(city) (
 
 根据表中 `store_id` 列进行哈希分区，并分为4个分区，示例 SQL 语句如下：
 
-```sql
+```mysql
 create table employees (
     id int not null,
     fname varchar(30),
@@ -369,7 +864,7 @@ partitions 4;
 
 哈希分区中，还可以使用为 SQL 返回整数的表达式，比如：
 
-```sql
+```mysql
 create table employees (
     id int not null,
     fname varchar(30),
@@ -387,7 +882,7 @@ partitions 4;
 
 MySQL 还支持线性哈希，它与常规哈希的不同之处在于：线性哈希使用线性二次幂算法，二常规哈希使用哈希函数值的模数。在语法上，线性哈希分区唯一区别于常规哈希的地方是在 `partition by` 子句中添加了 `linear` 关键字。
 
-```sql
+```mysql
 create table employees (
     id int not null,
     fname varchar(30),
@@ -415,7 +910,7 @@ partitions 4;
 唯一列作为分区列时，唯一列不能为 `null`。
 :::
 
-```sql
+```mysql
 create table tb_key (
     id int,
     var char(32)
@@ -434,7 +929,7 @@ partitions 10;
 
 **范围-哈希（range-hash）复合分区**
 
-```sql
+```mysql
 create table emp(
     empno varchar(20) not null,
     empname varchar(20),
@@ -454,7 +949,7 @@ subpartitions 3(
 
 **范围-键（range-key）复合分区**
 
-```sql
+```mysql
 create table emp(
     empno varchar(20) not null,
     empname varchar(20),
@@ -473,7 +968,7 @@ subpartitions 3
 
 **列表-哈希（list-hash）复合分区**
 
-```sql
+```mysql
 create table emp(
     empno varchar(20) not null,
     empname varchar(20),
@@ -492,7 +987,7 @@ subpartitions 3
 
 **列表-键（list-key）复合分区**
 
-```sql
+```mysql
 create table emp(
     empno varchar(20) not null,
     empname varchar(20),
@@ -521,7 +1016,7 @@ MySQL 中的分区不会禁止 `null` 作为分区表达式的值，无论列值
 
 当且仅当定义的分区中存在分区其 `values in` 后跟的值列表中存在 `null` 值时，才允许 `null` 值插入该分区。
 
-```sql
+```mysql
 create table ts2 (
     c1 int,
     c2 varchar(20)
@@ -542,14 +1037,14 @@ partition by list(c1) (
 
 **删除分区**
 
-```sql
+```mysql
 # 删除分区
 alter table table_name drop partition partition_name;
 ```
 
 **添加分区（范围分区）**
 
-```sql
+```mysql
 CREATE TABLE employees (
   id INT NOT NULL,
   fname VARCHAR(50) NOT NULL,
@@ -584,7 +1079,7 @@ ALTER TABLE employees REORGANIZE PARTITION n0,n1 INTO (
 
 **添加分区（列表分区）**
 
-```sql
+```mysql
 CREATE TABLE tt (
     id INT,
     data INT
@@ -604,7 +1099,7 @@ ALTER TABLE tt ADD PARTITION (
 
 在保证数据不丢失的情况下，可以拆分、合并分区：
 
-```sql
+```mysql
 create table members (
     id int(11) default null,
     fname varchar(25) default null,
@@ -638,7 +1133,7 @@ alter table members reorganize s0, s1 into (
 
 **哈希分区**
 
-```sql
+```mysql
 # 创建一张具有10个哈希分区的数据表
 create table clients (
     id int,
@@ -659,7 +1154,7 @@ alter table clients coalesce partition 4;
 
 **键分区**
 
-```sql
+```mysql
 # 创建一张具有 10 个键分区的表
 create table clients (
     id int,
@@ -678,7 +1173,7 @@ alter table clients coalesce partition 4;
 
 **删除分区（仅限于范围分区和列表分区，会丢失数据）**
 
-```sql
+```mysql
 # 一次性删除一个分区
 alter table emp drop partition p1;
 
@@ -688,7 +1183,7 @@ alter table emp drop partition p1,p2;
 
 **增加分区**
 
-```sql
+```mysql
 # 增加范围分区
 alter table emp add partition (partition p3 values less than (5000));
 
@@ -700,7 +1195,7 @@ alter table emp add partition (partition p3 values in (5000));
 
 `reorganize partition` 关键字可以对表的部分分区或全部分区进行修改，并且不会丢失数据。分解前后分区的整体范围应该一致。
 
-```sql
+```mysql
 alter table t
 reorganize partition p1 into
 (
@@ -713,7 +1208,7 @@ reorganize partition p1 into
 
 随着分区数量的增多，有时需要把多个分区合并成一个分区，可以使用 `into` 指令实现。
 
-```sql
+```mysql
 alter table t
 reorganize partition p1,p3 into
 (partition p1 values less than (10000));
@@ -723,7 +1218,7 @@ reorganize partition p1,p3 into
 
 想要对哈希分区进行扩容或缩容，可以对现有的哈希分区进行重新定义。
 
-```sql
+```mysql
 alter table t partition by hash(salary) partitions 8;
 ```
 
@@ -731,7 +1226,7 @@ alter table t partition by hash(salary) partitions 8;
 
 想要对范围分区进行扩容或缩容，可以对现有范围分区进行重新定义。
 
-```sql
+```mysql
 alter table t partition by range(salary)
 (
     partition p1 values less than (20000),
@@ -743,7 +1238,7 @@ alter table t partition by range(salary)
 
 如果要删除表的所有分区，但又不想删除数据，可以执行如下语句：
 
-```sql
+```mysql
 # 注意是 `partitioning`，不是 `partition`
 alter table emp remove partitioning;
 ```
@@ -752,7 +1247,7 @@ alter table emp remove partitioning;
 
 这和先删除保存在分区中的所有记录，然后重新插入它们具有同样的效果，可用于**整理分区碎片**。
 
-```sql
+```mysql
 alter table emp rebuild partition p1,p2;
 ```
 
@@ -760,7 +1255,7 @@ alter table emp rebuild partition p1,p2;
 
 如果从分区中删除了大量的行，或者对一个带有可变长度的行做了许多修改，那么可以使用 `alter table ... optimize partition` 来收回没有使用的空间，并整理分区数据文件的碎片。
 
-```sql
+```mysql
 alter table t optimize partition p1,p2;
 ```
 
@@ -768,14 +1263,14 @@ alter table t optimize partition p1,p2;
 
 想要对现有的分区进行分析，可以执行如下语句：
 
-```sql
+```mysql
 -- 读取并保存分区的键分布
 alter table t analyze partition p1,p2;
 ```
 
 **修补分区**
 
-```sql
+```mysql
 -- 修补被破坏的分区
 alter table t repairpartition p1,p2;
 ```
@@ -784,7 +1279,7 @@ alter table t repairpartition p1,p2;
 
 想要查看现有的分区是否被破坏，可以执行如下语句：
 
-```sql
+```mysql
 -- 检查表指定的分区
 alter table t check partition p1,p2;
 ```
@@ -812,7 +1307,7 @@ alter table t check partition p1,p2;
 
 **唯一键是 `col1` 和 `col2` 的组合，分区键是 `col3`**
 
-```sql
+```mysql
 create table t1 (
     col1 int not null,
     col2 date not null,
@@ -830,7 +1325,7 @@ ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partit
 **两个唯一键分别是 `col1` 和 `col3`，分区键是 `col1 + col3`**
 
 
-```sql
+```mysql
 create table t2 (
     col1 int not null,
     col2 date not null,
@@ -848,7 +1343,7 @@ ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partit
 
 **两个唯一键分别是 `(col1, col2)` 和 `col3`，分区键是 `col1 + col3`**
 
-```sql
+```mysql
 create table t3 (
     col1 int not null,
     col2 date not null,
@@ -866,7 +1361,7 @@ ERROR 1491 (HY000): A PRIMARY KEY must include all columns in the table's partit
 
 **主键是 `col1` 和 `col2`，分区键是 `col3`**
 
-```sql
+```mysql
 create table t4 (
     col1 int not null,
     col2 date not null,
@@ -883,7 +1378,7 @@ ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partit
 
 **主键是 `col1` 和 `col3`，唯一键为 `col2`，分区键为 `year(col2)`**
 
-```sql
+```mysql
 create table t5 (
     col1 int not null,
     col2 date not null,
@@ -901,7 +1396,7 @@ ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partit
 
 ##### 正确示例 {#mysql-correct-examples-partition-key-relationship}
 
-```sql
+```mysql
 create table t1 (
     col1 int not null,
     col2 date not null,
@@ -913,7 +1408,7 @@ partition by hash(col3)
 partitions 4;
 ```
 
-```sql
+```mysql
 create table t2 (
     col1 int not null,
     col2 date not null,
@@ -925,7 +1420,7 @@ partition by hash(col1 + col3)
 partitions 4;
 ```
 
-```sql
+```mysql
 create table t3 (
     col1 int not null,
     col2 date not null,
@@ -940,7 +1435,7 @@ partitions 4;
 
 **以下两种情况，主键都不包括分区表达式中引用的所有列，但语句都是有效的**
 
-```sql
+```mysql
 create table t4 (
     col1 int not null,
     col2 date not null,
@@ -952,7 +1447,7 @@ partition by hash(col1 + year(col2))
 partitions 4;
 ```
 
-```sql
+```mysql
 create table t5 (
     col1 int not null,
     col2 date not null,
@@ -1050,7 +1545,7 @@ mysqldump -uroot -p123456 --all-databases > all.sql
 
 需要先登录数据库终端。
 
-```sql
+```mysql
 -- 创建数据库
 create database demo;
 
@@ -1068,7 +1563,7 @@ source /home/data/userinfo.sql;
 
 MySQL提供了load data infile语句来插入数据。
 
-```sql
+```mysql
 LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl;
 ```
 
