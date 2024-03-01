@@ -719,21 +719,84 @@ where t1.deptno = emp.deptno and emp.salary = t1.maxsal;
 
 #### MySQL 日期函数 {#mysql-date-function}
 
-- `adddate(d,n)`：返回指定日期加上指定天数后的日期。
-- `addtime(t,n)`：返回指定时间加上指定时间后的时间。
-- `curdate()`：返回当前日期。格式为 `YYYY-MM-DD`。
-- `datediff(d1,d2)`：返回两个日期相隔的天数。
-- `dayofyear(d)`：返回指定日期是本年的第几天。
-- `extract(type from d)`：根据对应格式返回日期。
-- `now()`：返回当前日期和时间。
-- `quarter(d)`：返回日期对应的季度数。
-- `second(t)`：返回指定时间中的秒数。
-- `timediff(time1, time2)`：计算时间差。
-- `date(t)`：从指定日期时间中提取日期值。
-- `hour(t)`：返回指定时间中的小时数。
-- `time(expression)`：提取日期时间参数中的时间部分。
-- `time_format(t,f)`：根据表达式显示时间。
-- `year(d)`：返回指定日期的年份。
+**`adddate(d,n)`：返回指定日期加上指定天数后的日期**
+
+```mysql
+/**
+  计算在2021-06-06的基础上加上60天后的日期
+  输出：2017-08-14
+ */
+select adddate("2017-06-15", 60);
+```
+
+**`addtime(t,n)`：返回指定时间加上指定时间后的时间**
+
+```mysql
+/**
+  2021-06-06 23:23:10 加 8 秒
+  得到：2021-06-06 23:23:18
+ */
+select addtime("2021-06-06 23:23:10", 8);
+
+/**
+  2021-06-06 23:23:10 加 1小时10分5秒
+  得到：2021-06-07 00:33:15
+ */
+select addtime("2021-06-06 23:23:10", "1:10:5");
+```
+
+**`curdate()`：返回当前日期。格式为 `YYYY-MM-DD`**
+
+**`datediff(d1,d2)`：返回两个日期相隔的天数**
+
+**`dayofyear(d)`：返回指定日期是本年的第几天**
+
+**`extract(type from d)`：从日期 `d` 中返回 `type` 类型的值**
+
+`type` 的枚举值有：`hour`、`minute`、`second`、`microsecond`、`year`、`month`、`day`、`week`、`quarter`、`year_month`、`day_hour`、`day_minute`、`day_second`、`hour_minute`、`hour_second`、`minute_second`。
+
+```mysql
+-- 得到 `11`
+select extract (minute from "2021-06-06 23:11:11");
+```
+
+**`now()`：返回当前日期和时间**
+
+```mysql
+-- 得到格式如：YYYY-MM-DD HH:mm:ss
+select now();
+```
+
+**`quarter(d)`：返回日期对应的季度数，范围是 1~4**
+
+**`second(t)`：返回指定时间中的秒数**
+
+**`timediff(time1, time2)`：计算时间差**
+
+```mysql
+-- 得到：`838:59:59`
+select timediff("2021-06-06 16:42:45", "2020-06-06 16:42:45");
+```
+
+**`date(t)`：从指定日期时间中提取日期值**
+
+```mysql
+-- 得到：`2021-06-16`
+select date("2021-06-16 23:11:11");
+```
+
+**`hour(t)`：返回指定时间中的小时数**
+
+**`time(expression)`：提取日期时间参数中的时间部分**
+
+```mysql
+-- 提取 `2021-06-06 16:42:45` 的时间部分
+select time("2021-06-06 16:42:45");
+```
+
+**`time_format(t,f)`：根据表达式显示时间**
+
+**`year(d)`：返回指定日期的年份**
 
 ### MySQL 高级查询函数 {#mysql-advanced-query-function}
 
@@ -814,7 +877,9 @@ partition by range(year(birthdate) (
 **查询每个分区中分配的数据量**
 
 ```mysql
-select partition_name as "", table_rows as "" from information_schema.partitions where table_name="employees";
+select partition_name as "", table_rows as ""
+from information_schema.partitions
+where table_name="employees";
 ```
 
 得到结果格式如下：
