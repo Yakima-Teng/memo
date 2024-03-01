@@ -4,7 +4,7 @@
 
 参考的书籍：
 
-- 张文亮《MySQL 8.0从入门到实战》
+- 张文亮《MySQL 8.0从入门到实战》，或者说是参考了[MySQL 8.0 Reference Manual](https://dev.mysql.com/doc/refman/8.0/en/)，比如[26.2.7 How MySQL Partitioning Handles NULL](https://dev.mysql.com/doc/refman/8.0/en/partitioning-handling-nulls.html)
 
 参考的文章：
 

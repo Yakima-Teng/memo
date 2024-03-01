@@ -401,9 +401,569 @@ partition by linear hash( year(hired) )
 partitions 4;
 ```
 
-#### MySQL 键分区
+#### MySQL 键分区 {#mysql-partition-by-key}
 
-#### MySQL 子分区
+键分区将表中的数据按照特定的键值进行分区。在键分区中，每个分区都包含相同键值的数据，不同键值的数据则存储在不同的分区中。
+
+键分区和哈希分区很像，但有区别：
+- 键分区支持除 text 和 blob 类型之外的所有数据类型的列，而哈希分区只支持数字类型的列；
+- 键分区不允许使用用户自定义的表达式进行分区，而是使用系统提供的哈希函数进行分区。
+
+当表中存在主键或唯一键时，如果创建键分区时没有指定列，则系统默认会选择主键列作为分区列；如果不存在主键列，则会选择**非空**的唯一键列作为分区列。
+
+::: tip 提示
+唯一列作为分区列时，唯一列不能为 `null`。
+:::
+
+```sql
+create table tb_key (
+    id int,
+    var char(32)
+)
+partition by key(var)
+partitions 10;
+```
+
+#### MySQL 子分区 {#mysql-subpartition}
+
+子分区也称复合分区，是对分区表中的每个分区的进一步划分，分为：
+- 范围-哈希复合分区。
+- 范围-键复合分区。
+- 列表-哈希复合分区。
+- 列表-键复合分区。
+
+**范围-哈希（range-hash）复合分区**
+
+```sql
+create table emp(
+    empno varchar(20) not null,
+    empname varchar(20),
+    deptno int,
+    birthdate date not null,
+    salary int
+)
+partition by range(salary)
+subpartition by hash(year(birthdate))
+subpartitions 3(
+    partition p1 values less than (2000),
+    partition p2 values less than maxvalue
+);
+```
+
+在上面这个例子中，先按 `salary` 列的薪资范围将表进行分区，并对 `birthdate` 列采用 `year` 进行哈希分区，子分区数为3。在此分区方案中，将数据分成了两个范围分区 p1 和 p2，每个范围分区又分为3个子分区，其中 p1 分区存储 salary 小于 2000 的数据，p2 分区存储所有大于或等于 2000 的数据。
+
+**范围-键（range-key）复合分区**
+
+```sql
+create table emp(
+    empno varchar(20) not null,
+    empname varchar(20),
+    deptno int,
+    birthdate date not null,
+    salary int
+)
+partition by range(salary)
+subpartition by key(birthdate)
+subpartitions 3
+(
+    partition p1 values less than (2000),
+    partition p2 values less than maxvalue
+);
+```
+
+**列表-哈希（list-hash）复合分区**
+
+```sql
+create table emp(
+    empno varchar(20) not null,
+    empname varchar(20),
+    deptno int,
+    birthdate date not null,
+    salary int
+)
+partition by list (deptno)
+subpartition by hash(year(birthdate))
+subpartitions 3
+(
+    partition p1 values in (10),
+    partition p2 values in (20),
+);
+```
+
+**列表-键（list-key）复合分区**
+
+```sql
+create table emp(
+    empno varchar(20) not null,
+    empname varchar(20),
+    deptno int,
+    birthdate date not null,
+    salary int
+)
+partition by list (deptno)
+subpartition by key(birthdate)
+subpartitions 3
+(
+    partition p1 values in (10),
+    partition p2 values in (20)
+);
+```
+
+#### MySQL 分区对 `null` 的处理 {#mysql-partition-handling-null}
+
+MySQL 中的分区不会禁止 `null` 作为分区表达式的值，无论列值还是用户提供的表达式的值，都允许 `null` 用作必须产生整数的表达式的值。MySQL 中的分区将 `null` 视为小于任何非 `null` 值。
+
+**范围分区中如何处理 `null`**
+
+要将一行数据插入分区中，如果用于确定范围分区的列值为 `null`，那么该行将插入最低分区中。
+
+**列表分区中如何处理 `null`**
+
+当且仅当定义的分区中存在分区其 `values in` 后跟的值列表中存在 `null` 值时，才允许 `null` 值插入该分区。
+
+```sql
+create table ts2 (
+    c1 int,
+    c2 varchar(20)
+)
+partition by list(c1) (
+    partition p0 values in (0, 3, 6),
+    partition p1 values in (1, 4, 7),
+    partition p2 values in (2, 5, 8),
+    partition p3 values in (null)
+);
+```
+
+**哈希分区和健分区中如何处理 `null`**
+
+在哈希分区和键分区的表中，任何产生 `null` 值的分区表达式的返回值都为 0。
+
+#### 范围分区和列表分区的管理 {#mysql-partition-management-range-list}
+
+**删除分区**
+
+```sql
+# 删除分区
+alter table table_name drop partition partition_name;
+```
+
+**添加分区（范围分区）**
+
+```sql
+CREATE TABLE employees (
+  id INT NOT NULL,
+  fname VARCHAR(50) NOT NULL,
+  lname VARCHAR(50) NOT NULL,
+  hired DATE NOT NULL
+)
+PARTITION BY RANGE( YEAR(hired) ) (
+  PARTITION p1 VALUES LESS THAN (1991),
+  PARTITION p2 VALUES LESS THAN (1996),
+  PARTITION p3 VALUES LESS THAN (2001),
+  PARTITION p4 VALUES LESS THAN (2005)
+);
+
+# 如果要新增的分区的范围值大于之前已有的分区范围值，可以直接添加：
+ALTER TABLE employees ADD PARTITION (
+    PARTITION p5 VALUES LESS THAN (2010),
+    PARTITION p6 VALUES LESS THAN MAXVALUE
+);
+
+# 否则需要像下面这样处理：
+ALTER TABLE employees
+    REORGANIZE PARTITION p1 INTO (
+        PARTITION n0 VALUES LESS THAN (1970),
+        PARTITION n1 VALUES LESS THAN (1991)
+);
+
+# 如果要对上面的操作反向处理：
+ALTER TABLE employees REORGANIZE PARTITION n0,n1 INTO (
+    PARTITION p1 VALUES LESS THAN (1991)
+);
+```
+
+**添加分区（列表分区）**
+
+```sql
+CREATE TABLE tt (
+    id INT,
+    data INT
+)
+PARTITION BY LIST(data) (
+    PARTITION p0 VALUES IN (5, 10, 15),
+    PARTITION p1 VALUES IN (6, 12, 18)
+);
+
+# 如果新增的分区的范围值大于之前已有分区的范围值，可以直接添加：
+ALTER TABLE tt ADD PARTITION (
+    PARTITION p2 VALUES IN (7, 14, 21)
+);
+```
+
+**拆分、合并分区**
+
+在保证数据不丢失的情况下，可以拆分、合并分区：
+
+```sql
+create table members (
+    id int(11) default null,
+    fname varchar(25) default null,
+    lname varchar(25) default null,
+    dob date default null
+) engine=InnoDB default charset=latin1
+partition by range (year(dob))
+(
+    partition n0 values less than (1970) engine = InnoDB,
+    partition n1 values less than (1980) engine = InnoDB,
+    partition p1 values less than (1990) engine = InnoDB,
+    partition p2 values less than (2000) engine = InnoDB,
+    partition p3 values less than (2010) engine = InnoDB
+);
+
+# 把 n0 分区拆分成2个分区：s0、s1
+alter table members reorganize partition n0 into (
+    partition s0 values less than (1960),
+    partition s1 values less than (1970)
+);
+
+# 把 s0、s1 分区合并成一个分区
+alter table members reorganize s0, s1 into (
+    partition p0 values less than (1970)
+);
+```
+
+* `dob` 是出生日期（date of birth）的缩写。
+
+#### 哈希分区和键分区的管理 {#mysql-partition-management-hash-key}
+
+**哈希分区**
+
+```sql
+# 创建一张具有10个哈希分区的数据表
+create table clients (
+    id int,
+    fname varchar(30),
+    lname varchar(30),
+    signed date
+)
+partition by hash( month(signed) )
+partitions 10;
+
+# 把分区数量从 10 个变成 6 个 （即，合并掉 4 个分区）
+alter table clients coalesce partition 4;
+```
+
+::: tip `coalesce partition`
+需要注意，`coalesce partition` 后面的数字表示要删除的分区数。
+:::
+
+**键分区**
+
+```sql
+# 创建一张具有 10 个键分区的表
+create table clients (
+    id int,
+    fname varchar(30),
+    lname varchar(30),
+    signed date
+)
+partition by linear key(signed)
+partitions 10;
+
+# 把键分区数量从 10 个变成 6 个
+alter table clients coalesce partition 4;
+```
+
+#### 分区管理和维护操作 {#mysql-management-partition}
+
+**删除分区（仅限于范围分区和列表分区，会丢失数据）**
+
+```sql
+# 一次性删除一个分区
+alter table emp drop partition p1;
+
+# 一次性删除多个分区
+alter table emp drop partition p1,p2;
+```
+
+**增加分区**
+
+```sql
+# 增加范围分区
+alter table emp add partition (partition p3 values less than (5000));
+
+# 增加列表分区
+alter table emp add partition (partition p3 values in (5000));
+```
+
+**分解分区（不会丢失数据）**
+
+`reorganize partition` 关键字可以对表的部分分区或全部分区进行修改，并且不会丢失数据。分解前后分区的整体范围应该一致。
+
+```sql
+alter table t
+reorganize partition p1 into
+(
+    partition p1 values less than (1000),
+    partition p3 values less than (2000)
+);
+```
+
+**合并分区（不会丢失数据）**
+
+随着分区数量的增多，有时需要把多个分区合并成一个分区，可以使用 `into` 指令实现。
+
+```sql
+alter table t
+reorganize partition p1,p3 into
+(partition p1 values less than (10000));
+```
+
+**重新定义哈希分区（不会丢失数据）**
+
+想要对哈希分区进行扩容或缩容，可以对现有的哈希分区进行重新定义。
+
+```sql
+alter table t partition by hash(salary) partitions 8;
+```
+
+**重新定义范围分区（不会丢失数据）**
+
+想要对范围分区进行扩容或缩容，可以对现有范围分区进行重新定义。
+
+```sql
+alter table t partition by range(salary)
+(
+    partition p1 values less than (20000),
+    partition p2 values less than (30000)
+);
+```
+
+**删除表的所有分区（不会丢失数据）**
+
+如果要删除表的所有分区，但又不想删除数据，可以执行如下语句：
+
+```sql
+# 注意是 `partitioning`，不是 `partition`
+alter table emp remove partitioning;
+```
+
+**重建分区**
+
+这和先删除保存在分区中的所有记录，然后重新插入它们具有同样的效果，可用于**整理分区碎片**。
+
+```sql
+alter table emp rebuild partition p1,p2;
+```
+
+**优化分区**
+
+如果从分区中删除了大量的行，或者对一个带有可变长度的行做了许多修改，那么可以使用 `alter table ... optimize partition` 来收回没有使用的空间，并整理分区数据文件的碎片。
+
+```sql
+alter table t optimize partition p1,p2;
+```
+
+**分析分区**
+
+想要对现有的分区进行分析，可以执行如下语句：
+
+```sql
+-- 读取并保存分区的键分布
+alter table t analyze partition p1,p2;
+```
+
+**修补分区**
+
+```sql
+-- 修补被破坏的分区
+alter table t repairpartition p1,p2;
+```
+
+**检查分区**
+
+想要查看现有的分区是否被破坏，可以执行如下语句：
+
+```sql
+-- 检查表指定的分区
+alter table t check partition p1,p2;
+```
+
+这条语句可以告诉我们表 `t` 的分区 `p1`、`p2` 中的数据或索引个是否已经被破坏了。如果分区被破坏了，那么可以使用 `alter table ... repairpartition` 来修补该分区。
+
+#### 分区的限制 {#mysql-partition-limit}
+
+在业务中可以对分区进行一些限制：
+
+- 分区键必须包含在表的主键、唯一键中。
+- MySQL 只能在使用分区函数的列进行比较时才能筛选分区，而不能根据表达式的值去筛选分区，即使这个表达式就是分区函数也不行。
+- 不使用NDB存储引擎的数据表的最大分区数为8192。
+- InnoDB存储引擎的分区不支持外键。
+- 服务器 SQL 模式（可以通过 SQL-MODE 参数进行配置）影响分区表的同步复制。主节点和从节点上不同的SQL模式可能会导致相同的数据存储在主从节点的不同分区中，甚至可能导致数据插入主节点成功，而插入从节点失败。为了获得最佳效果，应该始终在主机和从机上使用相同的服务器SQL模式，强烈建议不要在创建分区后更改服务器SQL模式。
+- 分区不支持全文索引，即使是使用 InnoDB 或 MyISAM 存储引擎的分区也不例外。
+- 分区无法使用外键约束。
+- 临时表不能进行分区。
+
+#### 分区键和主键、唯一键的关系 {#mysql-relationship-partition}
+
+控制分区键与主键、唯一键关系的规则是：分区表达式中使用的所有列必须是该数据表可能具有的每个唯一键的一部分。换句话说，分区键必须包含在表的主键、唯一键中。
+
+##### 错误示例 {#mysql-wrong-examples-relationship-partition}
+
+**唯一键是 `col1` 和 `col2` 的组合，分区键是 `col3`**
+
+```sql
+create table t1 (
+    col1 int not null,
+    col2 date not null,
+    col3 int not null,
+    col4 int not null,
+    unique key (col1, col2)
+)
+partition by hash(col3)
+partitions 4;
+
+-- 报错如下：
+ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partitioning function (prefixed columns are not considered).
+```
+
+**两个唯一键分别是 `col1` 和 `col3`，分区键是 `col1 + col3`**
+
+
+```sql
+create table t2 (
+    col1 int not null,
+    col2 date not null,
+    col3 int not null,
+    col4 int not null,
+    unique key (col1),
+    unique key (col3)
+)
+partition by hash(col1 + col3)
+partitions 4;
+
+-- 报错如下：
+ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partitioning function (prefixed columns are not considered).
+```
+
+**两个唯一键分别是 `(col1, col2)` 和 `col3`，分区键是 `col1 + col3`**
+
+```sql
+create table t3 (
+    col1 int not null,
+    col2 date not null,
+    col3 int not null,
+    col4 int not null,
+    unique key (col1, col2),
+    unique key (col3)
+)
+partition by hash(col1 + col3)
+partitions 4;
+
+-- 报错如下：
+ERROR 1491 (HY000): A PRIMARY KEY must include all columns in the table's partitioning function.
+```
+
+**主键是 `col1` 和 `col2`，分区键是 `col3`**
+
+```sql
+create table t4 (
+    col1 int not null,
+    col2 date not null,
+    col3 int not null,
+    col4 int not null,
+    primary key(col1, col2)
+)
+partition by hash(col3)
+partitions 4;
+
+-- 报错如下：
+ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partitioning function (prefixed columns are not considered).
+```
+
+**主键是 `col1` 和 `col3`，唯一键为 `col2`，分区键为 `year(col2)`**
+
+```sql
+create table t5 (
+    col1 int not null,
+    col2 date not null,
+    col3 int not null,
+    col4 int not null,
+    primary key(col1, col3),
+    unique key(col2)
+)
+partition by hash( year(col2) )
+partitions 4;
+
+-- 报错如下：
+ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partitioning function (prefixed columns are not considered).
+```
+
+##### 正确示例 {#mysql-correct-examples-partition-key-relationship}
+
+```sql
+create table t1 (
+    col1 int not null,
+    col2 date not null,
+    col3 int not null,
+    col4 int not null,
+    unique key (col1, col2, col3)
+)
+partition by hash(col3)
+partitions 4;
+```
+
+```sql
+create table t2 (
+    col1 int not null,
+    col2 date not null,
+    col3 int not null,
+    col4 int not null,
+    unique key (col1, col3)
+)
+partition by hash(col1 + col3)
+partitions 4;
+```
+
+```sql
+create table t3 (
+    col1 int not null,
+    col2 date not null,
+    col3 int not null,
+    col4 int not null,
+    unique key (col1, col2, col3),
+    unique key (col3)
+)
+partition by hash(col3)
+partitions 4;
+```
+
+**以下两种情况，主键都不包括分区表达式中引用的所有列，但语句都是有效的**
+
+```sql
+create table t4 (
+    col1 int not null,
+    col2 date not null,
+    col3 int not null,
+    col4 int not null,
+    primary key(col1, col2)
+)
+partition by hash(col1 + year(col2))
+partitions 4;
+```
+
+```sql
+create table t5 (
+    col1 int not null,
+    col2 date not null,
+    col3 int not null,
+    col4 int not null,
+    primary key (col1, col2, col4),
+    unique key (col2, col1)
+)
+partition by hash(col1 + year(col2))
+partitions 4;
+```
 
 ### MySQL 视图、存储过程 {#mysql-view-procedure}
 
