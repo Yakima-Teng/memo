@@ -971,6 +971,29 @@ partitions 4;
 
 ### MySQL 数据运维和读写分离架构 {#mysql-maintenance}
 
+#### 基准测试 {#mysql-base-test}
+
+基准测试可以理解为针对系统的一种压力测试。基准测试不关心业务逻辑，更加简单、直接，易于测试，数据可以由工具生成，不要求真实；而压力测试一般考虑业务逻辑，要求真实的数据。
+
+对于大多数Web应用来说，整个系统的瓶颈在于数据库，原因很简单：Web应用中的其他因素（例如网络带宽、负载均衡节点、应用服务器（包括CPU、内存、硬盘灯、连接数等）、缓存）都很容易通过增加机器水平的扩展来实现性能的提高。而对于MySQL，由于数据一致性的要求，无法通过增加机器来分散向数据库写数据带来的压力，虽然可以通过读写分离、分库、分表来减轻压力，但是与系统其他组件的水平扩展相比，数据库仍然受到了太多的限制。
+
+对数据库进行基准测试的作用是分析在当前配置（硬件配置、操作系统配置、数据库配置等）下，其数据库的性能表现，从而找出MySQL的性能阈值，并根据实际系统的要求调整配置。基准测试的指标有如下几个：
+
+- 每秒查询数(Query Per Second，QPS)：是对一个特定的查询服务器在规定时间内处理查询数量的衡量标准，对应fetches/sec，即每秒的响应请求数。
+- 每秒处理的事务数(Transaction Per Second，TPS)：是指系统在单位时间内处理事务的数量。对于非并发的应用系统而言，TPS与响应时间呈反比关系，实际上此时TPS就是响应时间的倒数。前面已经讲过，对于单用户的系统，响应时间（或者系统响应时间和应用延迟时间）可以很好地度量系统的性能，但对于并发系统而言，通常需要用TPS作为性能指标。
+- 响应时间：包括平均响应时间、最小响应时间、最大响应时间、时间百分比等，其中时间百分比参考意义较大，如前90%的请求的最大响应时间。
+- 并发量：同时处理的查询请求的数量，即可以同时承载的正常业务功能的请求数量。
+
+在对MySQL进行基准测试时，一般使用专门的工具，例如MySQLslap、Sysbench等。其中，Sysbench比MySQLslap更通用、更强大。
+
+Sysbench是一个开源的、模块化的、跨平台的多线程性能测试工具，可以用来进行CPU、内存、磁盘I/O、线程、数据库的性能测试。目前支持的数据库有MySQL、Oracle和PostgreSQL。它主要包括以下几种测试：
+
+- CPU性能。
+- 磁盘I/O性能。
+- 调度程序性能。
+- 内存分配及传输速度。
+- 数据库性能基准测试。
+
 #### 读写分离 {#mysql-read-write-separation}
 
 随着应用业务数据的不断增多，程序应用的响应速度会不断下降，在检测过程中不难发现大多数的请求都是查询操作。此时，我们可以将数据库扩展成主从复制模式，将读操作和写操作分离开来，多台数据库分摊请求，从而减少单库的访问压力，进而使应用得到优化。
@@ -981,7 +1004,81 @@ partitions 4;
 
 上图所示架构有一个主库与两个从库：主库负责写数据，从库复制读数据。随着业务发展，如果还想增加从节点来提升读性能，那么可以随时进行扩展。
 
-#### MySQL 主从复制
+#### 数据库备份 {#mysql-database-backup}
+
+mysqldump是MySQL用于转存数据库的实用程序。它主要产生一个SQL脚本，其中包含从头重新创建数据库所必需的命令 `create table insert` 等。
+
+要使用mysqldump导出数据，需要使用 `--tab` 选项来指定导出文件存储的目录，该目录必须有写操作权限。
+
+**备份 `demo` 数据库下的 `userinfo` 数据表**
+
+```bash
+# 到 /tmp 目录下查看，该目录下会多出一个 userinfo.sql 文件
+mysqldump -uroot -p123456 --no-create-info --tab=/tmp demo userinfo
+```
+
+**备份数据库**
+
+语法：
+
+```bash
+mysqldump -h 服务器 -u用户名 -p密码 数据库名 > 备份文件.sql
+```
+
+单库备份：
+
+```bash
+mysqldump -uroot -p123456 db1 > db1.sql
+mysqldump -uroot -p123456 db1 table1 table2 > db1-table1-table2.sql
+```
+
+多库备份：
+
+```bash
+mysqldump -uroot -p123456 --databases db1 db2 mysql db3 > db1_db2_mysql_db3.sql
+```
+
+备份所有库：
+
+```bash
+mysqldump -uroot -p123456 --all-databases > all.sql
+```
+
+#### 数据库还原 {#mysql-database-restore}
+
+**利用 `source` 命令导入数据库**
+
+需要先登录数据库终端。
+
+```sql
+-- 创建数据库
+create database demo;
+
+-- 使用已创建的数据库
+use demo;
+
+-- 设置编码
+set names utf8;
+
+-- 导入备份数据库
+source /home/data/userinfo.sql;
+```
+
+**使用 `load data infile` 导入数据**
+
+MySQL提供了load data infile语句来插入数据。
+
+```sql
+LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl;
+```
+
+**使用 `mysqlimport` 导入数据**
+
+```bash
+mysqlimport -u root -p --local mytbl dump.txt
+```
+
+#### MySQL 主从复制 {#mysql-master-replication}
 
 如果需要使用MySQL服务器提供读写分离支持，则需要MySQL的一主多从架构。在一主多从的数据库体系中，多个从服务器采用异步的方式更新主数据库的变化，业务服务器执行写操作或者相关修改数据库的操作直接在主服务器上执行，读操作在各从服务器上执行。MySQL主从复制实现原理如下图所示。
 
