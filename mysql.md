@@ -684,7 +684,62 @@ from emp,
 where t1.deptno = emp.deptno and emp.salary = t1.maxsal;
 ```
 
-### MySQL 高级查询函数 {#mysql-advanced-query}
+### MySQL 基础函数 {#mysql-function}
+
+#### MySQL 字符串函数 {#mysql-string-function}
+
+- `character_length(s)`：返回字符串长度
+- `concat(s1,s2,...,sn)`：字符串合并
+- `format(x,n)`：数字格式化（将数字 `x` 格式化为保留 `n` 位小数点）
+- `lpad(s1,len,s2)`：该函数用于在字符串s1的开始处填充字符串s2，使字符串长度达到len。
+- `field(s,s1,s2,…)`：该函数用于返回第一个字符串s在字符串列表(s1,s2,…)中的位置。
+- `insert(s1,x,len,s2)`：该函数用字符串s2替换字符串s1中从x位置开始长度为len的字符串。
+- `lcase(s)`：把字符串中的所有字母转换为小写字母。
+- `ucase(s)`：把字符串中的所有字母转换为大写字母。
+- `strcmp(s1,s2)`：比较字符串大小。该函数用于比较字符串s1和s2，如果s1与s2相等则返回0，如果s1>s2则返回1，如果s1<s2则返回‒1。
+- `replace(s,s1,s2)`：字符串替换。该函数用字符串s2替换字符串s中的字符串s1。
+- `position(s1 in s)`：获取子字符串 `s1` 在字符串 `s` 中出现的位置。
+- `md5(s)`：字符串加密。
+- `inet_aton(ip)`：把 IP 地址转换为数字。
+- `inet_ntoa (s)`：把数字转换为 IP 地址。
+
+#### MySQL 数字函数 {#mysql-number-function}
+
+- `ceil(x)`：返回不小于x的最小整数。
+- `ceiling(x)`：返回不小于x的最小整数。同 `ceil(x)`。
+- `floor(x)`：返回不大于x的最大整数。
+- `round(x)`：返回最接近x的整数。
+- `max(expression)`：求最大值。
+- `min(expression)`：求最小值。
+- `sum(expression)`：求总和。
+- `avg(expression)`：求平均值。
+- `count(expression)`：求总记录数。
+  - `count(字段名)`：计算指定列下总的行数，计算时将忽略空值的行。
+  - `count(*)`：计算数据表中总的行数，无论某列是否为空值都包含在内。
+
+#### MySQL 日期函数 {#mysql-date-function}
+
+- `adddate(d,n)`：返回指定日期加上指定天数后的日期。
+- `addtime(t,n)`：返回指定时间加上指定时间后的时间。
+- `curdate()`：返回当前日期。格式为 `YYYY-MM-DD`。
+- `datediff(d1,d2)`：返回两个日期相隔的天数。
+- `dayofyear(d)`：返回指定日期是本年的第几天。
+- `extract(type from d)`：根据对应格式返回日期。
+- `now()`：返回当前日期和时间。
+- `quarter(d)`：返回日期对应的季度数。
+- `second(t)`：返回指定时间中的秒数。
+- `timediff(time1, time2)`：计算时间差。
+- `date(t)`：从指定日期时间中提取日期值。
+- `hour(t)`：返回指定时间中的小时数。
+- `time(expression)`：提取日期时间参数中的时间部分。
+- `time_format(t,f)`：根据表达式显示时间。
+- `year(d)`：返回指定日期的年份。
+
+### MySQL 高级查询函数 {#mysql-advanced-query-function}
+
+#### MySQL 高级函数 {#mysql-advanced-function}
+
+#### MySQL 窗口函数 {#mysql-window-function}
 
 ### MySQL 数据表分区 {#mysql-table-partition}
 
@@ -1585,5 +1640,3 @@ mysqlimport -u root -p --local mytbl dump.txt
 - I/O线程：负责从主服务器上读取二进制日志，并写入从服务器的中继日志中。- SQL线程：负责读取中继日志并重放其中的SQL语句。
 
 MySQL服务之间数据复制的基础是二进制日志文件。一个MySQL数据库一旦启用二进制日志后，其作为主服务器，它的数据库中所有操作都会以“事件”的方式记录在二进制日志中，其他数据库作为从服务器，通过一个I/O线程与主服务器保持通信，并监控主服务器的二进制日志文件的变化。如果发现主服务器的二进制日志文件发生变化，则会把变化复制到自己的中继日志中，然后从服务器的一个SQL线程把相关的“事件”触发操作在自己的数据库中执行，以此实现从数据库和主数据库的一致性，也就实现了主从复制。
-
-### 函数速查表 {#mysql-function-reference}
