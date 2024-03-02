@@ -1,3 +1,7 @@
+---
+layout: blog
+---
+
 # 程序员备忘录
 
 <div align="center" style="display: flex;align-items: center;justify-content: center;gap:8px;">
@@ -70,13 +74,3 @@
 - [写在最后](./last.md)
 - [附录1：参考文档](./reference.md)
 - [附录2：致谢名单](./thanks.md)
-
-## 客户端预览
-
-**Windows客户端**
-
-![Windows客户端](./attachments/memo-pc.png)
-
-**安卓客户端**
-
-<img src="./attachments/memo_android.jpg" style="display:block;width:320px;height:auto;margin:15px auto;">

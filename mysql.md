@@ -171,7 +171,7 @@ MySQL 支持 JSON 数据类型，JSON 数据类型具有如下优点：
 
 ### MySQL 基本操作 {#mysql-operation}
 
-#### 数据库和数据表的创建与查看 {#mysql-create-database-table}
+#### 数据库和数据表的创建与查看 {#mysql-create-query-database-table}
 
 查看 MySQL 服务器中的所有数据库：
 
