@@ -23,7 +23,7 @@
 
 **保护你的眼睛**
 
-> 本书提供单页HTML版本：[https://www.orzzone.com/frontend](https://www.orzzone.com/frontend)。读者可以直接利用浏览器的打印功能打印成PDF电子书放到水墨屏电纸书阅读器中阅读。以减少对眼睛的损害。
+> 本书提供单页HTML版本：[https://www.orzzone.com/memo/single](https://www.orzzone.com/memo/single)。读者可以直接利用浏览器的打印功能打印成PDF电子书放到水墨屏电纸书阅读器中阅读。以减少对眼睛的损害。
 
 由于编写时间仓促，如您发现有错误或需要补充、删减的地方，或是有想讨论的内容，请到这里提交：[https://github.com/Yakima-Teng/memo/issues](https://github.com/Yakima-Teng/memo/issues)。
 
