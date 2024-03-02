@@ -1,7 +1,3 @@
----
-layout: blog
----
-
 # 程序员备忘录
 
 <div align="center" style="display: flex;align-items: center;justify-content: center;gap:8px;">
