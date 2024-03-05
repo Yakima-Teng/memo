@@ -736,7 +736,9 @@ var name = 'Jenny';
 function person() {
     return this.name;
 }
-console.log(person());  //Jenny
+
+// Jenny
+console.log(person());
 ```
 
 上述代码输出 `Jenny`，原因是调用函数的对象在游览器中为 `window`，因此 `this` 指向 `window`，所以输出 `Jenny`。
