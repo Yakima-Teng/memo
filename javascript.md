@@ -731,6 +731,13 @@ testObject()
 
 全局环境中定义 `person` 函数，内部使用 `this` 关键字。
 
+``` javascript
+var name = 'Jenny';
+function person() {
+    return this.name;
+}
+console.log(person());  //Jenny
+```
 
 上述代码输出 `Jenny`，原因是调用函数的对象在游览器中为 `window`，因此 `this` 指向 `window`，所以输出 `Jenny`。
 
