@@ -66,6 +66,7 @@
 - [安全](./safety.md)
 - [缓存](./cache.md)
 - [MySQL](./mysql.md)
+- [Python](./python.md)
 - [简历与工作](./job.md)
 - [写在最后](./last.md)
 - [附录1：参考文档](./reference.md)
