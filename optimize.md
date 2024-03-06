@@ -34,3 +34,68 @@
 ### 高频率触发的事件的性能优化 {#optimize-high-frequency}
 
 一些事件，比如touchmove可能会被高频率地触发，如果该事件对应的handler函数中需要处理的逻辑较多，可能会导致FPS下降影响程序流畅度，在这种情况下，可以考虑将handler中的执行体放于setTimeout(function () { //执行的代码  }, 0)中，程序会变流畅。
+
+### debounce 防抖 {#debounce}
+
+当事件触发时，函数不立即执行，而是延迟一段时间后再执行。并且这期间只要事件再次被触发，就重新计算延迟时间。所以如果事件被不停触发的话，函数就一直不会被执行。
+
+```javascript
+/**
+ * 将函数进行防抖处理，生成一个新的防抖函数
+ * @param {function|Promise} fn - 需要进行防抖处理的原始函数（可以是async函数）
+ * @param {number} [delay = 1000] - 防抖延迟时间，单位 ms
+ * @param {boolean} [immediate = false] 不在延迟时间内的每次第一次触发时是否立即执行
+ * @param {function} [callback] - 回调函数，用于获取每次最终执行后的结果
+ * @return {function} 生成的防抖函数
+ */
+function debounce(fn, delay = 1000, immediate = false, callback) {
+    let timer = 0
+    let isFirstTime = false
+    let self = this
+
+    function returnFunc(...args) {
+        if (timer) {
+            clearTimeout(timer)
+            timer = 0
+        }
+        
+        const mainTask = () => {
+            let errorObj = null
+            // apply 第二个入参为数组，call 和 bind 的第二个入参是0到多个arguments
+            let result = fn.apply(self, args)
+            
+            const doCallback = () => {
+                if (typeof callback === 'function') {
+                    // 第一个参数表示error，第二个参数表示实际结果
+                    callback(errorObj, result)
+                }
+            }
+
+            if (result instanceof Promise) {
+                result
+                    .then((res) => {
+                        result = res
+                        doCallback()
+                    })
+                    .catch((err) => {
+                        errorObj = err
+                        doCallback()
+                    })
+            } else {
+                doCallback()
+            }
+        }
+
+        if (immediate && isFirstTime) {
+            mainTask()
+            isFirstTime = false
+        }
+        timer = setTimeout(() => {
+            mainTask()
+            isFirstTime = true
+        }, delay)
+    }
+
+    return returnFunc
+}
+```
