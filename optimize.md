@@ -99,3 +99,21 @@ function debounce(fn, delay = 1000, immediate = false, callback) {
     return returnFunc
 }
 ```
+
+### throttle 节流 {#throttle}
+
+> 节流的话，当事件被频繁触发时，函数也只会按指定的间隔频率被触发，函数被触发的时间间隔只会大于等于指定时间间隔。节流与防抖的最大区别在于防抖的核心是**延时等待**，节流的核心在于**保证最小时间间隔**。
+
+```javascript
+function throttle (fn, delay) {
+    let lastTime = 0
+    return function () {
+        const currentTime = Date.now()
+        if (lastTime > 0 && currentTime - lastTime < delay) {
+            return
+        }
+        lastTime = currentTime
+        fn.apply(this, arguments)
+    }
+}
+```
