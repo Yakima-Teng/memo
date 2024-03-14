@@ -94,7 +94,7 @@ todo。
 
 本文参考资料如下：
 
-- [<script>: The Script element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)
+- [The Script element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)
 - [HTML Standard - 4.12 Scripting](https://html.spec.whatwg.org/multipage/scripting.html#script)
 
 script 标签用于嵌入可执行脚本或数据，一般用于嵌入一段 JavaScript 脚本，或者指向一个 JavaScript 文件。script 标签也可用于其他语言，比如 WebGL 的 GLSL shader 编程语言脚本，或者 JSON 数据等。
