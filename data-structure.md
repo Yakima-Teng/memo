@@ -46,7 +46,7 @@
 
 ```javascript
 function bubbleSort (arr) {
-  const len = arr.length
+  let len = arr.length
   while (len > 0) {
     for (let i = 0; i < len - 1; i++) {
       if (arr[i] > arr[i + 1]) {
@@ -303,7 +303,7 @@ function quickSort (arr) {
   var left = []
   var right = []
 
-  // 比基准小的放在left，比基准打的放在right
+  // 比基准小的放在left，比基准大的放在right
   arr.forEach(function (val) {
     if (val <= pivot) {
       left.push(val)
