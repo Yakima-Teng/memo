@@ -1882,8 +1882,6 @@ function toDateStr (ts) {
 }
 ```
 
-
-
 ### [原创]三行代码实现函数柯里化 {#curry}
 
 **实现一个函数，用于将目标函数柯里化**
@@ -1937,3 +1935,31 @@ function add(a, b, c, d, e) {
 const curryAdd = curry(add)
 console.log(curryAdd(1)(2)(3)(4)(5)) // 输出：15
 ```
+
+
+
+### require, import {#require-import}
+
+本文参考了以下文章：
+
+- [JavaScript Require – How to Use the require() Function in JS](https://www.freecodecamp.org/news/how-to-use-the-javascript-require-function/)
+
+一段时间以来，CommonJS 模块化方案一直是 Node.js 生态中的默认模块化方案。从 Node.js v8.5.0 开始，引入了 ES（ECMAScript） 模块化方案。这两种方案在执行时有一些差异。
+
+- ES 模块化方案是 ECMAScript 语言的官方正式模块化方案，也是大多数浏览器原生支持的方案。使用 `import` 和 `export` 来导入、导出模块。
+- Node.js 默认采用 CommonJS 模块化方案。使用 `require` 和 `module.exports` / `exports.<keyName>` 来导入和导出模块。
+- `require()` 函数可以在程序的任何地方被调用，`import` 则在文件头部进行调用。
+- 一般用 `require()` 引入的文件名使用 .js 作为文件名后缀，用 `import` 引入的文件名使用 .mjs 作为文件名后缀。（不绝对）
+- `require()` 得到的内容可以视作一个对象，里面有我们需要的属性或者方法。
+- `require()` 得到的是原始内容的一个拷贝（如果是对象的话就是浅拷贝），也就是重新又自己声明了一份变量，比如在 `b.js` 文件中声明了 `const { a } = require(./a.js)` 后在 `a.js` 文件中修改 `a` 的值也不会影响 `b.js` 中的 `a` 的值，两个文件中的 `a` 是不一样的。
+- `import` 则不会重新声明变量，在上面所述的场景中，`a.js` 和 `b.js` 文件中的 `a` 一直都是同一个变量，值也始终相同。
+
+::: tip `require` 引入 外部模块
+
+`require` 除了支持通过传入一个本地文件路径来引用本地模块，也支持通过传入一个 web 地址来引入外部模块，比如这样：
+
+```javascript
+const myVar = require('http://web-module.location');
+```
+
+:::
