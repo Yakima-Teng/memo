@@ -400,3 +400,104 @@ function (e) {
 - 捕获阶段：先由外至内按捕获的顺序触发了事件回调。
 - 目标阶段：其实就是先捕获后冒泡，在此前提下各自按注册的先后顺序执行。
 - 冒泡阶段：最后由内而外按冒泡的顺序又触发了对应的事件回调。
+
+
+### innerHTML, innerText and textContent {#inner-html-text-content}
+
+本文参考资料如下：
+
+- [innerHTML vs innerText vs textContent – What's the Difference?](https://www.freecodecamp.org/news/innerhtml-vs-innertext-vs-textcontent/)
+
+这几个元素都是 DOM 对象的属性，可以用来读取、更新 HTML 中元素的内容。
+
+**读取内容**
+
+假设现在有如下 HTML 代码片段：
+
+```html
+<nav>
+    <a>Home</a>
+    <a>About</a>
+    <a>Contact</a>
+    <a style="display: none">Pricing</a>
+</nav>
+```
+
+通过 `document.querySelector('nav').innerHTML` 获取到的内容如下：
+
+```text
+    <a>Home</a>
+    <a>About</a>
+    <a>Contact</a>
+    <a style="display: none">Pricing</a>
+```
+
+通过 `document.querySelector('nav').innerText` 获取到的内容如下（内容为渲染到屏幕上的内容，会忽略所有 HTML 标签，也**会忽略被隐藏的元素**）：
+
+```text
+Home About Contact
+```
+
+通过 `document.querySelector('nav').textContent` 获取到的内容如下（会忽略 HTML 标签，但**不会忽略被隐藏的元素**）：
+
+```text
+    Home
+    About
+    Contact
+    Pricing
+```
+
+**设置内容**
+
+假设现有如下 HTML 代码片段：
+
+```html
+<h2>Programming languages</h2>
+<ul class="languages-list"></ul>
+```
+
+使用 `innerHTML` 像下面这样更新内容，可以增加4个由 &lt;li&gt; 标签组成的列表：
+
+```javascript
+const langListElement = document.querySelector('.languages-list')
+
+// Setting or updating content with innerHTML
+langListElement.innerHTML = `
+  <li>JavaScript</li>
+  <li>Python</li>
+  <li>PHP</li>
+  <li>Ruby</li>
+`
+```
+
+![](./attachments/innerhtml-list.png)
+
+使用 `innerText` 像下面这样更新内容，则会得到含有 `<li>` 字符（不是 HTML 标签）的 4 行文本：
+
+```javascript
+const langListElement = document.querySelector('.languages-list')
+
+langListElement.innerText = `
+  <li>JavaScript</li>
+  <li>Python</li>
+  <li>PHP</li>
+  <li>Ruby</li>
+`
+```
+
+![](./attachments/innertext-list.png)
+
+使用 `textContent` 像下面这样更新内容会直接得到一行文本（不是 4 行文本）：
+
+```javascript
+const langListElement = document.querySelector('.languages-list')
+
+langListElement.textContent = `
+  <li>JavaScript</li>
+  <li>Python</li>
+  <li>PHP</li>
+  <li>Ruby</li>
+`
+```
+
+![](./attachments/textcontent-list.png)
