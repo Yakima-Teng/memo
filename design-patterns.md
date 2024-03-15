@@ -273,11 +273,11 @@ console.log(a.name === b.name)
 
 责任链模式、观察者模式、策略模式 这三种在日常的前端开发中，经常遇到：
 
--   责任链模式通常在分布提交表单中，前一步表单满足后才能进入下一步，例如新建商品、营促销活动等；
+- 责任链模式通常在分布提交表单中，前一步表单满足后才能进入下一步，例如新建商品、营促销活动等；
 
--   观察者模式通常应用在组件之间的通讯中；
+- 观察者模式通常应用在组件之间的通讯中；
 
--   策略模式通常用来优化过多的 `if/else` 或 `switch/case`；
+- 策略模式通常用来优化过多的 `if`/`else` 或 `switch`/`case`；
 
 那么单例模式有哪些场景使用呢？
 
@@ -358,12 +358,14 @@ module.exports = Storage.getInstance();
     }
     ```
 
--   `set()` 用来设置某个属性的值，同时它返回了 `this`，这样可以链式调用：
+-   `set()` 用来设置某个属性的值，同时它返回了 `this`，这样可以**链式调用**：
 
     ```javascript
     const store = require("./store.js");
 
-    store.set("productName", "商品名称").set("productBrand", "商品品牌");
+    store
+        .set("productName", "商品名称")
+        .set("productBrand", "商品品牌");
     ```
 
 -   `get()` 用来获取指定属性或全部属性的值；
@@ -380,3 +382,35 @@ module.exports = Storage.getInstance();
     ```
 
 -   `removeItem()` 用来移除某个属性的值；
+
+### 策略模式 {#strategy-design-pattern}
+
+例1：
+
+```javascript
+const strategy = new SomeStrategy()
+context.setStrategy(strategy)
+context.doSomething()
+```
+
+例2：
+
+```javascript
+const eventStrategies = {
+    commandStart: {
+        editor: async () => {},
+    },
+    commandEnd: {
+        editor: async () => {},
+    },
+    *: async () => {}
+}
+addEventListener((type, msg) => {
+    const strategy = eventStrategies[type][msg]
+    if (typeof strategy === 'function') {
+        strategy()
+        return
+    }
+    eventStrategies['*']()
+})
+```
