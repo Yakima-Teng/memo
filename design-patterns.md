@@ -346,42 +346,42 @@ module.exports = Storage.getInstance();
 
 这份 `store.js` 模块，暴露了几个函数用来共享给页面和组件：
 
--   `init()` 用来在编辑模式下回填接口返回的商详数据；
--   `reset()` 用来清空并重置当前存储的数据；
+- `init()` 用来在编辑模式下回填接口返回的商详数据；
+- `reset()` 用来清空并重置当前存储的数据；
 
-    ```javascript
-    // 在保存或某个场景结束操作时，需要重置单例所存储的数据
-    const store = require("./store.js");
+  ```javascript
+  // 在保存或某个场景结束操作时，需要重置单例所存储的数据
+  const store = require("./store.js");
 
-    onUnload() {
-    	storage.reset();
-    }
-    ```
+  onUnload() {
+  	storage.reset();
+  }
+  ```
 
--   `set()` 用来设置某个属性的值，同时它返回了 `this`，这样可以**链式调用**：
+- `set()` 用来设置某个属性的值，同时它返回了 `this`，这样可以**链式调用**：
 
-    ```javascript
-    const store = require("./store.js");
+  ```javascript
+  const store = require("./store.js");
 
-    store
-        .set("productName", "商品名称")
-        .set("productBrand", "商品品牌");
-    ```
+  store
+      .set("productName", "商品名称")
+      .set("productBrand", "商品品牌");
+  ```
 
--   `get()` 用来获取指定属性或全部属性的值；
+- `get()` 用来获取指定属性或全部属性的值；
 
-    ```javascript
-    const store = require("./store.js");
+  ```javascript
+  const store = require("./store.js");
 
-    onShow() {
-    	// 获取全部属性的值
-    	const productInfo = storage.get();
-    	// 获取指定属性的值
-    	const productName = storage.get("productName");
-    }
-    ```
+  onShow() {
+  	// 获取全部属性的值
+  	const productInfo = storage.get();
+  	// 获取指定属性的值
+  	const productName = storage.get("productName");
+  }
+  ```
 
--   `removeItem()` 用来移除某个属性的值；
+- `removeItem()` 用来移除某个属性的值；
 
 ### 策略模式 {#strategy-design-pattern}
 
@@ -413,4 +413,45 @@ addEventListener((type, msg) => {
     }
     eventStrategies['*']()
 })
+```
+
+### 外观模式 {#appearance-design-pattern}
+
+例1：
+
+```javascript
+class ObjType1 {
+    static add () {}
+}
+class ObjType2 {
+    static add () {}
+}
+function addElement(type) {
+    switch (type) {
+        case 'objType1':
+            ObjType1.add()
+            break
+        case 'objType2':
+            ObjType2.add()
+            break
+        default:
+            break
+    }
+}
+
+// 调用者无需关心具体有哪些对象类自己去调用对应对象类的 add 静态方法
+addElement('objType1')
+```
+
+例2：
+
+```javascript
+/**
+ * 调用者只需要知道对象 id，
+ * 就可以初始化对象实例，
+ * 不用关心具体代码是如何判断某个 id 对应的对象是哪个 class 的实例，
+ * 也不用关心里面的是否有缓存逻辑和是否有优先调用批查询命令替换多次调用单查询命令的情况
+ * 高级开发可以慢慢完善内部的具体实验，普通开发可以直接开发业务功能，只要确定好输入和输出即可
+ */
+batchGetElementInstanceList([id1, id2, id3, id4])
 ```
