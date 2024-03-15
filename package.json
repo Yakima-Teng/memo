@@ -1,0 +1,12 @@
+{
+  "name": "memo",
+  "version": "1.0.0",
+  "description": "《程序员备忘录》记录了WEB程序员常用的知识点，方便温故知新，自我成长。",
+  "main": "README.md",
+  "scripts": {
+    "buildAndDeploy": "cd ../all-sites/sites/orzzone.com/packages/home && nvm use v18.18.0 && npm run buildAndDeploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
