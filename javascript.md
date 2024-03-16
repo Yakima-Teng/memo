@@ -1631,10 +1631,12 @@ p
 
 ![事件循环，宏任务，微任务的关系图](./attachments/event-loop.webp)
 
+先看一个例子：
+
 ```javascript
 setTimeout(function() {
     console.log('setTimeout');
-})
+}, 0)
 
 new Promise(function(resolve) {
     console.log('promise');
@@ -1785,6 +1787,43 @@ console.log(5)
 ```
 
 执行结果3，4，5，6，7
+
+**例4**
+
+```javascript
+console.log(1)
+const promise = new Promise((resolve, reject) => {
+    console.log(2)
+    setTimeout(() => {
+        resolve(3)
+        reject(4)
+    }, 0)
+})
+
+promise.then((data) => {
+    console.log(data)
+}).catch((err) => {
+    console.log('6')
+    console.log(err)
+})
+
+promise.then((data) => {
+    console.log(data)
+}).catch((err) => {
+    console.log('7')
+    console.log(err)
+})
+
+console.log(5)
+```
+
+上面这段代码会输出：1、2、5、3、3。
+
+::: tip promise 的 resolve、reject
+
+这里需要注意，promise 被 `resolve` 后再触发 `reject` 是无效的，不会触发 `promise.catch` 回调。
+
+:::
 
 ### [原创]不使用内置函数处理时间戳 {#timestamp}
 
