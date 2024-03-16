@@ -773,3 +773,45 @@ languages
 ```
 
 ### 用户输入和while循环 {#python-while}
+
+函数input()让程序暂停运行，等待用户输入一些文本。获取用户输入后，Python将其赋给一个变量，以方便你使用。
+
+```python
+message = input("Tell me something,and I will repeat it back to you:")
+print(message)
+```
+
+函数input()接受一个参数——要向用户显示的提示(prompt)或说明，让用户知道该如何做。在本例中，Python运行第一行代码时，用户将看到提示Tell me something,and I will repeat it back to you:。程序等待用户输入，并在用户按回车键后继续运行。输入被赋给变量message，接下来的print(message)将输入呈现给用户。
+
+函数int()将数的字符串表示转换为数值表示，如下所示：
+
+```python
+age = input("How old are you?")
+# How old are you?21
+
+age = int(age)
+
+# True
+age >= 18
+```
+
+```python
+prompt = "\nTell me something,and I will repeat it back to you:"
+prompt += "\nEnter 'quit'to end the program."
+message = ""
+while message != 'quit':
+    message = input(prompt)
+    print(message)
+```
+
+删除为特定值的所有列表元素：
+
+```python
+pets = ['dog','cat','dog','goldfish','cat','rabbit','cat']
+print(pets)
+
+while 'cat'in pets:
+    pets.remove('cat')
+
+print(pets)
+```
