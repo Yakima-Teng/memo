@@ -694,3 +694,43 @@ for ( var i = 0, c; c = checkbox[ i++ ]; ){
 ```
 
 :::
+
+### 职责链模式 {#chain-of-responsibility--pattern}
+
+本文参考了曾探的《JavaScript设计模式与开发实战》。
+
+职责链模式的定义是：使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系，将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。
+
+职责链模式的名字非常形象，一系列可能会处理请求的对象被连接成一条链，请求在这些对象之间依次传递，直到遇到一个可以处理它的对象，我们把这些对象称为链中的节点。
+
+![](./attachments/chain-of-responsibility-pattern.jpg)
+
+一般情况下我们会利用一个 `Chain` 类来把普通函数包装成职责链的节点。但是利用 JavaScript 的函数式特性，有一种更加方便的方法来创建职责链：
+
+```javascript
+Function.prototype.after = function( fn ){
+    var self = this;
+    return function(){
+      var ret = self.apply( this, arguments );
+      if ( ret === 'nextSuccessor' ){
+          return fn.apply( this, arguments );
+      }
+
+      return ret;
+    }
+};
+
+var order = order500yuan.after( order200yuan ).after( orderNormal );
+
+order( 1, true, 500 );    // 输出：500元定金预购，得到100优惠券
+order( 2, true, 500 );    // 输出：200元定金预购，得到50优惠券
+order( 1, false, 500 );   // 输出：普通购买，无优惠券
+```
+
+用 AOP 来实现职责链既简单又巧妙，但这种把函数叠在一起的方式，同时也叠加了函数的作用域，如果链条太长的话，也会对性能有较大的影响。
+
+::: tip AOP
+
+AOP 是 Aspect Oriented Programming 的缩写，即“面向切面编程”。编程中，对象之间、方法之间、模块之间，都是一个个的切面。
+
+:::
