@@ -1007,3 +1007,310 @@ submitBtn.onclick = function(){
 - 适配器模式主要用来解决两个已有接口之间不匹配的问题，它不考虑这些接口是怎样实现的，也不考虑它们将来可能会如何演化。适配器模式不需要改变已有的接口，就能够使它们协同作用。
 - 装饰者模式和代理模式也不会改变原有对象的接口，但装饰者模式的作用是为了给对象增加功能。装饰者模式常常形成一条长的装饰链，而适配器模式通常只包装一次。代理模式是为了控制对对象的访问，通常也只包装一次。
 - 外观模式的作用倒是和适配器比较相似，有人把外观模式看成一组对象的适配器，但外观模式最显著的特点是定义了一个新的接口。
+
+
+### 重构 {#refactor}
+
+本文参考了曾探的《JavaScript设计模式与开发实战》。
+
+**提炼函数**
+
+如果一个函数过长，不得不加上若干注释才能让这个函数显得易读一些，那这些函数就很有必要进行重构。
+
+如果在函数中有一段代码可以被独立出来，那我们最好把这些代码放进另外一个独立的函数中。这是一种很常见的优化工作，这样做的好处主要有以下几点。
+
+- 避免出现超大函数。
+- 独立出来的函数有助于代码复用。
+- 独立出来的函数更容易被覆写。
+- 独立出来的函数如果拥有一个良好的命名，它本身就起到了注释的作用。
+
+
+**合并重复的条件片段**
+
+比如把这段代码：
+
+```javascript
+var paging = function( currPage ){
+    if ( currPage <= 0 ){
+      currPage = 0;
+      jump( currPage );    // 跳转
+    }else if ( currPage >= totalPage ){
+      currPage = totalPage;
+      jump( currPage );    // 跳转
+    }else{
+      jump( currPage );    // 跳转
+    }
+};
+```
+
+修改成：
+
+```javascript
+var paging = function( currPage ){
+    if ( currPage <= 0 ){
+      currPage = 0;
+    }else if ( currPage >= totalPage ){
+      currPage = totalPage;
+    }
+    jump( currPage );    // 把jump函数独立出来
+};
+```
+
+**把条件分支语句提炼成函数**
+
+比如把下面这段代码：
+
+```javascript
+var getPrice = function( price ){
+    var date = new Date();
+    if ( date.getMonth() >= 6 && date.getMonth() <= 9 ){    // 夏天
+      return price * 0.8;
+    }
+    return price;
+};
+观察这句代码：
+if ( date.getMonth() >= 6 && date.getMonth() <= 9 ){
+    // ...
+}
+```
+
+修改成：
+
+```javascript
+var isSummer = function(){
+    var date = new Date();
+    return date.getMonth() >= 6 && date.getMonth() <= 9;
+};
+
+var getPrice = function( price ){
+    if ( isSummer() ){    // 夏天
+      return price * 0.8;
+    }
+    return price;
+};
+```
+
+**合理使用循环**
+
+比如将下面这段代码：
+
+```javascript
+var createXHR = function(){
+    var xhr;
+    try{
+      xhr = new ActiveXObject( 'MSXML2.XMLHttp.6.0' );
+    }catch(e){
+      try{
+          xhr = new ActiveXObject( 'MSXML2.XMLHttp.3.0' );
+      }catch(e){
+          xhr = new ActiveXObject( 'MSXML2.XMLHttp' );
+      }
+    }
+    return xhr;
+};
+
+var xhr = createXHR();
+```
+
+修改成：
+
+```javascript
+var createXHR = function(){
+var versions= [ 'MSXML2.XMLHttp.6.0ddd', 'MSXML2.XMLHttp.3.0', 'MSXML2.XMLHttp' ];
+    for ( var i = 0, version; version = versions[ i++ ]; ){
+      try{
+          return new ActiveXObject( version );
+      }catch(e){
+      }
+    }
+};
+
+var xhr = createXHR();
+```
+
+**提前让函数退出代替嵌套条件分支**
+
+比如将下面这段代码：
+
+```javascript
+var del = function( obj ){
+    var ret;
+    if ( ! obj.isReadOnly ){    // 不为只读的才能被删除
+        if ( obj.isFolder ){    // 如果是文件夹
+            ret = deleteFolder( obj );
+        }else if ( obj.isFile ){    // 如果是文件
+            ret = deleteFile( obj );
+        }
+    }
+    return ret;
+};
+```
+
+修改为：
+
+```javascript
+var del = function( obj ){
+    if ( obj.isReadOnly ){    // 反转if表达式
+      return;
+    }
+    if ( obj.isFolder ){
+      return deleteFolder( obj );
+    }
+    if ( obj.isFile ){
+      return deleteFile( obj );
+    }
+};
+```
+
+**传递对象参数代替过长的参数列表**
+
+比如将下面的代码：
+
+```javascript
+var setUserInfo = function( id, name, address, sex, mobile, qq ){
+    console.log( 'id= ' + id );
+    console.log( 'name= ' +name );
+    console.log( 'address= ' + address );
+    console.log( 'sex= ' + sex );
+    console.log( 'mobile= ' + mobile );
+    console.log( 'qq= ' + qq );
+};
+
+setUserInfo( 1314, 'sven', 'shenzhen', 'male', '137********', 377876679 );
+```
+
+修改为：
+
+```javascript
+var setUserInfo = function( obj ){
+    console.log( 'id= ' + obj.id );
+    console.log( 'name= ' + obj.name );
+    console.log( 'address= ' + obj.address );
+    console.log( 'sex= ' + obj.sex );
+    console.log( 'mobile= ' + obj.mobile );
+    console.log( 'qq= ' + obj.qq );
+};
+
+setUserInfo({
+    id: 1314,
+    name: 'sven',
+    address: 'shenzhen',
+    sex: 'male',
+    mobile: '137********',
+    qq: 377876679
+});
+```
+
+**尽量减少参数数量**
+
+比如将下面这段代码：
+
+```javascript
+var draw = function( width, height, square ){};
+```
+
+修改为：
+
+```javascript
+// square 完全可以在函数内部自行计算出来，不需要从外部传入
+var draw = function( width, height ){
+    var square = width * height;
+};
+```
+
+**少用三目运算符**
+
+如果条件分支逻辑简单且清晰，这无碍我们使用三目运算符：
+
+```javascript
+var global = typeof window ! == "undefined" ? window : this;
+```
+
+但是像下面这样就不合适了：
+
+```javascript
+if ( ! aup || ! bup ) {
+    return a === doc ? -1 :
+      b === doc ? 1 :
+      aup ? -1 :
+      bup ? 1 :
+      sortInput ?
+      ( indexOf.call( sortInput, a ) - indexOf.call( sortInput, b ) ) :
+      0;
+}
+```
+
+**合理使用链式调用**
+
+在JavaScript中，可以很容易地实现方法的链式调用，即让方法调用结束后返回对象自身，如下代码所示：
+
+```javascript
+        var User = function(){
+    this.id = null;
+    this.name = null;
+};
+
+User.prototype.setId = function( id ){
+    this.id = id;
+    return this;
+};
+
+User.prototype.setName = function( name ){
+    this.name = name;
+    return this;
+};
+
+console.log( new User().setId( 1314 ).setName( 'sven' ) );
+```
+
+或者这样写也可以：
+
+```javascript
+var User = {
+    id: null,
+    name: null,
+    setId: function( id ){
+      this.id = id;
+      return this;
+    },
+    setName: function( name ){
+      this.name = name;
+      return this;
+    }
+};
+
+console.log( User.setId( 1314 ).setName( 'sven' ) );
+```
+
+使用链式调用的方式并不会造成太多阅读上的困难，也确实能省下一些字符和中间变量，但节省下来的字符数量同样是微不足道的。链式调用带来的坏处就是在调试的时候非常不方便，如果我们知道一条链中有错误出现，必须得先把这条链拆开才能加上一些调试log或者增加断点，这样才能定位错误出现的地方。
+
+如果该链条的结构相对稳定，后期不易发生修改，那么使用链式调用无可厚非。但如果该链条很容易发生变化，导致调试和维护困难，那么还是建议使用普通调用的形式：
+
+```javascript
+var user = new User();
+
+user.setId( 1314 );
+user.setName( 'sven' );
+```
+
+**分解大型类**
+
+示例代码：
+
+```javascript
+var Spirit = function( name ){
+    this.name = name;
+    this.attackObj = new Attack( this );
+};
+
+Spirit.prototype.attack = function( type ){    // 攻击
+    this.attackObj.start( type );
+};
+
+var spirit = new Spirit( 'RYU' );
+
+spirit.attack( 'waveBoxing' );    // 输出：RYU：使用波动拳
+spirit.attack( 'whirlKick' );    // 输出：RYU：使用旋风腿
+```
+
+**用return退出多重循环**
