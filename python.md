@@ -512,6 +512,127 @@ for dimension in dimensions:
 
 ### if {#python-if}
 
+```python
+cars = ['audi','bmw','subaru','toyota']
+
+for car in cars:
+    if car == 'bmw':
+        print(car.upper())
+    else:
+        print(car.title())
+```
+
+要检查是否两个条件都为True，可使用关键字and将两个条件测试合而为一。
+
+关键字or也能够让你检查多个条件，但只要至少一个条件满足，就能通过整个测试。仅当两个测试都没有通过时，使用or的表达式才为False。
+
+要判断特定的值是否已包含在列表中，可使用关键字in。
+
+```python
+requested_toppings = ['mushrooms','onions','pineapple']
+
+# True
+'mushrooms'in requested_toppings
+
+# False
+'pepperoni'in requested_toppings
+```
+
+还有些时候，确定特定的值未包含在列表中很重要。在这种情况下，可使用关键字not in。
+
+```python
+banned_users = ['andrew','carolina','david']
+user = 'marie'
+
+if user not in banned_users:
+    print(f"{user.title()},you can post a response if you wish.")
+```
+
+布尔表达式：
+
+```python
+game_active = True
+can_edit = False
+```
+
+最简单的if语句只有一个测试和一个操作：
+
+```python
+if conditional_test:
+    do something
+```
+
+if-else语句：
+
+```python
+age = 17
+if age >= 18:
+    print("You are old enough to vote!")
+    print("Have you registered to vote yet?")
+else:
+    print("Sorry,you are too young to vote.")
+    print("Please register to vote as soon as you turn 18!")
+```
+
+```python
+requested_toppings = ['mushrooms','green peppers','extra cheese']
+
+for requested_topping in requested_toppings:
+    if requested_topping == 'green peppers':
+        print("Sorry,we are out of green peppers right now.")
+    else:
+        print(f"Adding {requested_topping}.")
+
+print("\nFinished making your pizza!")
+```
+
+if-elif-else结构：
+
+```python
+age = 12
+
+if age <4:
+    print("Your admission cost is $0.")
+elif age <18:
+    print("Your admission cost is $25.")
+else:
+    print("Your admission cost is $40.")
+```
+
+```python
+age = 12
+
+if age <4:
+    price = 0
+elif age <18:
+    price = 25
+elif age <65:
+    price = 40
+else:
+    price = 20
+
+print(f"Your admission cost is ${price}.")
+```
+
+else 代码块是可以省略的：
+
+```python
+age = 12
+
+if age <4:
+    price = 0
+elif age <18:
+    price = 25
+elif age <65:
+    price = 40
+elif age >= 65:
+    price = 20
+
+print(f"Your admission cost is ${price}.")
+```
+
+在if语句中将列表名用作条件表达式时，Python将在列表至少包含一个元素时返回True，并在列表为空时返回False（**这点和JavaScript中的空数组的布尔值判断逻辑不一样**）。
+
 ### 字典 {#python-dictionary}
 
 遍历键值对：
