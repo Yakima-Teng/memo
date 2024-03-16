@@ -665,4 +665,32 @@ for ( var i = 0, c; c = checkbox[ i++ ]; ){
 
 一个典型的例子就是对象池。对象池维护一个装载空闲对象的池子，如果需要对象的时候，不是直接new，而是转从对象池里获取。如果对象池里没有空闲对象，则创建一个新的对象，当获取出的对象完成它的职责之后，再进入池子等待被下次获取。
 
+示例代码如下：
+
+```javascript
+        var toolTipFactory = (function(){
+    var toolTipPool = [];    // toolTip对象池
+
+    return {
+        create: function() {
+            // 如果对象池为空
+            if ( toolTipPool.length === 0 ) {
+                // 创建一个dom
+                var div = document.createElement( 'div' );
+                document.body.appendChild( div );
+                return div;
+            } else {
+                // 如果对象池里不为空
+                // 则从对象池中取出一个dom
+                return toolTipPool.shift();
+            }
+        },
+        recover: function( tooltipDom ){
+            // 对象池回收dom
+            return toolTipPool.push( tooltipDom );
+        }
+    }
+})();
+```
+
 :::
