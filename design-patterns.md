@@ -396,6 +396,8 @@ module.exports = Storage.getInstance();
 
 ### 策略模式 {#strategy-design-pattern}
 
+策略模式有时是违法最少知识原则的，因为使用者可能要了解所有的 strategy 才能判断应该具体使用哪种 strategy。
+
 例1：
 
 ```javascript
@@ -644,3 +646,10 @@ for ( var i = 0, c; c = checkbox[ i++ ]; ){
     }
 };
 ```
+
+### 命令模式 {#command-design-pattern}
+
+本文参考了曾探的《JavaScript设计模式与开发实战》。
+
+有时候需要向某些对象发送请求，但是并不知道请求的接收者是谁，也不知道被请求的操作是什么，此时希望用一种松耦合的方式来设计软件，使得请求发送者和请求接收者能够消除彼此之间的耦合关系。
+
