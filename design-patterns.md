@@ -843,3 +843,157 @@ var mediator = (function(){
     }
 })();
 ```
+
+### 装饰者模式 {#decorator-pattern}
+
+本文参考了曾探的《JavaScript设计模式与开发实战》。
+
+装饰者模式可以动态地给某个对象添加一些额外的职责，而不会影响从这个类中派生的其他对象。
+
+JavaScript语言动态改变对象相当容易，我们可以直接改写对象或者对象的某个方法，并不需要使用“类”来实现装饰者模式。
+
+在JavaScript中，几乎一切都是对象，其中函数又被称为一等对象。在平时的开发工作中，也许大部分时间都在和函数打交道。在JavaScript中可以很方便地给某个对象扩展属性和方法，但却很难在不改动某个函数源代码的情况下，给该函数添加一些额外的功能。在代码的运行期间，我们很难切入某个函数的执行环境。
+
+这里我们可以用 AOP 的方式来装饰函数：
+
+```javascript
+Function.prototype.before = function( beforefn ){
+    var __self = this;  // 保存原函数的引用
+    return function(){    // 返回包含了原函数和新函数的"代理"函数
+      beforefn.apply( this, arguments );  // 执行新函数，且保证this不被劫持，新函数接受的参数
+                                      // 也会被原封不动地传入原函数，新函数在原函数之前执行
+      return __self.apply( this, arguments );  // 执行原函数并返回原函数的执行结果，
+                                          // 并且保证this不被劫持
+    }
+}
+
+Function.prototype.after = function( afterfn ){
+    var __self = this;
+    return function(){
+      var ret = __self.apply( this, arguments );
+      afterfn.apply( this, arguments );
+      return ret;
+    }
+};
+```
+
+使用示例：
+
+```javascript
+window.onload = function(){
+    console.log(1);
+}
+
+// 该回调被触发时，会依次输出数字：0、1、2、3、4。
+window.onload = ( window.onload || function(){} )
+    .before(function () {
+        console.log(0)
+    })
+    .after(function(){
+        console.log(2);
+    })
+    .after(function(){
+        console.log(3);
+    })
+    .after(function(){
+        console.log(4);
+    });
+```
+
+案例：数据统计上报
+
+分离业务代码和数据统计代码，无论在什么语言中，都是 AOP 的经典应用之一。
+
+```html
+<html>
+    <button tag="login" id="button">点击打开登录浮层</button>
+    <script>
+
+    Function.prototype.after = function( afterfn ){
+      var __self = this;
+      return function(){
+          var ret = __self.apply( this, arguments );
+          afterfn.apply( this, arguments );
+          return ret;
+      }
+    };
+
+    var showLogin = function(){
+      console.log('打开登录浮层');
+    }
+
+    var log = function(){
+      console.log('上报标签为： ' + this.getAttribute( 'tag' ) );
+    }
+
+    // 打开登录浮层之后上报数据
+    showLogin = showLogin.after( log );
+
+    document.getElementById( 'button' ).onclick = showLogin;
+    </script>
+</html>
+```
+
+案例：用 AOP 动态改变函数的参数
+
+```javascript
+var getToken = function(){
+    return 'Token';
+}
+
+ajax = ajax.before(function( type, url, param ){
+    param.Token = getToken();
+});
+
+ajax( 'get', 'http://xxx.com/userinfo', { name: 'sven' } );
+```
+
+案例：插件式的表单校验
+
+```javascript
+Function.prototype.before = function( beforefn ){
+    var __self = this;
+    return function(){
+      if ( beforefn.apply( this, arguments ) === false ){
+          // beforefn返回false的情况直接return，不再执行后面的原函数
+          return;
+      }
+      return __self.apply( this, arguments );
+    }
+}
+
+var validata = function(){
+    if ( username.value === '' ){
+      alert ( ’用户名不能为空’ );
+      return false;
+    }
+    if ( password.value === '' ){
+      alert ( ’密码不能为空’ );
+      return false;
+    }
+}
+
+var formSubmit = function(){
+    var param = {
+      username: username.value,
+      password: password.value
+    }
+    ajax( 'http://xxx.com/login', param );
+}
+
+formSubmit = formSubmit.before( validata );
+
+submitBtn.onclick = function(){
+    formSubmit();
+}
+```
+
+值得注意的是，因为函数通过Function.prototype.before或者Function.prototype.after被装饰之后，返回的实际上是一个新的函数，如果在原函数上保存了一些属性，那么这些属性会丢失。
+
+另外，这种装饰方式也叠加了函数的作用域，如果装饰的链条过长，性能上也会受到一些影响。
+
+::: tip 装饰者模式和代理模式
+
+代理模式和装饰者模式最重要的区别在于它们的意图和设计目的。代理模式的目的是，当直接访问本体不方便或者不符合需要时，为这个本体提供一个替代者。本体定义了关键功能，而代理提供或拒绝对它的访问，或者在访问本体之前做一些额外的事情。装饰者模式的作用就是为对象动态加入行为。换句话说，代理模式强调一种关系（Proxy与它的实体之间的关系），这种关系可以静态的表达，也就是说，这种关系在一开始就可以被确定。而装饰者模式用于一开始不能确定对象的全部功能时。代理模式通常只有一层代理-本体的引用，而装饰者模式经常会形成一条长长的装饰链。
+
+:::
