@@ -345,6 +345,171 @@ Traceback (most recent call last):
 IndexError:list index out of range
 ```
 
+遍历列表，可以使用 for 语句。for语句末尾的冒号告诉Python，下一行是循环的第一行。如果不小心遗漏了冒号，将导致语法错误，因为Python不知道你意欲何为。
+
+```python
+magicians = ['alice','david','carolina']
+for magician in magicians:
+    print(magician)
+```
+
+Python函数range()让你能够轻松地生成一系列数。例如，可以像下面这样使用函数range()来打印一系列数：
+
+```python
+for value in range(1,5):
+    print(value)
+```
+
+上述代码会输出1~4，不会输出5：
+
+```text
+1
+2
+3
+4
+```
+
+调用函数range()时，也可只指定一个参数，这样它将从0开始。例如，range(6)返回数0～5。
+
+要创建数字列表，可使用函数list()将range()的结果直接转换为列表。如果将range()作为list()的参数，输出将是一个数字列表。
+
+```python
+numbers = list(range(1,6))
+
+# [1,2,3,4,5]
+print(numbers)
+```
+
+使用函数range()时，还可指定步长。为此，可给这个函数指定第三个参数，Python将根据这个步长来生成数。
+
+```python
+even_numbers = list(range(2,11,2))
+
+# [2,4,6,8,10]
+print(even_numbers)
+```
+
+使用函数range()几乎能够创建任何需要的数集。例如，如何创建一个列表，其中包含前10个整数(1～10)的平方呢？在Python中，用两个星号(**)表示乘方运算。下面的代码演示了如何将前10个整数的平方加入一个列表中：
+
+```python
+squares = []
+for value in range(1,11):
+    squares.append(value ** 2)
+
+# [1,4,9,16,25,36,49,64,81,100]
+print(squares)
+```
+
+有几个专门用于处理数字列表的Python函数。例如，你可以轻松地找出数字列表的最大值、最小值和总和：
+
+```python
+digits = [1,2,3,4,5,6,7,8,9,0]
+
+# 0
+min(digits)
+
+# 9
+max(digits)
+
+# 45
+sum(digits)
+```
+
+前面介绍的生成列表squares的方式包含三四行代码，而列表解析让你只需编写一行代码就能生成这样的列表。列表解析将for循环和创建新元素的代码合并成一行，并自动附加新元素。
+
+```python
+# 请注意，这里的for语句末尾没有冒号。
+squares = [value**2 for value in range(1,11)]
+
+# [1,4,9,16,25,36,49,64,81,100]
+print(squares)
+```
+
+除了处理整个列表，你还可以处理列表的部分元素，Python称之为切片。
+
+要创建切片，可指定要使用的第一个元素和最后一个元素的索引。与函数range()一样，Python在到达第二个索引之前的元素后停止。
+
+```python
+players = ['charles','martina','michael','florence','eli']
+
+# ['charles','martina','michael']
+print(players[0:3])
+```
+
+如果没有指定第一个索引，Python将自动从列表开头开始：
+
+```python
+players = ['charles','martina','michael','florence','eli']
+
+# ['charles','martina','michael','florence']
+print(players[:4])
+```
+
+要让切片终止于列表末尾，也可使用类似的语法。例如，如果要提取从第三个元素到列表末尾的所有元素，可将起始索引指定为2，并省略终止索引：
+
+```python
+players = ['charles','martina','michael','florence','eli']
+
+# ['michael','florence','eli']
+print(players[2:])
+```
+
+前面说过，负数索引返回离列表末尾相应距离的元素，因此你可以输出列表末尾的任意切片。例如，如果要输出名单上的最后三名队员，可使用切片players[-3:]：
+
+```python
+players = ['charles','martina','michael','florence','eli']
+print(players[-3:])
+```
+
+::: tip 注意
+
+注意：可在表示切片的方括号内指定第三个值。这个值告诉Python在指定范围内每隔多少元素提取一个。
+
+:::
+
+遍历切片：
+
+```python
+players = ['charles','martina','michael','florence','eli']
+
+print("Here are the first three players on my team:")
+for player in players[:3]:
+    print(player.title())
+```
+
+打印内容如下：
+
+```text
+Here are the first three players on my team:
+Charles
+Martina
+Michael
+```
+
+要复制列表，可创建一个包含整个列表的切片，方法是同时省略起始索引和终止索引([:])。
+
+::: tip 元组
+
+Python将不能修改的值称为不可变的，而不可变的列表被称为元组。元组看起来很像列表，但使用圆括号而非中括号来标识。定义元组后，就可使用索引来访问其元素，就像访问列表元素一样。
+
+注意：严格地说，元组是由逗号标识的，圆括号只是让元组看起来更整洁、更清晰。如果你要定义只包含一个元素的元组，必须在这个元素后面加上逗号：
+
+```python
+my_t = (3,)
+```
+
+遍历元组中的所有值：
+
+```python
+dimensions = (200,50)
+for dimension in dimensions:
+    print(dimension)
+```
+
+相比于列表，元组是更简单的数据结构。如果需要存储的一组值在程序的整个生命周期内都不变，就可以使用元组。
+
+:::
+
 ### if {#python-if}
 
 ### 字典 {#python-dictionary}
