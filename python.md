@@ -633,8 +633,6 @@ print(f"Your admission cost is ${price}.")
 
 在if语句中将列表名用作条件表达式时，Python将在列表至少包含一个元素时返回True，并在列表为空时返回False（**这点和JavaScript中的空数组的布尔值判断逻辑不一样**）。
 
-### 字典 {#python-dictionary}
-
 遍历键值对：
 
 ```python
@@ -663,6 +661,115 @@ for language in favorite_languages.values():
 # 对值进行去重后再遍历
 for language in set(favorate_languages.values):
     print(language.title())
+```
+
+### 字典 {#python-dictionary}
+
+在Python中，字典是一系列键值对。每个键都与一个值相关联，你可使用键来访问相关联的值。与键相关联的值可以是数、字符串、列表乃至字典。事实上，可将任何Python对象用作字典中的值。
+
+在Python 3.7中，字典中元素的排列顺序与定义时相同。如果将字典打印出来或遍历其元素，将发现元素的排列顺序与添加顺序相同。
+
+```python
+alien_0 = {'color':'green','points':5}
+```
+
+对于字典中不再需要的信息，可使用del语句将相应的键值对彻底删除。使用del语句时，必须指定字典名和要删除的键。
+
+```python
+alien_0 = {'color':'green','points':5}
+print(alien_0)
+
+del alien_0['points']
+print(alien_0)
+```
+
+使用放在方括号内的键从字典中获取感兴趣的值时，可能会引发问题：如果指定的键不存在就会出错。就字典而言，可使用方法get()在指定的键不存在时返回一个默认值，从而避免这样的错误。方法get()的第一个参数用于指定键，是必不可少的；第二个参数为指定的键不存在时要返回的值，是可选的。
+
+```python
+alien_0 = {'color':'green','speed':'slow'}
+
+point_value = alien_0.get('points','No point value assigned.')
+print(point_value)
+```
+
+遍历所有键值对：
+
+```python
+user_0 = {
+    'username':'efermi',
+    'first':'enrico',
+    'last':'fermi',
+}
+
+for key,value in user_0.items():
+    print(f"\nKey:{key}")
+    print(f"Value:{value}")
+```
+
+遍历字典中的所有键：
+
+```python
+favorite_languages = {
+    'jen':'python',
+    'sarah':'c',
+    'edward':'ruby',
+    'phil':'python',
+}
+
+for name in favorite_languages.keys():
+    print(name.title())
+```
+
+遍历字典时，会默认遍历所有的键。即 `for name in favorite_languages:` 等价于 `for name in favorite_languages.keys():`。显式地使用方法keys()可让代码更容易理解，你可以选择这样做，但是也可以省略它。
+
+要以特定顺序返回元素，一种办法是在for循环中对返回的键进行排序。为此，可使用函数sorted()来获得按特定顺序排列的键列表的副本：
+
+```python
+favorite_languages = {
+    'jen':'python',
+    'sarah':'c',
+    'edward':'ruby',
+    'phil':'python',
+}
+
+for name in sorted(favorite_languages.keys()):
+    print(f"{name.title()},thank you for taking the poll.")
+```
+
+遍历字典中的所有值：
+
+```python
+favorite_languages = {
+    'jen':'python',
+    'sarah':'c',
+    'edward':'ruby',
+    'phil':'python',
+}
+
+print("The following languages have been mentioned:")
+for language in favorite_languages.values():
+    print(language.title())
+```
+
+通过对包含重复元素的列表调用set()，可让Python找出列表中独一无二的元素，并使用这些元素来创建一个**集合**。
+
+```python
+favorite_languages = {
+    --snip--
+}
+
+print("The following languages have been mentioned:")
+for language in set(favorite_languages.values()):
+    print(language.title())
+```
+
+可使用一对花括号直接创建集合，并在其中用逗号分隔元素：
+
+```python
+languages = {'python','ruby','python','c'}
+
+# {'ruby','python','c'}
+languages
 ```
 
 ### 用户输入和while循环 {#python-while}
