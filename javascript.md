@@ -1936,8 +1936,6 @@ const curryAdd = curry(add)
 console.log(curryAdd(1)(2)(3)(4)(5)) // 输出：15
 ```
 
-
-
 ### require, import {#require-import}
 
 本文参考了以下文章：
@@ -1963,3 +1961,87 @@ const myVar = require('http://web-module.location');
 ```
 
 :::
+
+### 函数作用域与变量提升 {#function-scope-variable-hoist}
+
+`for` 循环的例子：
+
+```javascript
+// 打印：4、5、6
+for (var i = 0; i < 3; i++) {
+    setTimeout(() => console.log(++i), 0)
+}
+
+// 打印：1、2、3
+for (let i = 0; i < 3; i++) {
+    setTimeout(() => console.log(++i), 0)
+}
+```
+
+变量声明在函数内部提升至顶部的例子：
+
+```javascript
+var foo = 1;
+function bar() {
+    if (!foo) {
+        var foo = 10;
+    }
+    alert(foo);
+}
+// 会 alert 10
+bar();
+```
+
+**变量声明提升在作用域最顶部，其次是函数声明，最后是赋值语句：**
+
+```javascript
+var a = 1;
+function b() {
+    a = 10;
+    return;
+    function a() {}
+}
+b();
+// 会 alert 1
+alert(a);
+```
+
+```javascript
+function a () {
+    var b = 1;
+    function b () {};
+    console.log(b);
+}
+// 输出1
+a();
+```
+
+```javascript
+function a () {
+    var b;
+    function b () {};
+    console.log(typeof b);
+}
+// 输出 'function'
+a();
+```
+
+```javascript
+function a () {
+    function b () {};
+    var b;
+    console.log(typeof b);
+}
+// 也是输出 'function'
+a();
+```
+
+```javascript
+function a () {
+    function b () {};
+    var b = 2;
+    console.log(b);
+}
+// 输出 2
+a();
+```
