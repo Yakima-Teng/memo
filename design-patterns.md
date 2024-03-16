@@ -236,6 +236,17 @@ class EventBus {
 
 ### 单例模式 {#singleton-pattern}
 
+通用的单例构造函数：
+
+```javascript
+const getSingle = function (fn) {
+    let result
+    return function () {
+        return result || (result = fn.apply(this, arguments))
+    }
+}
+```
+
 ```javascript
 // 单例构造函数
 function CreateSingleton (name) {
@@ -556,4 +567,80 @@ public class MementoPatternDemo {
 Current State: State #4
 First saved State: State #2
 Second saved State: State #3
+```
+
+### 代理模式 {#proxy-design-pattern}
+
+本文参考了曾探的《JavaScript设计模式与开发实践》一书。
+
+其实代理模式很常见：
+
+- 比如我之前写项目时，一般不喜欢同事直接使用第三方的 api，或者直接使用未确定具体实现的 api，喜欢再嵌一层。举个例子，封装一个 storage 对象来代替 localStorage，这样以后要把 localStorage 替换成别的存储引擎也无需大动干戈。再举个例子，比如接口请求，我不会直接用 axios，而是会再封装一层，这样以后不想用 axios 想用别的比如 jQuery 的话，要替换起来会很方便。
+- 不只是方便替换，有时候我们想增加更多的细节功能，如果之前多了一层代理，这样都会方便很多。比如对第三方的日志打印功能不满意，可以自己代理一下，然后在里面加上打印正文前加上时间戳前缀等逻辑。或者对 query 方法增加缓存和打日志功能，对 execute 方法增加打日志功能。
+
+注意：代理和本地的接口需要保持一致。
+
+虚拟代理模式示例：
+
+```javascript
+var myImage = (function(){
+    var imgNode = document.createElement( 'img' );
+    document.body.appendChild( imgNode );
+
+    return function( src ){
+      imgNode.src = src;
+    }
+})();
+
+var proxyImage = (function(){
+    var img = new Image;
+
+    img.onload = function(){
+      myImage( this.src );
+    }
+
+    return function( src ){
+      myImage( 'file:// /C:/Users/svenzeng/Desktop/loading.gif' );
+      img.src = src;
+    }
+})();
+
+proxyImage( 'http://imgcache.qq.com/music// N/k/000GGDys0yA0Nk.jpg' );
+```
+
+虚拟代理合并 HTTP 请求：
+
+```javascript
+var synchronousFile = function( id ){
+    console.log( ’开始同步文件，id为： ' + id );
+};
+
+var proxySynchronousFile = (function(){
+    var cache = [],    // 保存一段时间内需要同步的ID
+      timer;    // 定时器
+
+    return function( id ){
+      cache.push( id );
+      if ( timer ){    // 保证不会覆盖已经启动的定时器
+          return;
+      }
+
+      timer = setTimeout(function(){
+          synchronousFile( cache.join( ', ' ) );    // 2秒后向本体发送需要同步的ID集合
+          clearTimeout( timer );    // 清空定时器
+          timer = null;
+          cache.length = 0; // 清空ID集合
+      }, 2000 );
+    }
+})();
+
+var checkbox = document.getElementsByTagName( 'input' );
+
+for ( var i = 0, c; c = checkbox[ i++ ]; ){
+    c.onclick = function(){
+        if ( this.checked === true ){
+          proxySynchronousFile( this.id );
+        }
+    }
+};
 ```
