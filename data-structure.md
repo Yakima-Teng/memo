@@ -359,6 +359,35 @@ function isStrValid (str) {
 }
 ```
 
+#### 字符消消乐 {#string-match-game}
+
+**问题描述**
+
+给定一个字符串，消除其中所有的字符串 `ac` 和 `b`，如果消掉之后获得的新字符串中仍存在可消内容则需要继续消，直到没有可继续消的字符串为止。
+
+比如字符串 `aaaaaaaaabbbbbbbcccccbbbbbcccc` 经过处理后应该得到空字符串。
+
+**解决方案**
+
+```javascript
+function deleteMatchStr (str) {
+    const arr = str.split('')
+    const tempArr = []
+    arr.forEach((item) => {
+        const last = tempArr.length ? tempArr[tempArr.length - 1] : ''
+        if (last + item === 'ac') {
+            tempArr.pop()
+            return
+        }
+        if (item !== 'b') {
+            tempArr.push(item)
+        }
+    })
+    return tempArr.join('')
+}
+deleteMatchStr('aaaaaaaaabbbbbbbcccccbbbbbcccc')
+```
+
 #### Monotone stack 单调栈 {#monotone-stack}
 
 单调栈是一种特殊的栈结构，其内部元素的排序是单调朝一个方向的。
@@ -845,4 +874,43 @@ function rotate90(arr) {
     return tempArr
 }
 console.log(rotate90(rawArr))
+```
+
+#### 画星号 {#draw-asterisk}
+
+**问题描述**
+
+实现一个函数，入参为数字 `n`，输出如下图所示的字符串。
+
+![](./attachments/num-snows.png)
+
+**解决方案**
+
+```javascript
+function drawAsterisk(n) {
+    function getRepeatStr (num, repeatStr) {
+        return new Array(num).fill(repeatStr).join('')
+    }
+    function log (str) {
+        console.log(str)
+    }
+
+    const arr = []
+    const sumLength = 2 * n - 1
+    for (let i = 0; i < n - 1; i++) {
+        const numOfStar = 2 * i + 1
+        const numOfSpaces = sumLength - numOfStar
+        const sideSpaces = getRepeatStr(numOfSpaces / 2, ' ')
+        arr.push(sideSpaces + getRepeatStr(numOfStar, '*') + sideSpaces)
+    }
+    // 画上半部分
+    arr.forEach(log)
+    // 画中间一行
+    console.log(getRepeatStr(2 * n - 1, '*'))
+    // 下半部分与上半部分层是轴对称的，直接 `reverse()` 反转下就可以直接用
+    arr.reverse()
+    // 画下半部分
+    arr.forEach(log)
+}
+drawAsterisk(2)
 ```
