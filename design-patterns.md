@@ -734,3 +734,112 @@ order( 1, false, 500 );   // 输出：普通购买，无优惠券
 AOP 是 Aspect Oriented Programming 的缩写，即“面向切面编程”。编程中，对象之间、方法之间、模块之间，都是一个个的切面。
 
 :::
+
+### 中介者模式 {#mediator-pattern}
+
+本文参考了曾探的《JavaScript设计模式与开发实战》。
+
+面向对象设计鼓励将行为分布到各个对象中，把对象划分成更小的粒度，有助于增强对象的可复用性，但由于这些细粒度对象之间的联系激增，又有可能会反过来降低它们的可复用性。
+
+中介者模式的作用就是解除对象与对象之间的紧耦合关系。增加一个中介者对象后，所有的相关对象都通过中介者对象来通信，而不是互相引用，所以当一个对象发生改变时，只需要通知中介者对象即可。中介者使各对象之间耦合松散，而且可以独立地改变它们之间的交互。中介者模式使网状的多对多关系变成了相对简单的一对多关系。
+
+![](./attachments/mediator-pattern.jpg)
+
+有个购买商品（比如内存条）时选规则然后校验库存的场景：现在我们来引入中介者对象，所有的节点对象只跟中介者通信。当下拉选择框colorSelect、memorySelect和文本输入框numberInput发生了事件行为时，它们仅仅通知中介者它们被改变了，同时把自身当作参数传入中介者，以便中介者辨别是谁发生了改变。剩下的所有事情都交给中介者对象来完成，这样一来，无论是修改还是新增节点，都只需要改动中介者对象里的代码。
+
+```javascript
+var goods = {   // 手机库存
+    "red|32G": 3,
+    "red|16G": 0,
+    "blue|32G": 1,
+    "blue|16G": 6
+};
+
+var mediator = (function(){
+
+    var colorSelect = document.getElementById( 'colorSelect' ),
+      memorySelect = document.getElementById( 'memorySelect' ),
+      numberInput = document.getElementById( 'numberInput' ),
+      colorInfo = document.getElementById( 'colorInfo' ),
+      memoryInfo = document.getElementById( 'memoryInfo' ),
+      numberInfo = document.getElementById( 'numberInfo' ),
+      nextBtn = document.getElementById( 'nextBtn' );
+
+    return {
+      changed: function( obj ){
+          var color = colorSelect.value,   // 颜色
+              memory = memorySelect.value, // 内存
+              number = numberInput.value,   // 数量
+              stock = goods[ color + '|' + memory ];   // 颜色和内存对应的手机库存数量
+
+          if ( obj === colorSelect ){     // 如果改变的是选择颜色下拉框
+              colorInfo.innerHTML = color;
+          }else if ( obj === memorySelect ){
+              memoryInfo.innerHTML = memory;
+          }else if ( obj === numberInput ){
+              numberInfo.innerHTML = number;
+          }
+
+          if ( ! color ){
+              nextBtn.disabled = true;
+              nextBtn.innerHTML = ’请选择手机颜色’;
+              return;
+          }
+
+          if ( ! memory ){
+              nextBtn.disabled = true;
+              nextBtn.innerHTML = ’请选择内存大小’;
+              return;
+          }
+
+          if ( Number.isInteger ( number -0 ) && number > 0 ){   // 输入购买数量是否为正整数
+              nextBtn.disabled = true;
+              nextBtn.innerHTML = ’请输入正确的购买数量’;
+              return;
+          }
+
+          nextBtn.disabled = false;
+          nextBtn.innerHTML = ’放入购物车’;
+      }
+    }
+
+})();
+
+// 事件函数：
+colorSelect.onchange = function(){
+    mediator.changed( this );
+};
+memorySelect.onchange = function(){
+    mediator.changed( this );
+};
+numberInput.oninput = function(){
+    mediator.changed( this );
+};
+```
+
+可以想象，某天我们又要新增一些跟需求相关的节点，比如CPU型号，那我们只需要稍稍改动 `mediator` 对象即可：
+
+```javascript
+        var goods = {    // 手机库存
+    "red|32G|800": 3,    // 颜色red，内存32G, cpu800，对应库存数量为3
+    "red|16G|801": 0,
+    "blue|32G|800": 1,
+    "blue|16G|801": 6
+};
+
+var mediator = (function(){
+    // 略
+    var cpuSelect = document.getElementById( 'cpuSelect' );
+    return {
+        change: function(obj){
+            // 略
+            var cpu = cpuSelect.value,
+                stock = goods[ color + '|' + memory + '|' + cpu ];
+            if ( obj === cpuSelect ){
+                cpuInfo.innerHTML = cpu;
+            }
+            // 略
+        }
+    }
+})();
+```
