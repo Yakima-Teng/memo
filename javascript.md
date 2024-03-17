@@ -4,7 +4,7 @@
 
 ### JavaScript数据类型 {#js-data-types}
 
-- 基本数据类型（primitive data type）：Undefined、Null、Boolean、Number、String、Symbol、BigInt。
+- 基本数据类型（primitive data type）：共 7 个，分别是：Undefined、Null、Boolean、Number、String、Symbol、BigInt。
 - 对象数据类型
 
 参考：[BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt)
@@ -49,7 +49,7 @@ const hugeBin = BigInt(
 
 `call`：`func.call(obj, param1, param2)`将`func`函数应用于`obj`对象上，此时`func`函数内部的`this`指向`obj`对象。
 
-`apply`：与`call`类似，只是所有要传入的数据都是以**数组**的形式放到第二个参数里的，如`func.apply(obj, [arg1, arg2])`。一个经典用法是来求数组中的最大数：`Math.max.apply(null, [1, 3, 5])`。
+`apply`：与`call`类似，只是所有要传入的数据都是以**数组**的形式放到第二个参数里的，如`func.apply(obj, [arg1, arg2])`。一个经典用法是来求数组中的最大数：`Math.max.apply(null, [1, 3, 5])`，另一个经典用法是用数组方法去处理非数组对象：`[].slice.call(arguments, 1)`。
 
 `bind`：与`call`类似，但**不会立即执行**，而是生成了一个**新函数**，新函数的`this`指向的是我们传入的`obj`。
 
@@ -70,7 +70,10 @@ console.log('apply')
 test.apply(false, [1, true, 'example', [], { a: 1 }])
 
 console.log('bind')
-// 注意这里我们直接对 `bind` 生成的函数进行调用，并且这个调用中也传入了几个参数
+/**
+ * 注意这里我们直接对 `bind` 生成的函数进行调用
+ * 并且在这个调用中也传入了几个新参数
+ */
 test.bind(0, 1, true, 'example', [], { a: 1 })(
     'hello', 'world'
 )
@@ -82,8 +85,8 @@ test.bind(0, 1, true, 'example', [], { a: 1 })(
 
 #### 实现 `bind` {#bind}
 
-::: tip core-js的实现
-core-js库中bind的实现见：[https://github.com/zloirock/core-js/blob/master/packages/core-js/internals/function-bind.js](https://github.com/zloirock/core-js/blob/master/packages/core-js/internals/function-bind.js)
+::: tip core-js 的实现
+core-js 库中 `bind` 的实现见：[https://github.com/zloirock/core-js/blob/master/packages/core-js/internals/function-bind.js](https://github.com/zloirock/core-js/blob/master/packages/core-js/internals/function-bind.js)
 :::
 
 我们自己实现一个，注意：
@@ -111,7 +114,10 @@ Function.prototype.myBind = function () {
     return function () {
         args = args.concat(Array.from(arguments))
         const uniqueKey = Symbol('避免污染对象上的其他属性')
-        // 使用 `symbol`作为 key，可以避免影响其他人添加的可能同名的 key
+        /**
+         * 使用 `symbol`作为 key，
+         * 可以避免影响其他人添加的可能同名的 key
+         */
         obj[uniqueKey] = func
         const result = obj[uniqueKey](...args)
         // 删除临时添加的属性，避免污染对象
@@ -137,10 +143,10 @@ test.myBind(0, 1, true, 'example', [], { a: 1 })(
 
 ![](./attachments/my-bind.png)
 
-### forEach、for-of、for-in循环 {#for-loop}
+### `forEach`、`for-of`、`for-in` 循环 {#for-loop}
 
 ```javascript
-// forEach循环无法通过break或return语句进行中断
+// `forEach` 循环无法通过 `break` 或 `return` 语句进行中断
 arr.forEach(function (elem) {
     console.log(elem)
 })
@@ -159,7 +165,8 @@ for (const p in obj) {
 // obj.c = 3
 
 /**
- * for-of能循环很多东西，包括字符串、数组、map、set、DOM collection等等
+ * for-of能循环很多东西，
+ * 包括字符串、数组、map、set、DOM collection等等
  * （但是不能遍历对象，因为对象不是iterable可迭代的）
  */
 const iterable = [1, 2, 3]
@@ -168,18 +175,18 @@ for (const value of iterable) {
 }
 ```
 
-基本上for in用于大部分常见的由key-value对构成的对象上以遍历对象内容。但是for in在遍历数组对象时并不方便，这时候用for of会很方便。
+基本上 `for in` 用于大部分常见的由 `key-value` 对构成的对象上以遍历对象内容。但是 `for in` 在遍历数组对象时并不方便，这时候用 `for of` 会很方便。
 
 ### IIFE（Immediately-Invoked Function Expression）与分号 {#iife}
 
-如果习惯写完一条语句后不加分号的写法，碰到需要写IIFE（自执行函数）的时候容易踩到下面的坑：
+如果习惯写完一条语句后不加分号的写法，碰到需要写 IIFE（自执行函数）的时候容易踩到下面的坑：
 
 ``` javascript
 const a = 1
 (function () {})()
 ```
 
-上述代码会报错，因为上一行的1会和这一行一起被程序解析成`const a = 1(function () {})()`，然后报错说1不是函数。
+上述代码会报错，因为第一行的 `1` 会和第二行一起被程序解析成 `const a = 1(function () {})()`，然后报错：`Uncaught TypeError: 1 is not a function`。
 
 这时候可以这样写：
 
