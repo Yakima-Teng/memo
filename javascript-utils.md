@@ -13,9 +13,9 @@ if (typeof localStorage !== 'undefined') {
 或者
 
 ``` javascript
-// 浏览器端全局处window/this/self三者彼此全等
+// 浏览器端全局处 `window`/`this`/`self` 三者彼此全等
 if ('localStorage' in self) {
-  // 此时访问 localStorage 绝对不会出现引用错误
+  // 此时访问 `localStorage` 绝对不会出现引用错误
 }
 ```
 
@@ -27,14 +27,20 @@ var a // 或 var a = undefined
 typeof a // 'undefined'
 ```
 
-- `var a = undefined` 或者 `var a` 相当于是给 `window` 对象添加了 `a` 属性，但是未赋值，即 `window.a === undefined` 为 `true`
+- 在全局作用域下定义 `var a = undefined` 或者 `var a` 相当于是给 `window` 对象添加了 `a` 属性，但是未赋值，即 `window.a === undefined` 为 `true`。
 - `typeof a` 就是返回其变量类型，未赋值或者声明类型为 `undefined` 的变量，其类型就是 `undefined`
+
+::: tip `const`、`let` 与 `var`
+
+全局作用域下通过 `const` 或 `let` 定义一个变量时，并不会在 `window` 上挂载该对象，这是与 `var` 表现不同之处。
+
+:::
 
 ### 判断 2 个对象是否**相等**（不是**相同**） {#object-equality}
 
 **前提假设**
 
-不是只根据引用地址来判断，只要两个对象的键值对的值对的上就认为是相等的，比如分开创建的 `{ a: 1 }` 和 `{ a: 1 }`，被认为是相等的对象。
+不是只根据引用地址来判断，只要两个对象的键完全一致且同名键对应的值也“相等”，就认为这两个对象是相等的，比如分开创建的 `{ a: 1 }` 和 `{ a: 1 }`，被认为是相等的两个对象。
 
 **具体实现**
 
@@ -56,12 +62,13 @@ function isObjectEqual (obj1, obj2) {
         return false
     }
 
-    if (keys1.length === 0 && keys2.length === 0) {
+    if (keys1.length === 0) {
         return true
     }
 
     for (let i = 0, len = keys1.length; i < len; i++) {
-        if (!isObjectEqual(obj1[keys1[i]], obj2[keys2[i]])) {
+        const key = keys1[i]
+        if (!isObjectEqual(obj1[key], obj2[key])) {
             return false
         }
     }
@@ -70,7 +77,7 @@ function isObjectEqual (obj1, obj2) {
 }
 ```
 
-### 实现assign {#assign}
+### 实现 `assign` {#assign}
 
 ```javascript
 function assign () {
@@ -101,12 +108,15 @@ function assign () {
 
 ```javascript
 /**
- * 判断类型
+ * 判断是否是非空对象
  * @param val {any}
- * @returns {string} array, object, function, null, undefined, string, number
+ * @returns {boolean}
  */
-function typeOf(val) {
-    return ({}).toString.call(val).slice(8, -1).toLowerCase()
+function isObject(val) {
+    return (
+        typeof val !== 'null' &&
+        ({}).toString.call(val).slice(8, -1).toLowerCase() === 'object'
+    )
 }
 
 function merge(target, obj) {
@@ -114,7 +124,7 @@ function merge(target, obj) {
         if (!obj.hasOwnProperty(p)) {
             return
         }
-        if (typeOf(target[p]) === 'object' && typeOf(obj[p]) === 'object') {
+        if (isObject(target[p]) && isObject(obj[p])) {
             merge(target[p], obj[p])
             return
         }
@@ -138,7 +148,7 @@ Array.from(Array(100).keys())
 [...Array(100).keys()]
 ```
 
-如果你想要直接从1开始到100，可以用 `Array.from` 方法实现（下面这种传参方法不太常见，第二个参数是一个 **map function**，可以对第一个参数传进去的**类数组对象**或者**可迭代对象**进行处理）：
+如果你想要直接从 1 开始到 100，可以用 `Array.from` 方法实现（下面这种传参方法不太常见，第二个参数是一个 **map function**，可以对第一个参数传进去的**类数组对象**或者**可迭代对象**进行处理）：
 
 `Array.from`的语法如下：
 
@@ -162,26 +172,26 @@ Array.from({ length: 100 }, (_, i) => i + 1)
 
 **要求**
 
-实现一个函数，该函数入参为一个时间戳，返回`YYYY:MM:DD HH:mm:ss`格式的字符串。不允许使用Date对象的内置方法。
+实现一个函数，该函数入参为一个时间戳，返回 `YYYY:MM:DD HH:mm:ss` 格式的字符串。不允许使用 `Date` 对象的内置方法。
 
 已知：
-- 时间戳是指格林威治时间1970年01月01日00时00分00秒（北京时间1970年01月01日08时00分00秒）起至现在的总秒数。
-- 普通闰年：公历年份是4的倍数，且不是100的倍数的，为闰年（如2004年、2020年等就是闰年）。
-- 世纪闰年：公历年份是整百数的，必须是400的倍数才是闰年（如1900年不是闰年，2000年是闰年）。
-- 1、3、5、7、8、10、12月每月31天。
-- 4、6、9、11月每月30天。
+- 时间戳是指格林威治时间 1970 年 01 月 01 日 00 时 00 分 00 秒（北京时间 1970 年 01 月 01 日 08 时 00 分 00 秒）起至现在的总秒数。
+- 普通闰年：公历年份是 4 的倍数，且不是 100 的倍数的，为闰年（如 2004 年、2020 年等就是闰年）。
+- 世纪闰年：公历年份是整百数的，必须是400的倍数才是闰年（如 1900 年不是闰年，2000 年是闰年）。
+- 1、3、5、7、8、10、12 月每月 31 天。
+- 4、6、9、11 月每月 30 天。
 
 **实现**
 
 ```javascript
 function toDateStr (ts) {
-    // 1天的毫秒数
+    // 1 天的毫秒数
     const tsDay = 24 * 60 * 60 * 1000
-    // 1小时的毫秒数
+    // 1 小时的毫秒数
     const tsHour = 60 * 60 * 1000
-    // 1分钟的毫秒数
+    // 1 分钟的毫秒数
     const tsMin = 60 * 1000
-    // 1秒的毫秒数
+    // 1 秒的毫秒数
     const tsSecond = 1000
 
     let remaining = ts
@@ -208,7 +218,7 @@ function toDateStr (ts) {
     // 统计过的天数
     let numOfDays = 0
     while (numOfDays < days) {
-        // 2月份
+        // 2 月份
         let daysInFebruary = 28
         if (years % 400 === 0) {
             daysInFebruary = 29
@@ -226,8 +236,8 @@ function toDateStr (ts) {
         for (const daysInMonth of arrMonthAndDays) {
             /**
              * 注意这里是小于，不是小于等于，
-             * 因为是从1970年1月【1日】开始计算的，
-             * 过30天就是1月31日，过31天已经是2月份了
+             * 因为是从 1970 年 1 月【1 日】开始计算的，
+             * 过 30 天就是 1 月 31 日，过 31 天已经是 2 月份了
              */
             if (days - numOfDays < daysInMonth) {
                 daysInLastMonth = days - numOfDays
@@ -246,11 +256,14 @@ function toDateStr (ts) {
     }
 
     /**
-     * 因为时间戳是从1970年1月1日开始计时的，
-     * 所以误差1天实际对应的是2号，
-     * 所以我们最终算出来的误差天数需要加1
+     * 因为时间戳是从 1970 年 1 月 1 日开始计时的，
+     * 所以误差 1 天实际对应的是 2 号，
+     * 所以我们最终算出来的误差天数需要加 1
      */
-    return `${years}:${months + 1}:${daysInLastMonth + 1} ${hours}:${mins}:${seconds}`
+    return [
+        `${years}:${months + 1}:${daysInLastMonth + 1}`,
+        `${hours}:${mins}:${seconds}`
+    ].join( )
 }
 ```
 
@@ -268,7 +281,7 @@ function add(a, b, c, d, e) {
 add(1, 2, 3, 4, 5)
 ```
 
-实现一个柯里化函数`curry`，使得下面`curryAdd(1)(2)(3)(4)(5)`的计算结果与上方`add(1, 2, 3, 4, 5)`一致：
+实现一个柯里化函数 `curry`，使得下面 `curryAdd(1)(2)(3)(4)(5)` 的计算结果与上方 `add(1, 2, 3, 4, 5)` 一致：
 
 ```javascript
 function curry() {}
@@ -282,7 +295,7 @@ console.log(curryAdd(1)(2)(3)(4)(5)) // 输出：15
 - 如果是，则执行当前函数；
 - 如果否，则返回一个新函数，用于继续接收更多的参数。
 
-注意，这里我们的原函数是指如下这个函数（`fn.length`为5，因为有`a`、`b`、`c`、`d`、`e`一共5个参数）：
+注意，这里我们的原函数是指如下这个函数（`fn.length`为 5，因为有 `a`、`b`、`c`、`d`、`e` 一共 5 个参数）：
 
 ```javascript
 function add(a, b, c, d, e) {
@@ -294,7 +307,7 @@ function add(a, b, c, d, e) {
 
 ```javascript
 function curry(fn, ...args) {
-    // 函数的参数个数可以直接通过函数的.length属性来访问
+    // 函数的参数个数可以直接通过函数的 `.length` 属性来访问
     return args.length === fn.length
         ? fn(...args)
         : (...newArgs) => curry(fn, ...args, ...newArgs)
