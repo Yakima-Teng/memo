@@ -45,16 +45,16 @@ const hugeBin = BigInt(
 - `typeof Object(1n) === "object";` 为 `true`。
 :::
 
-### call、apply和bind {#call-apply-bind}
+### `call`、`apply` 和 `bind` {#call-apply-bind}
 
 `call`：`func.call(obj, param1, param2)`将`func`函数应用于`obj`对象上，此时`func`函数内部的`this`指向`obj`对象。
 
-`apply`：与`call`类似，只是所有要传入的数据都是以**数组**的形式放到第二个参数里的，如`func.apply(obj, [arg1, arg2])`。
+`apply`：与`call`类似，只是所有要传入的数据都是以**数组**的形式放到第二个参数里的，如`func.apply(obj, [arg1, arg2])`。一个经典用法是来求数组中的最大数：`Math.max.apply(null, [1, 3, 5])`。
 
-`bind`：与`call`类似，但*不会立即执行*，而是生成了一个**新函数**，新函数的`this`指向的是我们传入的`obj`。
+`bind`：与`call`类似，但**不会立即执行**，而是生成了一个**新函数**，新函数的`this`指向的是我们传入的`obj`。
 
 ::: tip 关于第一个参数
-`call`、`apply`、`bind`的第一个参数，如果传了null或者undefined会被替换为global对象（浏览器环境下的话就是window对象），如果传的是其他基础类型（比如1、'a'、false等）则会被转换成基础类型对应的对象。
+`call`、`apply`、`bind`的第一个参数，如果传了 `null` 或者 `undefined` 会被替换为全局对象（浏览器环境下的话就是 `window` 对象），如果传的是其他基础类型（比如`1`、`'a'`、`false` 等）则会被转换成基础类型对应的对象。
 :::
 
 ```javascript
@@ -70,15 +70,17 @@ console.log('apply')
 test.apply(false, [1, true, 'example', [], { a: 1 }])
 
 console.log('bind')
-// 注意末尾有个()表示直接对bind生成的函数进行调用，并且这个调用中也传入了几个参数
-test.bind(0, 1, true, 'example', [], { a: 1 })('hello', 'world')
+// 注意这里我们直接对 `bind` 生成的函数进行调用，并且这个调用中也传入了几个参数
+test.bind(0, 1, true, 'example', [], { a: 1 })(
+    'hello', 'world'
+)
 ```
 
 执行结果见下图：
 
 ![](./attachments/call-apply-bind.png)
 
-#### 实现bind {#bind}
+#### 实现 `bind` {#bind}
 
 ::: tip core-js的实现
 core-js库中bind的实现见：[https://github.com/zloirock/core-js/blob/master/packages/core-js/internals/function-bind.js](https://github.com/zloirock/core-js/blob/master/packages/core-js/internals/function-bind.js)
@@ -86,21 +88,21 @@ core-js库中bind的实现见：[https://github.com/zloirock/core-js/blob/master
 
 我们自己实现一个，注意：
 
-- 调用bind后生成的是一个新函数（新函数名为`newFn`）。
-- 调用bind时传的第二个及后续参数会和调用新函数`newFn`时传入的参数合并作为入参。
-- 调用bind时会指定newFn中的this指向。
+- 调用 `bind` 后生成的是一个新函数（新函数名为 `newFn`）。
+- 调用 `bind` 时传的第二个及后续参数会和调用新函数 `newFn` 时传入的参数合并作为入参。
+- 调用 `bind` 时会指定 `newFn` 中的 `this` 指向。
 
 ```javascript
 Function.prototype.myBind = function () {
-    // 这里的this就是被bind处理前的函数
+    // 这里的 `this` 就是被 `bind` 处理前的函数
     const func = this
 
     let obj = arguments[0]
-    // 如果obj是undefined或null，则替换成global对象
+    // 如果 `obj` 是 `undefined` 或 `null`，则替换成全局对象
     if (typeof obj === 'undefined' || obj === null) {
-        obj = global
+        obj = globalThis
     }
-    // 如果不是对象类型，比如是false、1等，则包装成对象
+    // 如果不是对象类型，比如是 `false`、`1` 等，则包装成对象
     if (typeof obj !== 'object') {
         obj = new Object(obj)
     }
@@ -109,7 +111,7 @@ Function.prototype.myBind = function () {
     return function () {
         args = args.concat(Array.from(arguments))
         const uniqueKey = Symbol('避免污染对象上的其他属性')
-        // 使用symbol作为key，可以避免影响其他人添加的可能同名的key
+        // 使用 `symbol`作为 key，可以避免影响其他人添加的可能同名的 key
         obj[uniqueKey] = func
         const result = obj[uniqueKey](...args)
         // 删除临时添加的属性，避免污染对象
@@ -123,8 +125,12 @@ function test (...args) {
     console.log(args)
     console.log(arguments)
 }
-test.bind(0, 1, true, 'example', [], { a: 1 })('hello', 'world')
-test.myBind(0, 1, true, 'example', [], { a: 1 })('hello', 'world')
+test.bind(0, 1, true, 'example', [], { a: 1 })(
+    'hello', 'world'
+)
+test.myBind(0, 1, true, 'example', [], { a: 1 })(
+    'hello', 'world'
+)
 ```
 
 实现结果如下：
