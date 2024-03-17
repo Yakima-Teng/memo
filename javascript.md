@@ -203,9 +203,9 @@ const a = 1
 !function () {}()
 ```
 
-### JS中除了使用new关键字还有什么方法可以创建对象？ {#create-object-except-new}
+### JS中除了使用 `new` 关键字还有什么方法可以创建对象？ {#create-object-except-new}
 
-可以通过 `Object.create(proto, [, propertiesObject])` 实现。详见：[Object.create()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create)
+可以通过 `Object.create(proto, [, propertiesObject])` 实现。详见：[Object.create()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create)。
 
 `Object.create()` 静态方法以一个现有对象作为原型，创建一个新对象。
 
@@ -213,7 +213,9 @@ const a = 1
 const person = {
   isHuman: false,
   printIntroduction: function () {
-    console.log(`My name is ${this.name}. Am I human? ${this.isHuman}`);
+    console.log(
+        `I am ${this.name}. Am I human? ${this.isHuman}`
+    );
   },
 };
 
@@ -224,14 +226,14 @@ me.name = 'Matthew';
 // 继承过来的属性值可以被重写
 me.isHuman = true;
 
-// 打印内容: "My name is Matthew. Am I human? true"
+// 打印内容: "I am Matthew. Am I human? true"
 me.printIntroduction();
 ```
 
 **用 `Object.create()` 实现类式继承**
 
 ```javascript
-// Shape——父类
+// Shape —— 父类
 function Shape() {
   this.x = 0;
   this.y = 0;
@@ -244,34 +246,49 @@ Shape.prototype.move = function (x, y) {
   console.info("Shape moved.");
 };
 
-// Rectangle——子类
+// Rectangle —— 子类
 function Rectangle() {
   Shape.call(this); // 调用父类构造函数。
 }
 
 // 子类继承父类
 Rectangle.prototype = Object.create(Shape.prototype, {
-  // 如果不将 Rectangle.prototype.constructor 设置为 Rectangle，
-  // 它将采用 Shape（父类）的 prototype.constructor。
-  // 为避免这种情况，我们将 prototype.constructor 设置为 Rectangle（子类）。
-  constructor: {
-    value: Rectangle,
-    enumerable: false,
-    writable: true,
-    configurable: true,
-  },
+    /**
+     * 如果不将 `Rectangle.prototype.constructor` 
+     * 设置为 `Rectangle`，
+     * 它将采用 `Shape`（父类）的 `prototype.constructor`。
+     * 为避免这种情况，
+     * 我们将 `prototype.constructor` 设置为 `Rectangle`（子类）。
+     */
+    constructor: {
+        value: Rectangle,
+        enumerable: false,
+        writable: true,
+        configurable: true,
+    },
 });
 
 const rect = new Rectangle();
 
-console.log("rect 是 Rectangle 类的实例吗？", rect instanceof Rectangle); // true
-console.log("rect 是 Shape 类的实例吗？", rect instanceof Shape); // true
-rect.move(1, 1); // 打印 'Shape moved.'
+// true
+console.log(
+    "rect 是 Rectangle 类的实例吗？",
+    rect instanceof Rectangle
+);
+
+// true
+console.log(
+    "rect 是 Shape 类的实例吗？",
+    rect instanceof Shape
+);
+
+// 打印 'Shape moved.'
+rect.move(1, 1);
 ```
 
 **使用 `Object.create()` 的 `propertyObject` 参数**
 
-Object.create() 方法允许对对象创建过程进行精细的控制。实际上，字面量初始化对象语法是 Object.create() 的一种语法糖。使用 Object.create()，我们可以创建具有指定原型和某些属性的对象。请注意，第二个参数将键映射到属性描述符，这意味着你还可以控制每个属性的可枚举性、可配置性等，而这在字面量初始化对象语法中是做不到的。
+`Object.create()` 方法允许对对象创建过程进行精细的控制。实际上，字面量初始化对象语法可视为 `Object.create()` 的一种语法糖。使用 `Object.create()`，我们可以创建具有指定原型和某些属性的对象。请注意，第二个参数将键映射到属性描述符，这意味着你还可以控制每个属性的可枚举性、可配置性等，而这在 `{}` 字面量初始化对象语法中是做不到的。
 
 ```javascript
 o = {};
@@ -297,11 +314,15 @@ o = Object.create(Object.prototype, {
   },
 });
 
-// 创建一个新对象，它的原型是一个新的空对象，并添加一个名为 'p'，值为 42 的属性。
+/**
+ * 创建一个新对象
+ * 它的原型是一个新的空对象
+ * 并添加一个名为 'p'，值为 42 的属性。
+ */
 o = Object.create({}, { p: { value: 42 } });
 ```
 
-使用 `Object.create()`，我们可以创建一个原型为 `null` 的对象。在字面量初始化对象语法中，相当于使用 `__proto__` 键。
+使用 `Object.create()`，我们可以创建一个原型为 `null` 的对象。在字面量初始化对象语法中，相当于将 `__proto__` 键赋值为 `null`。
 
 ```javascript
 o = Object.create(null);
