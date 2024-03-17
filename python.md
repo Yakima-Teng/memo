@@ -815,3 +815,155 @@ while 'cat'in pets:
 
 print(pets)
 ```
+
+### 函数 {#python-function}
+
+有时候，预先不知道函数需要接受多少个实参，好在Python允许函数从调用语句中收集任意数量的实参。例如，来看一个制作比萨的函数，它需要接受很多配料，但无法预先确定顾客要多少种配料。下面的函数只有一个形参*toppings，但不管调用语句提供了多少实参，这个形参会将它们统统收入囊中：
+
+```python
+def make_pizza(*toppings):
+    """打印顾客点的所有配料。"""
+    print(toppings)
+
+make_pizza('pepperoni')
+make_pizza('mushrooms','green peppers','extra cheese')
+```
+
+形参名*toppings中的星号让Python创建一个名为toppings的空元组，并将收到的所有值都封装到这个元组中。函数体内的函数调用print()通过生成输出，证明Python能够处理使用一个值来调用函数的情形，也能处理使用三个值来调用函数的情形。它以类似的方式处理不同的调用。注意，Python将实参封装到一个元组中，即便函数只收到一个值：
+
+```python
+('pepperoni',)
+('mushrooms','green peppers','extra cheese')
+```
+
+如果要遍历其中的具体元素：
+
+```python
+def make_pizza(*toppings):
+    """概述要制作的比萨。"""
+    print("\nMaking a pizza with the following toppings:")
+    for topping in toppings:
+        print(f"- {topping}")
+
+make_pizza('pepperoni')
+make_pizza('mushrooms','green peppers','extra cheese')
+```
+
+结合使用位置实参和任意数量实参：
+
+```python
+def make_pizza(size,*toppings):
+    """概述要制作的比萨。"""
+    print(f"\nMaking a {size}-inch pizza with the following toppings:")
+    for topping in toppings:
+        print(f"- {topping}")
+
+make_pizza(16,'pepperoni')
+make_pizza(12,'mushrooms','green peppers','extra cheese')
+```
+
+::: tip *args
+
+你经常会看到通用形参名*args，它也收集任意数量的位置实参。
+
+:::
+
+使用任意数量的关键字实参：
+
+```python
+def build_profile(first,last,**user_info):
+    """创建一个字典，其中包含我们知道的有关用户的一切。"""
+    user_info['first_name'] = first
+    user_info['last_name'] = last
+    return user_info
+
+user_profile = build_profile('albert','einstein',
+                             location='princeton',
+                             field='physics')
+print(user_profile)
+```
+
+上例得到内容如下：
+
+```text
+{'location':'princeton','field':'physics',
+ 'first_name':'albert','last_name':'einstein'}
+```
+
+::: tip **kwargs
+
+注意　你经常会看到形参名**kwargs，它用于收集任意数量的关键字实参。
+
+:::
+
+import语句允许在当前运行的程序文件中使用模块中的代码。
+
+假定现在有文件 `pizza.py`：
+
+```python
+def make_pizza(size,*toppings):
+    """概述要制作的比萨。"""
+    print(f"\nMaking a {size}-inch pizza with the following toppings:")
+    for topping in toppings:
+        print(f"- {topping}")
+```
+
+导入整个模块（只需编写一条import语句并在其中指定模块名，就可在程序中使用该模块中的所有函数）：
+
+```python
+import pizza
+
+pizza.make_pizza(16,'pepperoni')
+pizza.make_pizza(12,'mushrooms','green peppers','extra cheese')
+```
+
+还可以导入模块中的特定函数，这种导入方法的语法如下：
+
+```python
+from module_name import function_name
+```
+
+通过用逗号分隔函数名，可根据需要从模块中导入任意数量的函数：
+
+```python
+from module_name import function_0,function_1,function_2
+```
+
+使用 `as` 给函数指定别名：
+
+```python
+from pizza import make_pizza as mp
+
+mp(16,'pepperoni')
+mp(12,'mushrooms','green peppers','extra cheese')
+```
+
+使用as给模块指定别名：
+
+```python
+import pizza as p
+
+p.make_pizza(16,'pepperoni')
+p.make_pizza(12,'mushrooms','green peppers','extra cheese')
+```
+
+使用星号(*)运算符可让Python导入模块中的所有函数：
+
+```python
+from pizza import *
+
+make_pizza(16,'pepperoni')
+make_pizza(12,'mushrooms','green peppers','extra cheese')
+```
+
+给形参指定默认值时，等号两边不要有空格：
+
+```python
+def function_name(parameter_0,parameter_1='default value')
+```
+
+对于函数调用中的关键字实参，也应遵循这种约定：
+
+```python
+function_name(value_0,parameter_1='value')
+```
