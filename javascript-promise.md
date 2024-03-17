@@ -36,9 +36,13 @@ class SimplePromise {
          * 至于为什么是数组呢？
          * 因为同一个 Promise 的 `then` 方法可以调用多次。
          * 比如:
-         * const p = new Promise((resolve, reject) => resolve('3'));
+         * ```javascript
+         * const p = new Promise(
+         *     (resolve, reject) => resolve('3')
+         * );
          * p.then(console.log);
          * p.then(console.log);
+         * ```
          * 上面后面的两句 `p.then(console.log)` 都会打印 '3'，
          * 都是基于 p 的结果 3 进行处理的（两个 `p.then` 互相无关）
          */
