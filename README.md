@@ -51,7 +51,7 @@
 - [JavaScript 中的闭包概念](./javascript-closure.md)
 - [JavaScript 中的事件循环](./javascript-eventloop.md)
 - [JavaScript 中的函数与变量声明提升](./javascript-hoist.md)
-- [JavaScript 中的 Promise](./javascript-promise.md)
+- [JavaScript 中的 `Promise`](./javascript-promise.md)
 - [JavaScript 中的原型链](./javascript-prototype.md)
 - [CSS](./css.md)
 - [HTML](./html.md)
