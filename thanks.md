@@ -2,6 +2,8 @@
 
 ## 附录2：致谢 {#thanks}
 
+感谢以下通过参与到本书的编写工作中来。
+
 - [PassionZale](https://github.com/PassionZale):
   - [perf: http methods & cache #19](https://github.com/Yakima-Teng/memo/pull/19).
   - [doc: 使用单例模式 #22](https://github.com/Yakima-Teng/memo/pull/22)
