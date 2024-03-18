@@ -165,6 +165,10 @@ TCP/IP最重要的一个特点就是分层管理，分别为：
 
 - [ETag,If-None-Match]这么厉害我们为什么还需要[Last-Modified,If-Modified-Since]呢？有一个例子就是，**分布式系统尽量关掉ETag，因为每台机器生成的ETag不一样**，[Last-Modified,If-Modified-Since]和[ETag,If-None-Match]一般都是同时启用。
 
+**304：**
+
+强缓存是不会请求服务端的，命中协商缓存的话，一般服务端会返回状态码 304。
+
 **常用场景举例：**
 
 前端 SPA 应用发布后，为了保证客户端总能直接加载最新的静态资源文件，结合 `nginx.conf` 对缓存做出如下配置：

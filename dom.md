@@ -293,7 +293,7 @@ function (e) {
 
 绑定事件的对象。对应的就是element.addEventListener(eventName, handler, options)里的element。
 
-#### currentTarget和target的比较
+#### currentTarget 和 target的比较
 
 - target指向事件直接作用的对象，而currentTarget指向绑定该事件的对象；
 - 当处于捕获或冒泡阶段时，两者指向不一致；当处于目标阶段时，两者指向一致。
@@ -372,7 +372,7 @@ function (e) {
 - 冒泡阶段：最后由内而外按冒泡的顺序又触发了对应的事件回调。
 
 
-### `innerHTML`, `innerText` 和 `textContent` {#inner-html-text-content}
+### `innerHTML`、`innerText` 和 `textContent` {#inner-html-text-content}
 
 本文参考资料如下：
 
