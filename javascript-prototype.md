@@ -25,8 +25,8 @@ typeof f2 // "function", 函数对象
 typeof f3 // "function", 函数对象
 
 typeof o1 // "object", 普通对象
-typeof o2 // "object", normal object
-typeof o3 // "object", normal object
+typeof o2 // "object", 普通对象
+typeof o3 // "object", 普通对象
 ```
 
 ::: tip 原型对象
