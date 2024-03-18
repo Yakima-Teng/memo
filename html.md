@@ -121,9 +121,13 @@
 
 <!--
     设置 iOS 设备中 web 应用的状态栏样式。
-    只在用 `apple-apple-mobile-web-app-capable` 开启全局模式后生效
+    只在用 `apple-apple-mobile-web-app-capable`
+    + 开启全局模式后生效
 -->
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black"
+>
 
 <!-- 启用/禁用 iOS Safari 浏览器中自动检测手机号的功能 -->
 <meta name="format-detection" content="telephone=no">

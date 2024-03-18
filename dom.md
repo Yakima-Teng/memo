@@ -134,14 +134,14 @@ var li501 = getLiByIndex(500)
 
 ### 事件的冒泡和捕获 {#event-bubble-capture}
 
-JS中事件流的三个阶段：捕获（低版本IE不支持）==>目标==>冒泡。
+JS 中事件流的三个阶段：捕获（低版本 IE 不支持）==> 目标 ==> 冒泡。
 
-- Capture：from general to specific;
-- Bubbling：from specific to general.
+- 捕获（Capture）：从外到内。
+- 冒泡（Bubbling）：从内到外。
 
-如果不同层的元素使用useCapture不同，会先从最外层元素往目标元素寻找设定为capture模式的事件，到达目标元素后执行目标元素的事件后，在循原路往外寻找设定为bubbling模式的事件。
+如果不同层的元素使用 `useCapture` 不同，会先从最外层元素往目标元素寻找设定为 捕获（capture）模式的事件，到达目标元素后执行目标元素的事件后，在循原路往外寻找设定为冒泡（bubbling）模式的事件。
 
-### addEventListener {#add-event-listener}
+### `addEventListener` {#add-event-listener}
 
 语法如下：
 
@@ -150,30 +150,34 @@ element.addEventListener(type, listener, useCapture)
 element.addEventListener(type, listener, options)
 ```
 
-- element: 要绑定事件的对象，或HTML节点；
-- type：事件名称（不带“on”），如“click”、“mouseover”；
-- listener：要绑定的事件监听函数；
-- useCapture：事件监听方式，只能是true或false。true，采用捕获（capture）模式；false，采用冒泡（bubbling）模式。若无特殊要求，一般是false。
-- options
-    - options.capture：一个布尔值，表示 listener 会在该类型的事件捕获阶段传播到该 EventTarget 时触发。
-    - options.once：一个布尔值，表示 listener 在添加之后最多只调用一次。如果为 true，listener 会在其被调用之后自动移除。
-    - options.passive：一个布尔值，设置为 true 时，表示 listener 永远不会调用 preventDefault()。如果 listener 仍然调用了这个函数，客户端将会忽略它并抛出一个控制台警告。
+- `element`: 要绑定事件的对象，或 HTML 节点；
+- `type`：事件名称（不带“on”），如 “click”、“mouseover”；
+- `listener`：要绑定的事件监听函数；
+- `useCapture`：事件监听方式，只能是 `true` 或 `false`。`true`，采用捕获（capture）模式；`false`，采用冒泡（bubbling）模式。若无特殊要求，一般是 `false`。
+- `options`
+    - `options.capture`：一个布尔值，表示 `listener` 会在该类型的事件捕获阶段传播到该 EventTarget 时触发。
+    - `options.once`：一个布尔值，表示 `listener` 在添加之后最多只调用一次。如果为 `true`，`listener` 会在其被调用之后自动移除。
+    - `options.passive`：一个布尔值，设置为 `true` 时，表示 `listener` 永远不会调用 `preventDefault()`。如果 `listener` 仍然调用了这个函数，客户端将会忽略它并抛出一个控制台警告。
 
-::: tip addEventListener
-addEventListener() 的工作原理是将实现 EventListener 的函数或对象添加到调用它的 EventTarget 上的指定事件类型的事件侦听器列表中。**如果要绑定的函数或对象已经被添加到列表中，该函数或对象不会被再次添加**。
+::: tip `addEventListener`
 
-addEventListener允许对同一个target同时绑定多个事件，且可以控制是在冒泡阶段还是捕获阶段触发。onclick、onmouseover这种方式只能绑定一个事件监听回调（最后绑定的生效），**且只能在冒泡阶段触发**。
+`addEventListener()` 的工作原理是将实现 EventListener 的函数或对象添加到调用它的 EventTarget 上的指定事件类型的事件侦听器列表中。**如果要绑定的函数或对象已经被添加到列表中，该函数或对象不会被再次添加**。
+
+`addEventListener` 允许对同一个 target 同时绑定多个事件，且可以控制是在冒泡阶段还是捕获阶段触发。`onclick`、`onmouseover` 这种方式只能绑定一个事件监听回调（最后绑定的生效），**且只能在冒泡阶段触发**。
+
 :::
 
-::: warning removeEventListener
-removeEventListener的入参和addEventListener一样。
+::: warning `removeEventListener`
 
-警告：如果同一个事件监听器分别为“事件捕获（capture 为 true）”和“事件冒泡（capture 为 false）”注册了一次，这两个版本的监听器需要分别移除。移除捕获监听器不会影响非捕获版本的相同监听器，反之亦然。
+`removeEventListener` 的入参和 `addEventListener` 一样。
+
+警告：如果同一个事件监听器分别为“事件捕获（`capture` 为 `true`）”和“事件冒泡（`capture` 为 `false`）”各注册了一次，这两个版本的监听器需要分别移除。移除捕获监听器不会影响非捕获版本的相同监听器，反之亦然。
+
 :::
 
 #### 使用 `passive` 改善滚屏性能
 
-将 `passive` 设为 `true` 可以启用性能优化，并可大幅改善应用性能，正如下面这个例子：
+将 `passive` 设为 `true` 可以启用性能优化，并可大幅改善应用性能（副作用是不能 `preventDefault` 了），正如下面这个例子：
 
 ```javascript
 /* 检测浏览器是否支持该特性 */
@@ -201,7 +205,7 @@ window.addEventListener(
 );
 ```
 
-根据规范，`addEventListener()` 的 `passive` 默认值始终为 `false`。然而，这会导致触摸事件和滚轮事件（如）的事件监听器在浏览器尝试滚动页面时可能会阻塞浏览器主线程——这可能会大大降低浏览器处理页面滚动时的性能。
+根据规范，`addEventListener()` 的 `passive` 默认值始终为 `false`。然而，这会导致触摸事件和滚轮事件（如 `wheel`、`mousewheel`、`touchstart`、`touchmove`）的事件监听器在浏览器尝试滚动页面时可能会**阻塞浏览器主线程——这可能会大大降低浏览器处理页面滚动时的性能**。
 
 * [EventTarget.addEventListener()](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener)
 
@@ -236,33 +240,7 @@ function delegate(element, targetSelector, type, handler) {
         }
     })
 }
-
-// 兼容写法
-function delegate(element, targetClass, type, handler) {
-    addEvent(element, type, function(e) {
-        e = e || window.event
-        var target = e.target || e.srcElement
-        if (target.className.indexOf(targetClass) !== -1) {
-            handler.apply(target, arguments)
-        }
-    })
-}
-
-function addEvent(target, type, listener) {
-    if (target.addEventListener) {
-        // non-IE, IE9&+
-        target.addEventListener(type, listener, false)
-    } else if (target.attachEvent) {
-        // IE6 - IE10, not available in IE11
-        target.attachEvent('on' + type, listener)
-    } else {
-        // all browsers
-        target['on' + type] = listener
-    }
-}
 ```
-
-说明：上面的实现方案中addEvent方法的最后一种实现方式，即 `target['on' + type]` 的方式会将之前绑定的同名事件的回调逻辑覆盖掉，是有点问题的。但是考虑到兼容性，一般来说代码是走不到这个地方的，如果要处理的话这里可以对 `target` 的 `'on' + type` 属性进行 set 和 get 拦截，再弄个队列。
 
 ### 阻止事件传播和默认行为 {#event-stop-propagation-prevent-default}
 
@@ -270,41 +248,32 @@ function addEvent(target, type, listener) {
 
 ```javascript
 e = e || window.event
-if (e.preventDefault) {
-    // none-IE, IE 9&+
-    e.preventDefault()
-} else {
-    // IE 5-8
-    e.returnValue = false
-}
+e.preventDefault()
 ```
 
 #### 阻止事件传播 {#stop-propagation}
 
 ```javascript
 e = e || window.event
-if (e.stopPropagation) {
-    e.stopPropagation()
-} else {
-    // IE 8&-
-    e.cancelBubble = true
-}
+e.stopPropagation()
 ```
 
 #### stopImmediatePropagation {#stop-immediate-propagation}
 
-stopImmediatePropagation方法可阻止相同事件上绑定的其他监听器函数被触发。
+`stopImmediatePropagation` 方法可阻止同元素或外层元素上相同事件上绑定的其他监听器函数被触发。
 
 ::: tip 触发顺序
-如果同类型事件的几个监听器函数被绑定到了同一个对象上，它们会按照添加的顺序被触发。
+
+如果同类型事件的几个监听器函数被绑定到了同一个对象上，且它们处于相同的阶段（冒泡、捕获），它们会按照添加的顺序被触发。
+
 :::
 
-::: tip stopPropagation和stopImmediatePropagation的区别
+::: tip `stopPropagation` 和 `stopImmediatePropagation的区别`
 - stopPropagation will prevent any **parent** handlers from being executed;
 - stopImmediatePropagation will prevent any **parent** handlers and also any **other handlers from executing**.
   :::
 
-### 事件的几种target {#event-kinds-of-target}
+### 事件的几种 target {#event-kinds-of-target}
 
 #### target {#event-target}
 
@@ -397,12 +366,13 @@ function (e) {
 ```
 
 可以看到：
+
 - 捕获阶段：先由外至内按捕获的顺序触发了事件回调。
 - 目标阶段：其实就是先捕获后冒泡，在此前提下各自按注册的先后顺序执行。
 - 冒泡阶段：最后由内而外按冒泡的顺序又触发了对应的事件回调。
 
 
-### innerHTML, innerText and textContent {#inner-html-text-content}
+### `innerHTML`, `innerText` 和 `textContent` {#inner-html-text-content}
 
 本文参考资料如下：
 
