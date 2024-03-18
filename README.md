@@ -6,7 +6,7 @@
 
 > 《程序员备忘录》记录了WEB程序员常用的知识点，方便温故知新，自我成长。
 
-我是一名独立博客 blogger，有一个维护了很久的博客：[峰间的云](https://www.orzzone.com/blog)，里面有技术内容，也有非技术的内容，由于博客天然的按时间倒排序的特点，导致技术文章的组织比较混乱。因此，有了当前这个纯技术博客，说是博客，其实以类似书本的方式撰写的，有很多自己的学习笔记，也有对网上优质内容的“拿来主义”。这里我就将其称作“书”吧。
+我是一名独立博客 blogger，有一个维护了很久的博客：[峰间的云](https://www.orzzone.com/blog)，里面有技术内容，也有非技术的内容，由于博客天然的按时间倒排序的特点，导致技术文章的管理比较混乱，缺少条理性。因此，有了当前这个纯技术博客，说是博客，其实以类似书本的方式按章节撰写的，有很多自己的学习笔记，也有对网上优质内容的“拿来主义”。这里我就将其称作“书”吧，书名就是《程序员备忘录》。
 
 你可以通过以下方式/渠道阅读本书：
 
@@ -14,22 +14,24 @@
 - [安卓客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“memo.apk”。
 - [Windows客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“memo.exe”。免安装，点击直接运行。
 
-**保护你的眼睛**
+意见与讨论请到这里提交：[https://github.com/Yakima-Teng/memo/issues](https://github.com/Yakima-Teng/memo/issues)。
 
-> 本书提供单页HTML版本：[https://www.orzzone.com/memo/single](https://www.orzzone.com/memo/single)。读者可以直接利用浏览器的打印功能打印成 PDF 电子书放到水墨屏电纸书阅读器中阅读。以减少对眼睛的伤害。
+作者个人主页：[峰间的云](https://www.orzzone.com)。
 
-由于编写时间仓促，如您发现有错误或需要补充、删减的地方，或是有想讨论的内容，请到这里提交：[https://github.com/Yakima-Teng/memo/issues](https://github.com/Yakima-Teng/memo/issues)。
+::: tip 保护你的眼睛
 
-最后，希望本书的内容能给大家带来一些帮助。如读者有宝贵意见和建议，欢迎邮件指出，我会及时更新本书内容。
+本书提供单页HTML版本：[https://www.orzzone.com/memo/single](https://www.orzzone.com/memo/single)。读者可以直接利用浏览器的打印功能打印成 PDF 电子书放到水墨屏电纸书阅读器中阅读。以减少对眼睛的伤害。
 
-**版权说明**
+:::
+
+::: warning 版权说明
 
 参考的文档或已列与本书末处，或已标注在正文当中，但可能少列了。若您发现文字和图片有侵犯到您的权益，请务必联系我。
 
 - 本书中引用的他人文章版权归原作者/平台所有，本人自己写的部分版权归本人所有。
 - 本书仅用于个人私下学习。谢绝商用。
 
-作者主页：[峰间的云](https://www.orzzone.com)
+:::
 
 **目录**
 
