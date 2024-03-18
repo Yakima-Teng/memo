@@ -72,7 +72,7 @@ html, body, .container, .left, .wrapper, .middle, .right {
 }
 ```
 
-### input 框加入 disabled 属性后字体颜色变淡 {#input-disabled-color}
+### input 框加入 `disabled` 属性后字体颜色变淡 {#input-disabled-color}
 
 ```css
 input[disabled] {
