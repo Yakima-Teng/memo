@@ -1439,7 +1439,8 @@ partition by hash(col3)
 partitions 4;
 
 -- 报错如下：
-ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partitioning function (prefixed columns are not considered).
+# ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's 
+# partitioning function (prefixed columns are not considered).
 ```
 
 **两个唯一键分别是 `col1` 和 `col3`，分区键是 `col1 + col3`**
@@ -1458,7 +1459,8 @@ partition by hash(col1 + col3)
 partitions 4;
 
 -- 报错如下：
-ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partitioning function (prefixed columns are not considered).
+# ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's
+# partitioning function (prefixed columns are not considered).
 ```
 
 **两个唯一键分别是 `(col1, col2)` 和 `col3`，分区键是 `col1 + col3`**
@@ -1476,7 +1478,8 @@ partition by hash(col1 + col3)
 partitions 4;
 
 -- 报错如下：
-ERROR 1491 (HY000): A PRIMARY KEY must include all columns in the table's partitioning function.
+# ERROR 1491 (HY000): A PRIMARY KEY must include all columns in the table's
+# partitioning function.
 ```
 
 **主键是 `col1` 和 `col2`，分区键是 `col3`**
@@ -1493,7 +1496,8 @@ partition by hash(col3)
 partitions 4;
 
 -- 报错如下：
-ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partitioning function (prefixed columns are not considered).
+# ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's
+# partitioning function (prefixed columns are not considered).
 ```
 
 **主键是 `col1` 和 `col3`，唯一键为 `col2`，分区键为 `year(col2)`**
@@ -1511,7 +1515,8 @@ partition by hash( year(col2) )
 partitions 4;
 
 -- 报错如下：
-ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's partitioning function (prefixed columns are not considered).
+# ERROR 1503 (HY000): A PRIMARY KEY must include all columns in the table's
+# partitioning function (prefixed columns are not considered).
 ```
 
 ##### 正确示例 {#mysql-correct-examples-partition-key-relationship}
