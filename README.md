@@ -1,22 +1,18 @@
 # 程序员备忘录
 
-<div align="center" style="display: flex;align-items: center;justify-content: center;gap:8px;">
+<div align="center" style="display: flex;align-items: center;justify-content: center;gap:8px;margin:20px 0;">
   <img style="width:200px;" src="https://www.orzzone.com/book-cover.svg">
 </div>
 
-> 《程序员备忘录》记录了WEB程序员常用的知识点，方便温故知新，自我成长。
+> 我是一名独立 blogger，有一个维护了很久的博客：[峰间的云](https://www.orzzone.com/blog)，里面有技术内容，也有非技术的内容，加上博客天然的按时间倒排序的特点，导致技术文章的组织缺少条理性，不方便汇总和回顾。因此，有了当前这个以类似书本的方式按章节撰写的博客，有很多自己的学习笔记，也有对网上优质内容的“拿来主义”。我将这本书叫做《程序员备忘录》。这本书记录了WEB程序员常用的知识点，方便温故知新，自我成长。
 
-我是一名独立博客 blogger，有一个维护了很久的博客：[峰间的云](https://www.orzzone.com/blog)，里面有技术内容，也有非技术的内容，由于博客天然的按时间倒排序的特点，导致技术文章的管理比较混乱，缺少条理性。因此，有了当前这个纯技术博客，说是博客，其实是以类似书本的方式按章节撰写的，有很多自己的学习笔记，也有对网上优质内容的“拿来主义”。这里我就将其称作“书”吧，书名就是《程序员备忘录》。
-
-你可以通过以下方式/渠道阅读本书：
+你可以通过以下方式阅读本书：
 
 - [网页版](https://www.orzzone.com/memo)。
-- [安卓客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“memo.apk”。
-- [Windows客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：文件名为“memo.exe”。绿色免安装，下载后点击直接运行。
+- [安卓客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)。
+- [Windows客户端](https://pan.baidu.com/s/17zS-w0ukaIr0Y2wwjTFT2A?pwd=82xh)：绿色免安装，下载后点击直接运行。
 
 意见与讨论请到这里提交：[https://github.com/Yakima-Teng/memo/issues](https://github.com/Yakima-Teng/memo/issues)。
-
-作者个人主页：[峰间的云](https://www.orzzone.com)。
 
 ::: tip 保护你的眼睛
 
@@ -31,6 +27,8 @@
 本书中引用的他人文章版权归原作者/平台所有，本人自己写的部分版权归本人所有。
 
 本书仅用于个人私下学习。谢绝商用。
+
+联系方式可在作者个人主页中找到：[峰间的云](https://www.orzzone.com)。
 
 :::
 
