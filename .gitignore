@@ -1,0 +1,9 @@
+/src/.vitepress/cache
+/src/.vitepress/dist
+/src/.vitepress/.temp
+/.idea
+/src/memo
+/src/memo.md
+/src/blog.md
+/src/activity.md
+/src/blog

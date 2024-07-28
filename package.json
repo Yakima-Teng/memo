@@ -1,0 +1,31 @@
+{
+  "scripts": {
+    "ready": "npm install",
+    "dev": "vitepress dev src --export --port 8888 --host 0.0.0.0",
+    "build": "vitepress build src",
+    "postbuild": "node build/move-dist.mjs",
+    "deploy:github": "bash build/github-deploy.sh",
+    "deploy:qiniu": "node build/deploy.mjs",
+    "deploy": "npm run deploy:qiniu && npm run deploy:github",
+    "buildAndDeploy": "npm run build && npm run deploy",
+    "preview": "vitepress preview src"
+  },
+  "devDependencies": {
+    "axios": "1.6.7",
+    "better-deploy": "0.0.13",
+    "bing-translate-api": "4.0.1",
+    "compressing": "1.10.0",
+    "dayjs": "1.11.10",
+    "front-matter": "4.0.2",
+    "fs-extra": "11.2.0",
+    "glob": "10.3.10",
+    "mysql": "2.18.1",
+    "node-ssh": "13.1.0",
+    "sass": "1.69.5",
+    "vitepress": "1.0.0-rc.44"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "2.3.1",
+    "element-plus": "2.7.3"
+  }
+}
